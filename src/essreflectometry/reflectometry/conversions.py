@@ -7,6 +7,11 @@ from scippneutron.conversion.graph import beamline, tof
 
 # from . import orso
 from .types import (
+    CorrectedQData,
+    FootprintCorrected,
+    HistogrammedByQ,
+    QBins,
+    QData,
     Raw,
     Run,
     SpecularReflectionCoordTransformGraph,
@@ -213,8 +218,10 @@ def wavelength_to_theta(
 
 
 def theta_to_q(
-    data_array: sc.DataArray, q_edges: sc.Variable = None, graph: dict = None
-) -> sc.DataArray:
+    data_array: FootprintCorrected[Run],
+    q_edges: QBins,
+    graph: SpecularReflectionCoordTransformGraph,
+) -> QData[Run]:
     """
     Convert from theta to Q and if necessary bin in Q.
 
@@ -233,14 +240,12 @@ def theta_to_q(
     :
         New data array with theta coordinate.
     """
-    graph = graph if graph is not None else specular_reflection()
     data_array_q = data_array.transform_coords(["Q"], graph=graph)
-    if q_edges is not None:
-        data_array_q = data_array_q.bin({q_edges.dim: q_edges})
-    return data_array_q
+    data_array_q = data_array_q.bin({q_edges.dim: q_edges})
+    return QData[Run](data_array_q)
 
 
-def sum_bins(data_array: sc.DataArray):
+def sum_bins(data_array: CorrectedQData) -> HistogrammedByQ[CorrectedQData]:
     """
     Sum the event bins and propagate the maximum resolution, where available.
 
@@ -262,4 +267,4 @@ def sum_bins(data_array: sc.DataArray):
     return data_array_summed
 
 
-providers = [tof_to_wavelength, wavelength_to_theta]
+providers = [tof_to_wavelength, wavelength_to_theta, theta_to_q, sum_bins]

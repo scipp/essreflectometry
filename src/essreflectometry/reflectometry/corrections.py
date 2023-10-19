@@ -5,9 +5,10 @@ import scipp as sc
 
 from ..amor.tools import fwhm_to_std
 from . import orso
+from .types import FootprintCorrected, Normalizable, NormalizedData, Run, ThetaData
 
 
-def footprint_correction(data_array: sc.DataArray) -> sc.DataArray:
+def footprint_correction(data_array: ThetaData[Run]) -> FootprintCorrected[Run]:
     """
     Perform the footprint correction on the data array that has a :code:`beam_size` and
     binned :code:`theta` values.
@@ -29,16 +30,16 @@ def footprint_correction(data_array: sc.DataArray) -> sc.DataArray:
         fwhm_to_std(data_array.coords['sample_size'] / size_of_beam_on_sample)
     )
     data_array_fp_correction = data_array / footprint_scale.squeeze()
-    try:
-        data_array_fp_correction.attrs['orso'].value.reduction.corrections += [
-            'footprint correction'
-        ]
-    except KeyError:
-        orso.not_found_warning()
-    return data_array_fp_correction
+    # try:
+    #    data_array_fp_correction.attrs['orso'].value.reduction.corrections += [
+    #        'footprint correction'
+    #    ]
+    # except KeyError:
+    #    orso.not_found_warning()
+    return FootprintCorrected[Run](data_array_fp_correction)
 
 
-def normalize_by_counts(data_array: sc.DataArray) -> sc.DataArray:
+def normalize_by_counts(data_array: Normalizable) -> NormalizedData[Normalizable]:
     """
     Normalize the bin-summed data by the total number of counts.
     If the data has variances, a check is performed to ensure that the counts in each

@@ -24,9 +24,8 @@ class ThetaData(sciline.Scope[Run, sc.DataArray], sc.DataArray):
     """Wavelength data transformed to theta"""
 
 
-class Experiment(sciline.Scope[Run, sc.DataArray], sc.DataArray):
-    """Experiment data with added coordinates:
-    wavelength, incidence angle, and momentum transfer"""
+class QData(sciline.Scope[Run, sc.DataArray], sc.DataArray):
+    """Theta data transformed to momentum transfer"""
 
 
 class FootprintCorrected(sciline.Scope[Run, sc.DataArray], sc.DataArray):
@@ -34,12 +33,12 @@ class FootprintCorrected(sciline.Scope[Run, sc.DataArray], sc.DataArray):
 
 
 CalibratedReference = NewType('CalibratedReference', sc.DataArray)
-WithQResolution = NewType('WithQResolution', sc.DataArray)
+Resolutions = NewType('Resolutions', dict)
 Normalized = NewType('Normalized', sc.DataArray)
 CountsByMomentumTransfer = NewType('CountsByMomentumTransfer', sc.DataArray)
 
 ''' Parameters for the workflow '''
-MomentumTransferBins = NewType('MomentumTransferBins', sc.Variable)
+QBins = NewType('QBins', sc.Variable)
 WavelengthBins = NewType('WavelengthBins', sc.Variable)
 ThetaBins = NewType('ThetaBins', sc.Variable)
 
@@ -55,3 +54,22 @@ class BeamlineParams(sciline.Scope[Run, dict], dict):
 SpecularReflectionCoordTransformGraph = NewType(
     'SpecularReflectionCoordTransformGraph', dict
 )
+
+QDataWithResolutions = NewType('QDataWithResolutions', sc.DataArray)
+CorrectedQData = TypeVar('CorrectedQData', QData[Reference], QDataWithResolutions)
+
+
+class HistogrammedByQ(sciline.Scope[CorrectedQData, sc.DataArray], sc.DataArray):
+    """Histogrammmed by Q. Either reference data or sample data with resolutions."""
+
+
+Normalizable = TypeVar(
+    'Normalizable', HistogrammedByQ[QDataWithResolutions], CalibratedReference
+)
+
+
+class NormalizedData(sciline.Scope[Normalizable, sc.DataArray], sc.DataArray):
+    """Normalized histogramm by Q."""
+
+
+NormalizedIOverQ = NewType('NormalizedIOverQ', sc.DataArray)

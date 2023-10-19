@@ -2,12 +2,20 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 import scipp as sc
 
-from ..reflectometry import orso
+# from ..reflectometry import orso
+from ..reflectometry.types import (
+    CalibratedReference,
+    HistogrammedByQ,
+    NormalizedData,
+    NormalizedIOverQ,
+    QDataWithResolutions,
+)
 
 
 def normalize_by_supermirror(
-    sample: sc.DataArray, supermirror: sc.DataArray
-) -> sc.DataArray:
+    sample: NormalizedData[HistogrammedByQ[QDataWithResolutions]],
+    supermirror: NormalizedData[CalibratedReference],
+) -> NormalizedIOverQ:
     """
     Normalize the sample measurement by the (ideally calibrated) supermirror.
 
@@ -26,19 +34,20 @@ def normalize_by_supermirror(
     """
     normalized = sample / supermirror
     normalized.masks['no_reference_neutrons'] = (supermirror == sc.scalar(0)).data
-    try:
-        normalized.attrs['orso'] = sample.attrs['orso']
-        normalized.attrs['orso'].value.reduction.corrections = list(
-            set(
-                sample.attrs['orso'].value.reduction.corrections
-                + supermirror.attrs['orso'].value.reduction.corrections
-            )
-        )
-        normalized.attrs[
-            'orso'
-        ].value.data_source.measurement.reference = supermirror.attrs[
-            'orso'
-        ].value.data_source.measurement.data_files
-    except KeyError:
-        orso.not_found_warning()
+    # TODO
+    # try:
+    #    normalized.attrs['orso'] = sample.attrs['orso']
+    #    normalized.attrs['orso'].value.reduction.corrections = list(
+    #        set(
+    #            sample.attrs['orso'].value.reduction.corrections
+    #            + supermirror.attrs['orso'].value.reduction.corrections
+    #        )
+    #    )
+    #    normalized.attrs[
+    #        'orso'
+    #    ].value.data_source.measurement.reference = supermirror.attrs[
+    #        'orso'
+    #    ].value.data_source.measurement.data_files
+    # except KeyError:
+    #    orso.not_found_warning()
     return normalized

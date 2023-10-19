@@ -2,7 +2,43 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 import scipp as sc
 
+from ..reflectometry.types import (
+    FootprintCorrected,
+    QData,
+    QDataWithResolutions,
+    Resolutions,
+    Sample,
+)
 from .tools import fwhm_to_std
+
+
+def compute_resolution(da: FootprintCorrected[Sample]) -> Resolutions:
+    return Resolutions(
+        {
+            'wavelength_resolution': wavelength_resolution(
+                chopper_1_position=da.coords['source_chopper_1'].value['position'],
+                chopper_2_position=da.coords['source_chopper_2'].value['position'],
+                pixel_position=da.coords['position'],
+            ),
+            'angular_resolution': angular_resolution(
+                pixel_position=da.coords['position'],
+                theta=da.bins.coords['theta'],
+                detector_spatial_resolution=da.coords['detector_spatial_resolution'],
+            ),
+            'sample_size_resolution': sample_size_resolution(
+                pixel_position=da.coords['position'],
+                sample_size=da.coords['sample_size'],
+            ),
+        }
+    )
+
+
+def add_resolutions(
+    da: QData[Sample], resolutions: Resolutions
+) -> QDataWithResolutions:
+    for coord, value in resolutions.items():
+        da.coords[coord] = value
+    return QDataWithResolutions(da)
 
 
 def wavelength_resolution(
