@@ -1,7 +1,41 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 # flake8: noqa: F401
-from . import calibrations, conversions, data, normalize, resolution, tools
-from .beamline import instrument_view_components, make_beamline
+from itertools import chain
+
+import scipp as sc
+from scipp.constants import g
+
+from ..reflectometry import providers as reflectometry_providers
+from ..reflectometry.types import Run
+from . import beamline, calibrations, conversions, load, normalize, resolution, tools
+
+# from .beamline import instrument_view_components
 from .instrument_view import instrument_view
-from .load import load
+from .types import *
+
+providers = list(
+    chain(
+        reflectometry_providers,
+        load.providers,
+        calibrations.providers,
+        conversions.providers,
+        normalize.providers,
+        resolution.providers,
+        beamline.providers,
+    )
+)
+
+default_parameters = {
+    Supermirror[MValue]: sc.scalar(5, unit=sc.units.dimensionless),
+    Supermirror[CriticalEdge]: 0.022 * sc.Unit('1/angstrom'),
+    Supermirror[Alpha]: sc.scalar(0.25 / 0.088, unit=sc.units.angstrom),
+    BeamSize[Run]: 2.0 * sc.units.mm,
+    SampleSize[Run]: 10.0 * sc.units.mm,
+    DetectorSpatialResolution[Run]: 0.0025 * sc.units.m,
+    Gravity: sc.vector(value=[0, -1, 0]) * g,
+    ChopperFrequency[Run]: sc.scalar(20 / 3, unit='Hz'),
+    ChopperPhase[Run]: sc.scalar(-8.0, unit='deg'),
+    Chopper1Position[Run]: sc.vector(value=[0, 0, -15.5], unit='m'),
+    Chopper2Position[Run]: sc.vector(value=[0, 0, -14.5], unit='m'),
+}
