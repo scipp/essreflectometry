@@ -44,8 +44,12 @@ WavelengthBins = NewType('WavelengthBins', sc.Variable)
 ThetaBins = NewType('ThetaBins', sc.Variable)
 
 
-class Rotation(sciline.Scope[Run, sc.Variable], sc.Variable):
+class SampleRotation(sciline.Scope[Run, sc.Variable], sc.Variable):
     """The rotation of the sample / the reference sample"""
+
+
+class BeamlineParams(sciline.Scope[Run, dict], dict):
+    """Parameters describing the beamline"""
 
 
 SpecularReflectionCoordTransformGraph = NewType(

@@ -5,24 +5,23 @@ from scipp.constants import g
 
 from ..choppers import make_chopper
 from ..logging import log_call
+from ..reflectometry.types import BeamlineParams, Run, SampleRotation
 
 
 @log_call(
     instrument='amor', message='Constructing AMOR beamline from default parameters'
 )
-BeamlineParams = NewType('Beamline', dict)
-
 def make_beamline(
-    sample_rotation: sc.Variable,
-    beam_size: sc.Variable = None,
-    sample_size: sc.Variable = None,
-    detector_spatial_resolution: sc.Variable = None,
-    gravity: sc.Variable = None,
-    chopper_frequency: sc.Variable = None,
-    chopper_phase: sc.Variable = None,
-    chopper_1_position: sc.Variable = None,
-    chopper_2_position: sc.Variable = None,
-) -> BeamlineParams:
+    sample_rotation: SampleRotation[Run],
+) -> BeamlineParams[Run]:
+    beam_size: sc.Variable = None
+    sample_size: sc.Variable = None
+    detector_spatial_resolution: sc.Variable = None
+    gravity: sc.Variable = None
+    chopper_frequency: sc.Variable = None
+    chopper_phase: sc.Variable = None
+    chopper_1_position: sc.Variable = None
+    chopper_2_position: sc.Variable = None
     """
     Amor beamline components.
 

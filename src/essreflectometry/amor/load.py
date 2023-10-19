@@ -2,14 +2,14 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional, Union, NewType, TypeVar
+from typing import Any, Union
 
 import scipp as sc
 import scippnexus as snx
 
 from ..logging import get_logger
-from .beamline import make_beamline, BeamlineParams
-from .types import Run, Raw, Filename
+from ..reflectometry.types import BeamlineParams, Filename, Raw, Run
+from .data import get_path
 
 
 def _tof_correction(data: sc.DataArray, dim: str = 'tof') -> sc.DataArray:
@@ -84,7 +84,7 @@ def _load_nexus_entry(filename: Union[str, Path]) -> sc.DataGroup:
         return f['entry'][()]
 
 
-def load(filename: Filename[Run], beamline: BeamlineParams) -> Raw[Run]:
+def load(filename: Filename[Run], beamline: BeamlineParams[Run]) -> Raw[Run]:
     """Load a single Amor data file.
 
     Parameters
@@ -99,6 +99,7 @@ def load(filename: Filename[Run], beamline: BeamlineParams) -> Raw[Run]:
     :
         Data array object for Amor dataset.
     """
+    filename = get_path("sample.nxs")
     get_logger('amor').info(
         "Loading '%s' as an Amor NeXus file",
         filename.filename if hasattr(filename, 'filename') else filename,

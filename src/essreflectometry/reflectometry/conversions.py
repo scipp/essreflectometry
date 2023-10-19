@@ -4,17 +4,17 @@ import scipp as sc
 from scipp.constants import h, m_n, pi
 from scippneutron._utils import elem_dtype, elem_unit
 from scippneutron.conversion.graph import beamline, tof
-from .types import (
-    ThetaBins,
-    WavelengthBins,
-    SpecularReflectionCoordTransformGraph,
-    ThetaData,
-    WavelengthData,
-    Run,
-    Raw,
-)
 
-from . import orso
+# from . import orso
+from .types import (
+    Raw,
+    Run,
+    SpecularReflectionCoordTransformGraph,
+    ThetaBins,
+    ThetaData,
+    WavelengthBins,
+    WavelengthData,
+)
 
 
 def theta(
@@ -262,4 +262,4 @@ def sum_bins(data_array: sc.DataArray):
     return data_array_summed
 
 
-providers = [specular_reflection, tof_to_wavelength, wavelength_to_theta]
+providers = [tof_to_wavelength, wavelength_to_theta]
