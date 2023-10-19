@@ -4,6 +4,15 @@ import scipp as sc
 from scipp.constants import h, m_n, pi
 from scippneutron._utils import elem_dtype, elem_unit
 from scippneutron.conversion.graph import beamline, tof
+from .types import (
+    ThetaBins,
+    WavelengthBins,
+    SpecularReflectionCoordTransformGraph,
+    ThetaData,
+    WavelengthData,
+    Run,
+    Raw,
+)
 
 from . import orso
 
@@ -86,7 +95,7 @@ def reflectometry_q(wavelength: sc.Variable, theta: sc.Variable) -> sc.Variable:
     return c * sc.sin(theta.astype(dtype, copy=False)) / wavelength
 
 
-def specular_reflection() -> dict:
+def specular_reflection() -> SpecularReflectionCoordTransformGraph:
     """
     Generate a coordinate transformation graph for specular reflection reflectometry.
 
@@ -101,12 +110,14 @@ def specular_reflection() -> dict:
         "theta": theta,
         "Q": reflectometry_q,
     }
-    return graph
+    return SpecularReflectionCoordTransformGraph(graph)
 
 
 def tof_to_wavelength(
-    data_array: sc.DataArray, wavelength_edges: sc.Variable = None, graph: dict = None
-) -> sc.DataArray:
+    data_array: Raw[Run],
+    wavelength_edges: WavelengthBins,
+    graph: SpecularReflectionCoordTransformGraph,
+) -> WavelengthData[Run]:
     """
     Use :code:`transform_coords` to convert from ToF to wavelength, cutoff high and
     low limits for wavelength, and add necessary ORSO metadata.
@@ -126,32 +137,33 @@ def tof_to_wavelength(
     :
         New data array with wavelength dimension.
     """
-    graph = graph if graph is not None else specular_reflection()
     data_array_wav = data_array.transform_coords(["wavelength"], graph=graph)
-    if wavelength_edges is not None:
-        data_array_wav = data_array_wav.bin({wavelength_edges.dim: wavelength_edges})
-    try:
-        from orsopy import fileio
+    data_array_wav = data_array_wav.bin({wavelength_edges.dim: wavelength_edges})
+    # TODO
+    # try:
+    #    from orsopy import fileio
 
-        unit = data_array_wav.coords['wavelength'].unit
-        # This insures that when the unit is Å it is written as
-        # angstrom in the ORSO object.
-        if unit == 'angstrom':
-            unit = 'angstrom'
-        orso_measurement = data_array_wav.attrs['orso'].value.data_source.measurement
-        orso_measurement.instrument_settings.wavelength = fileio.base.ValueRange(
-            float(data_array_wav.coords['wavelength'].min().value),
-            float(data_array_wav.coords['wavelength'].max().value),
-            unit,
-        )
-    except ImportError:
-        orso.not_found_warning()
-    return data_array_wav
+    #    unit = data_array_wav.coords['wavelength'].unit
+    #    # This insures that when the unit is Å it is written as
+    #    # angstrom in the ORSO object.
+    #    if unit == 'angstrom':
+    #        unit = 'angstrom'
+    #    orso_measurement = data_array_wav.attrs['orso'].value.data_source.measurement
+    #    orso_measurement.instrument_settings.wavelength = fileio.base.ValueRange(
+    #        float(data_array_wav.coords['wavelength'].min().value),
+    #        float(data_array_wav.coords['wavelength'].max().value),
+    #        unit,
+    #    )
+    # except ImportError:
+    #     orso.not_found_warning()
+    return WavelengthData[Run](data_array_wav)
 
 
 def wavelength_to_theta(
-    data_array: sc.DataArray, theta_edges: sc.Variable = None, graph: dict = None
-) -> sc.DataArray:
+    data_array: WavelengthData[Run],
+    theta_edges: ThetaBins,
+    graph: SpecularReflectionCoordTransformGraph,
+) -> ThetaData[Run]:
     """
     Use :code:`transform_coords` to find the theta values for the events and
     potentially add ORSO metadata.
@@ -171,34 +183,33 @@ def wavelength_to_theta(
     :
         New data array with theta coordinate.
     """
-    graph = graph if graph is not None else specular_reflection()
     data_array_theta = data_array.transform_coords(['theta'], graph=graph)
-    if theta_edges is not None:
-        data_array_theta = data_array_theta.bin({theta_edges.dim: theta_edges})
-    try:
-        from orsopy import fileio
+    data_array_theta = data_array_theta.bin({theta_edges.dim: theta_edges})
+    # TODO
+    # try:
+    #    from orsopy import fileio
 
-        orso_measurement = data_array_theta.attrs['orso'].value.data_source.measurement
-        orso_measurement.instrument_settings.incident_angle = fileio.base.ValueRange(
-            float(data_array_theta.coords['theta'].min().value),
-            float(data_array_theta.coords['theta'].max().value),
-            data_array_theta.bins.coords['theta'].min().unit,
-        )
-        import inspect
+    #    orso_measurement = data_array_theta.attrs['orso'].value.data_source.measurement
+    #    orso_measurement.instrument_settings.incident_angle = fileio.base.ValueRange(
+    #        float(data_array_theta.coords['theta'].min().value),
+    #        float(data_array_theta.coords['theta'].max().value),
+    #        data_array_theta.bins.coords['theta'].min().unit,
+    #    )
+    #    import inspect
 
-        # Determine if 'gravity' is in the graph and if to add the gravity correction
-        if any(
-            [
-                'gravity' in i.parameters.keys()
-                for i in map(inspect.signature, graph.values())
-            ]
-        ):
-            data_array_theta.attrs['orso'].value.reduction.corrections += [
-                'gravity correction'
-            ]
-    except ImportError:
-        orso.not_found_warning()
-    return data_array_theta
+    #    # Determine if 'gravity' is in the graph and if to add the gravity correction
+    #    if any(
+    #        [
+    #            'gravity' in i.parameters.keys()
+    #            for i in map(inspect.signature, graph.values())
+    #        ]
+    #    ):
+    #        data_array_theta.attrs['orso'].value.reduction.corrections += [
+    #            'gravity correction'
+    #        ]
+    # except ImportError:
+    #    orso.not_found_warning()
+    return ThetaData[Run](data_array_theta)
 
 
 def theta_to_q(
@@ -249,3 +260,6 @@ def sum_bins(data_array: sc.DataArray):
             'angular_resolution'
         ].max('detector_number')
     return data_array_summed
+
+
+providers = [specular_reflection, tof_to_wavelength, wavelength_to_theta]

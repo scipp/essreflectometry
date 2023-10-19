@@ -2,13 +2,14 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, NewType, TypeVar
 
 import scipp as sc
 import scippnexus as snx
 
 from ..logging import get_logger
-from .beamline import make_beamline
+from .beamline import make_beamline, BeamlineParams
+from .types import Run, Raw, Filename
 
 
 def _tof_correction(data: sc.DataArray, dim: str = 'tof') -> sc.DataArray:
@@ -83,19 +84,13 @@ def _load_nexus_entry(filename: Union[str, Path]) -> sc.DataGroup:
         return f['entry'][()]
 
 
-def load(
-    filename: Union[str, Path],
-    orso: Optional[Any] = None,
-    beamline: Optional[dict] = None,
-) -> sc.DataArray:
+def load(filename: Filename[Run], beamline: BeamlineParams) -> Raw[Run]:
     """Load a single Amor data file.
 
     Parameters
     ----------
     filename:
         Path of the file to load.
-    orso:
-        The orso object to be populated by additional information from the loaded file.
     beamline:
         A dict defining the beamline parameters.
 
@@ -124,16 +119,15 @@ def load(
     )
 
     # Add beamline parameters
-    beamline = make_beamline() if beamline is None else beamline
     for key, value in beamline.items():
         data.coords[key] = value
 
-    if orso is not None:
-        populate_orso(orso=orso, data=full_data, filename=filename)
-        data.attrs['orso'] = sc.scalar(orso)
+    # if orso is not None:
+    #    populate_orso(orso=orso, data=full_data, filename=filename)
+    #    data.attrs['orso'] = sc.scalar(orso)
 
     # Perform tof correction and fold two pulses
-    return _tof_correction(data)
+    return Raw[Run](_tof_correction(data))
 
 
 def populate_orso(orso: Any, data: sc.DataGroup, filename: str) -> Any:

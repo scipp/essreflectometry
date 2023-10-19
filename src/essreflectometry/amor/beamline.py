@@ -10,6 +10,8 @@ from ..logging import log_call
 @log_call(
     instrument='amor', message='Constructing AMOR beamline from default parameters'
 )
+BeamlineParams = NewType('Beamline', dict)
+
 def make_beamline(
     sample_rotation: sc.Variable,
     beam_size: sc.Variable = None,
@@ -20,7 +22,7 @@ def make_beamline(
     chopper_phase: sc.Variable = None,
     chopper_1_position: sc.Variable = None,
     chopper_2_position: sc.Variable = None,
-) -> dict:
+) -> BeamlineParams:
     """
     Amor beamline components.
 
@@ -91,7 +93,7 @@ def make_beamline(
             position=chopper_1_position,
         )
     )
-    return beamline
+    return BeamlineParams(beamline)
 
 
 @log_call(instrument='amor', level='DEBUG')
