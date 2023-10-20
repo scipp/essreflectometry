@@ -99,7 +99,7 @@ def load(filename: Filename[Run], beamline: BeamlineParams[Run]) -> Raw[Run]:
     :
         Data array object for Amor dataset.
     """
-    filename = get_path("sample.nxs")
+    filename = get_path(filename)
     get_logger('amor').info(
         "Loading '%s' as an Amor NeXus file",
         filename.filename if hasattr(filename, 'filename') else filename,
@@ -128,7 +128,14 @@ def load(filename: Filename[Run], beamline: BeamlineParams[Run]) -> Raw[Run]:
     #    data.attrs['orso'] = sc.scalar(orso)
 
     # Perform tof correction and fold two pulses
-    return Raw[Run](_tof_correction(data))
+    data = _tof_correction(data)
+
+    # Ad-hoc correction described in
+    # https://scipp.github.io/ess/instruments/amor/amor_reduction.html
+    data.coords['position'].fields.y += data.coords['position'].fields.z * sc.tan(
+        2.0 * data.coords['sample_rotation'] - (0.955 * sc.units.deg)
+    )
+    return data
 
 
 def populate_orso(orso: Any, data: sc.DataGroup, filename: str) -> Any:
