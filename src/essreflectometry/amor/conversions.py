@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
-from typing import NewType
 import scipp as sc
 
 from ..reflectometry.conversions import specular_reflection as spec_relf_graph
@@ -31,3 +30,6 @@ def specular_reflection() -> SpecularReflectionCoordTransformGraph:
     graph = spec_relf_graph()
     graph['incident_beam'] = incident_beam
     return SpecularReflectionCoordTransformGraph(graph)
+
+
+providers = [specular_reflection]

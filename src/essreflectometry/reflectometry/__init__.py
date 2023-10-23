@@ -2,5 +2,13 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 
 # flake8: noqa: F401
+from itertools import chain
 
 from . import conversions, corrections, io
+
+providers = list(
+    chain(
+        conversions.providers,
+        corrections.providers,
+    )
+)

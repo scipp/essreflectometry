@@ -8,10 +8,6 @@ Sample = NewType('Sample', str)
 Run = TypeVar('Run', Reference, Sample)
 
 
-class Filename(sciline.Scope[Run, str], str):
-    """Filename of the raw data"""
-
-
 class Raw(sciline.Scope[Run, sc.DataArray], sc.DataArray):
     """Raw data"""
 
@@ -28,23 +24,16 @@ class QData(sciline.Scope[Run, sc.DataArray], sc.DataArray):
     """Theta data transformed to momentum transfer"""
 
 
+QStd = NewType('QStd', sc.Variable)
+
+
 class FootprintCorrected(sciline.Scope[Run, sc.DataArray], sc.DataArray):
     """Experiment data corrected by footprint on sample"""
 
 
-CalibratedReference = NewType('CalibratedReference', sc.DataArray)
-Resolutions = NewType('Resolutions', dict)
-Normalized = NewType('Normalized', sc.DataArray)
-CountsByMomentumTransfer = NewType('CountsByMomentumTransfer', sc.DataArray)
-
-''' Parameters for the workflow '''
-QBins = NewType('QBins', sc.Variable)
-WavelengthBins = NewType('WavelengthBins', sc.Variable)
-ThetaBins = NewType('ThetaBins', sc.Variable)
-
-
-class SampleRotation(sciline.Scope[Run, sc.Variable], sc.Variable):
-    """The rotation of the sample / the reference sample"""
+WavelengthResolution = NewType('WavelengthResolution', sc.Variable)
+AngularResolution = NewType('AngularResolution', sc.Variable)
+SampleSizeResolution = NewType('SampleSizeResolution', sc.Variable)
 
 
 class BeamlineParams(sciline.Scope[Run, dict], dict):
@@ -55,21 +44,34 @@ SpecularReflectionCoordTransformGraph = NewType(
     'SpecularReflectionCoordTransformGraph', dict
 )
 
-QDataWithResolutions = NewType('QDataWithResolutions', sc.DataArray)
-CorrectedQData = TypeVar('CorrectedQData', QData[Reference], QDataWithResolutions)
-
-
-class HistogrammedByQ(sciline.Scope[CorrectedQData, sc.DataArray], sc.DataArray):
-    """Histogrammmed by Q. Either reference data or sample data with resolutions."""
-
-
-Normalizable = TypeVar(
-    'Normalizable', HistogrammedByQ[QDataWithResolutions], CalibratedReference
+CalibratedReference = NewType('CalibratedReference', sc.DataArray)
+HistogramContent = TypeVar(
+    'HistogramContent', Sample, Reference, CalibratedReference, AngularResolution
 )
 
 
-class NormalizedData(sciline.Scope[Normalizable, sc.DataArray], sc.DataArray):
-    """Normalized histogramm by Q."""
+class Histogrammed(sciline.Scope[HistogramContent, sc.DataArray], sc.DataArray):
+    """Histogrammmed by Q and detector_number"""
+
+
+CalibratedRun = TypeVar('CalibratedRun', CalibratedReference, Sample)
+
+
+class Normalized(sciline.Scope[CalibratedRun, sc.DataArray], sc.DataArray):
+    """Normalized histogram"""
 
 
 NormalizedIOverQ = NewType('NormalizedIOverQ', sc.DataArray)
+
+
+''' Parameters for the workflow '''
+
+QBins = NewType('QBins', sc.Variable)
+
+
+class SampleRotation(sciline.Scope[Run, sc.Variable], sc.Variable):
+    """The rotation of the sample / the reference sample"""
+
+
+class Filename(sciline.Scope[Run, str], str):
+    """Filename of the raw data"""

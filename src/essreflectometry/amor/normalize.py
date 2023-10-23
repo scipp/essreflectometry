@@ -5,16 +5,15 @@ import scipp as sc
 # from ..reflectometry import orso
 from ..reflectometry.types import (
     CalibratedReference,
-    HistogrammedByQ,
-    NormalizedData,
+    Normalized,
     NormalizedIOverQ,
-    QDataWithResolutions,
+    Sample,
 )
 
 
 def normalize_by_supermirror(
-    sample: NormalizedData[HistogrammedByQ[QDataWithResolutions]],
-    supermirror: NormalizedData[CalibratedReference],
+    sample: Normalized[Sample],
+    supermirror: Normalized[CalibratedReference],
 ) -> NormalizedIOverQ:
     """
     Normalize the sample measurement by the (ideally calibrated) supermirror.
@@ -50,4 +49,7 @@ def normalize_by_supermirror(
     #    ].value.data_source.measurement.data_files
     # except KeyError:
     #    orso.not_found_warning()
-    return normalized
+    return NormalizedIOverQ(normalized)
+
+
+providers = [normalize_by_supermirror]

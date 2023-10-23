@@ -4,8 +4,16 @@ import numpy as np
 import scipp as sc
 
 from ..amor.tools import fwhm_to_std
-from . import orso
-from .types import FootprintCorrected, Normalizable, NormalizedData, Run, ThetaData
+
+# from . import orso
+from .types import (
+    CalibratedRun,
+    FootprintCorrected,
+    Histogrammed,
+    Normalized,
+    Run,
+    ThetaData,
+)
 
 
 def footprint_correction(data_array: ThetaData[Run]) -> FootprintCorrected[Run]:
@@ -39,7 +47,9 @@ def footprint_correction(data_array: ThetaData[Run]) -> FootprintCorrected[Run]:
     return FootprintCorrected[Run](data_array_fp_correction)
 
 
-def normalize_by_counts(data_array: Normalizable) -> NormalizedData[Normalizable]:
+def normalize_by_counts(
+    data_array: Histogrammed[CalibratedRun],
+) -> Normalized[CalibratedRun]:
     """
     Normalize the bin-summed data by the total number of counts.
     If the data has variances, a check is performed to ensure that the counts in each
@@ -73,11 +83,12 @@ def normalize_by_counts(data_array: Normalizable) -> NormalizedData[Normalizable
             f'regime. The maximum counts found is {data_array.values[ind]} at '
             f'index {ind}. The total number of counts is {ncounts.value}.'
         )
-    try:
-        norm.attrs['orso'].value.reduction.corrections += ['total counts']
-    except KeyError:
-        orso.not_found_warning()
-    return norm
+    # TODO
+    # try:
+    #    norm.attrs['orso'].value.reduction.corrections += ['total counts']
+    # except KeyError:
+    #    orso.not_found_warning()
+    return Normalized[CalibratedRun](norm)
 
 
 def beam_on_sample(beam_size: sc.Variable, theta: sc.Variable) -> sc.Variable:
@@ -97,3 +108,6 @@ def beam_on_sample(beam_size: sc.Variable, theta: sc.Variable) -> sc.Variable:
         Size of the beam on the sample.
     """
     return beam_size / sc.sin(theta)
+
+
+providers = [footprint_correction, normalize_by_counts]

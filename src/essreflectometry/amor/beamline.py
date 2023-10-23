@@ -14,6 +14,7 @@ from ..reflectometry.types import BeamlineParams, Run, SampleRotation
 def make_beamline(
     sample_rotation: SampleRotation[Run],
 ) -> BeamlineParams[Run]:
+    # TODO
     beam_size: sc.Variable = None
     sample_size: sc.Variable = None
     detector_spatial_resolution: sc.Variable = None
@@ -132,3 +133,6 @@ def instrument_view_components(da: sc.DataArray) -> dict:
             'type': 'disk',
         },
     }
+
+
+providers = [make_beamline]

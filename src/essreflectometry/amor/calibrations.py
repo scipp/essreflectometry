@@ -3,12 +3,12 @@
 import scipp as sc
 
 # from ..reflectometry import orso
-from ..reflectometry.types import CalibratedReference, HistogrammedByQ, QData, Reference
+from ..reflectometry.types import CalibratedReference, Histogrammed, Reference
 
 
 def supermirror_calibration(
-    data_array: HistogrammedByQ[QData[Reference]],
-) -> CalibratedReference:
+    data_array: Histogrammed[Reference],
+) -> Histogrammed[CalibratedReference]:
     # TODO
     m_value: sc.Variable = None
     critical_edge: sc.Variable = None
@@ -47,7 +47,7 @@ def supermirror_calibration(
     #    ]
     # except KeyError:
     #    orso.not_found_warning()
-    return CalibratedReference(data_array_cal)
+    return Histogrammed[CalibratedReference](data_array_cal)
 
 
 def calibration_factor(
@@ -90,3 +90,6 @@ def calibration_factor(
     nq = 1.0 / (1.0 - alpha * (q - critical_edge))
     calibration_factor = sc.where(q < max_q, lim + (1 - lim) * nq, sc.scalar(1.0))
     return calibration_factor
+
+
+providers = [supermirror_calibration]

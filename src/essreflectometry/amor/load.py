@@ -160,3 +160,6 @@ def populate_orso(orso: Any, data: sc.DataGroup, filename: str) -> Any:
         '%Y-%m-%d',
     )
     orso.data_source.measurement.data_files = [filename]
+
+
+providers = [load]

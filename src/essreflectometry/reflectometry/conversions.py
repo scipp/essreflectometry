@@ -7,17 +7,15 @@ from scippneutron.conversion.graph import beamline, tof
 
 # from . import orso
 from .types import (
-    CorrectedQData,
+    AngularResolution,
     FootprintCorrected,
-    HistogrammedByQ,
+    Histogrammed,
     QBins,
     QData,
     Raw,
     Run,
     SpecularReflectionCoordTransformGraph,
-    ThetaBins,
     ThetaData,
-    WavelengthBins,
     WavelengthData,
 )
 
@@ -120,7 +118,6 @@ def specular_reflection() -> SpecularReflectionCoordTransformGraph:
 
 def tof_to_wavelength(
     data_array: Raw[Run],
-    wavelength_edges: WavelengthBins,
     graph: SpecularReflectionCoordTransformGraph,
 ) -> WavelengthData[Run]:
     """
@@ -131,9 +128,6 @@ def tof_to_wavelength(
     ----------
     data_array:
         Data array to convert.
-    wavelength_edges:
-        The lower and upper limits for the wavelength.
-        If :code:`None`, no binning is performed.
     graph:
         Graph for :code:`transform_coords`.
 
@@ -143,7 +137,6 @@ def tof_to_wavelength(
         New data array with wavelength dimension.
     """
     data_array_wav = data_array.transform_coords(["wavelength"], graph=graph)
-    data_array_wav = data_array_wav.bin({wavelength_edges.dim: wavelength_edges})
     # TODO
     # try:
     #    from orsopy import fileio
@@ -166,7 +159,6 @@ def tof_to_wavelength(
 
 def wavelength_to_theta(
     data_array: WavelengthData[Run],
-    theta_edges: ThetaBins,
     graph: SpecularReflectionCoordTransformGraph,
 ) -> ThetaData[Run]:
     """
@@ -177,9 +169,6 @@ def wavelength_to_theta(
     ----------
     data_array:
         Data array to convert.
-    theta_edges:
-        The lower and upper limits for the theta. If :code:`None`, no
-        binning is performed.
     graph:
         Graph for :code:`transform_coords`.
 
@@ -189,7 +178,6 @@ def wavelength_to_theta(
         New data array with theta coordinate.
     """
     data_array_theta = data_array.transform_coords(['theta'], graph=graph)
-    data_array_theta = data_array_theta.bin({theta_edges.dim: theta_edges})
     # TODO
     # try:
     #    from orsopy import fileio
@@ -230,8 +218,7 @@ def theta_to_q(
     data_array:
         Data array to convert.
     q_edges:
-        The lower and upper limits for the Q. If :code:`None`, no
-        binning is performed.
+        The lower and upper limits for the Q.
     graph:
         Graph for :code:`transform_coords`.
 
@@ -245,7 +232,7 @@ def theta_to_q(
     return QData[Run](data_array_q)
 
 
-def sum_bins(data_array: CorrectedQData) -> HistogrammedByQ[CorrectedQData]:
+def sum_bins(data_array: QData[Run]) -> Histogrammed[Run]:
     """
     Sum the event bins and propagate the maximum resolution, where available.
 
@@ -259,12 +246,32 @@ def sum_bins(data_array: CorrectedQData) -> HistogrammedByQ[CorrectedQData]:
     :
         Summed data array.
     """
-    data_array_summed = data_array.bins.sum()
-    if 'angular_resolution' in data_array.bins.coords:
-        data_array_summed.coords['angular_resolution'] = data_array.bins.coords[
-            'angular_resolution'
-        ].max('detector_number')
-    return data_array_summed
+    return Histogrammed[Run](data_array.bins.sum())
 
 
-providers = [tof_to_wavelength, wavelength_to_theta, theta_to_q, sum_bins]
+def aggregate_resolution_in_bins(
+    angular_resolution: AngularResolution,
+) -> Histogrammed[AngularResolution]:
+    """
+    Propagate the maximum resolution.
+
+    Parameters
+    ----------
+    angular_resolution:
+        Angular resolution for each Q.
+
+    Returns
+    -------
+    :
+        Max of angular resolution over detectors.
+    """
+    return Histogrammed[AngularResolution](angular_resolution.max('detector_number'))
+
+
+providers = [
+    tof_to_wavelength,
+    wavelength_to_theta,
+    theta_to_q,
+    sum_bins,
+    aggregate_resolution_in_bins,
+]
