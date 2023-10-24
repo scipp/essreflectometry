@@ -5,6 +5,8 @@ import scipp as sc
 
 from ..reflectometry.types import Run
 
+# TODO What do they mean?
+# Supermirror parameters
 MValue = NewType('MValue', str)
 CriticalEdge = NewType('CriticalEdge', str)
 Alpha = NewType('Alpha', str)
@@ -12,39 +14,41 @@ SupermirrorParameter = TypeVar('SupermirrorParameter', MValue, CriticalEdge, Alp
 
 
 class Supermirror(sciline.Scope[SupermirrorParameter, sc.Variable], sc.Variable):
-    """Supermirror parameter scope"""
+    """Supermirror parameter scope."""
 
 
 class SampleRotation(sciline.Scope[Run, sc.Variable], sc.Variable):
-    """The rotation of the sample / the reference sample"""
+    """The rotation of the sample / the reference sample."""
 
 
 class BeamSize(sciline.Scope[Run, sc.Variable], sc.Variable):
-    """parameter scope"""
+    """FWHM of the neutron beam."""
 
 
 class DetectorSpatialResolution(sciline.Scope[Run, sc.Variable], sc.Variable):
-    """parameter scope"""
+    # TODO
+    """Don't know what this is."""
 
 
 class SampleSize(sciline.Scope[Run, sc.Variable], sc.Variable):
-    """parameter scope"""
+    # TODO is this radius or total length?
+    """Size of the sample."""
 
 
 Gravity = NewType('Gravity', sc.Variable)
 
 
 class ChopperFrequency(sciline.Scope[Run, sc.Variable], sc.Variable):
-    """parameter scope"""
+    """Frequency of the choppers used in the run."""
 
 
 class ChopperPhase(sciline.Scope[Run, sc.Variable], sc.Variable):
-    """parameter scope"""
+    """Phase of the choppers in the run."""
 
 
 class Chopper1Position(sciline.Scope[Run, sc.Variable], sc.Variable):
-    """parameter scope"""
+    """Position of the first chopper relative the source of the beam."""
 
 
 class Chopper2Position(sciline.Scope[Run, sc.Variable], sc.Variable):
-    """parameter scope"""
+    """Position of the second chopper relative to the source of the beam."""
