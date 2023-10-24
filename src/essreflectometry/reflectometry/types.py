@@ -45,19 +45,13 @@ SpecularReflectionCoordTransformGraph = NewType(
 )
 
 CalibratedReference = NewType('CalibratedReference', sc.DataArray)
-HistogramContent = TypeVar(
-    'HistogramContent', Sample, Reference, CalibratedReference, AngularResolution
-)
 
 
-class Histogrammed(sciline.Scope[HistogramContent, sc.DataArray], sc.DataArray):
+class Histogrammed(sciline.Scope[Run, sc.DataArray], sc.DataArray):
     """Histogrammmed by Q and detector_number"""
 
 
-CalibratedRun = TypeVar('CalibratedRun', CalibratedReference, Sample)
-
-
-class Normalized(sciline.Scope[CalibratedRun, sc.DataArray], sc.DataArray):
+class Normalized(sciline.Scope[Run, sc.DataArray], sc.DataArray):
     """Normalized histogram"""
 
 

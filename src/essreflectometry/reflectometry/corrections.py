@@ -7,11 +7,13 @@ from ..amor.tools import fwhm_to_std
 
 # from . import orso
 from .types import (
-    CalibratedRun,
+    CalibratedReference,
     FootprintCorrected,
     Histogrammed,
     Normalized,
+    Reference,
     Run,
+    Sample,
     ThetaData,
 )
 
@@ -47,9 +49,21 @@ def footprint_correction(data_array: ThetaData[Run]) -> FootprintCorrected[Run]:
     return FootprintCorrected[Run](data_array_fp_correction)
 
 
-def normalize_by_counts(
-    data_array: Histogrammed[CalibratedRun],
-) -> Normalized[CalibratedRun]:
+def normalize_sample_by_counts(
+    data_array: Histogrammed[Sample],
+) -> Normalized[Sample]:
+    return Normalized[Sample](_normalize_by_counts(data_array))
+
+
+def normalize_reference_by_counts(
+    data_array: CalibratedReference,
+) -> Normalized[Reference]:
+    return Normalized[Reference](_normalize_by_counts(data_array))
+
+
+def _normalize_by_counts(
+    data_array: sc.DataArray,
+) -> sc.DataArray:
     """
     Normalize the bin-summed data by the total number of counts.
     If the data has variances, a check is performed to ensure that the counts in each
@@ -88,7 +102,7 @@ def normalize_by_counts(
     #    norm.attrs['orso'].value.reduction.corrections += ['total counts']
     # except KeyError:
     #    orso.not_found_warning()
-    return Normalized[CalibratedRun](norm)
+    return norm
 
 
 def beam_on_sample(beam_size: sc.Variable, theta: sc.Variable) -> sc.Variable:
@@ -110,4 +124,8 @@ def beam_on_sample(beam_size: sc.Variable, theta: sc.Variable) -> sc.Variable:
     return beam_size / sc.sin(theta)
 
 
-providers = [footprint_correction, normalize_by_counts]
+providers = [
+    footprint_correction,
+    normalize_sample_by_counts,
+    normalize_reference_by_counts,
+]

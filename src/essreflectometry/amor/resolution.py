@@ -4,7 +4,6 @@ import scipp as sc
 
 from ..reflectometry.types import (
     AngularResolution,
-    Histogrammed,
     QBins,
     QData,
     QStd,
@@ -143,7 +142,7 @@ def _angular_resolution(
 
 
 def sigma_Q(
-    angular_resolution: Histogrammed[AngularResolution],
+    angular_resolution: AngularResolution,
     wavelength_resolution: WavelengthResolution,
     sample_size_resolution: SampleSizeResolution,
     q_bins: QBins,

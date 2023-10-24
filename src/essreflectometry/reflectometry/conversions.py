@@ -7,7 +7,6 @@ from scippneutron.conversion.graph import beamline, tof
 
 # from . import orso
 from .types import (
-    AngularResolution,
     FootprintCorrected,
     Histogrammed,
     QBins,
@@ -249,29 +248,9 @@ def sum_bins(data_array: QData[Run]) -> Histogrammed[Run]:
     return Histogrammed[Run](data_array.bins.sum())
 
 
-def aggregate_resolution_in_bins(
-    angular_resolution: AngularResolution,
-) -> Histogrammed[AngularResolution]:
-    """
-    Propagate the maximum resolution.
-
-    Parameters
-    ----------
-    angular_resolution:
-        Angular resolution for each Q.
-
-    Returns
-    -------
-    :
-        Max of angular resolution over detectors.
-    """
-    return Histogrammed[AngularResolution](angular_resolution.max('detector_number'))
-
-
 providers = [
     tof_to_wavelength,
     wavelength_to_theta,
     theta_to_q,
     sum_bins,
-    aggregate_resolution_in_bins,
 ]

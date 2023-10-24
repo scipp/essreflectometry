@@ -12,7 +12,7 @@ def supermirror_calibration(
     m_value: Supermirror[MValue],
     critical_edge: Supermirror[CriticalEdge],
     alpha: Supermirror[Alpha],
-) -> Histogrammed[CalibratedReference]:
+) -> CalibratedReference:
     """
     Calibrate supermirror measurements
 
