@@ -69,9 +69,5 @@ NormalizedIOverQ = NewType('NormalizedIOverQ', sc.DataArray)
 QBins = NewType('QBins', sc.Variable)
 
 
-class SampleRotation(sciline.Scope[Run, sc.Variable], sc.Variable):
-    """The rotation of the sample / the reference sample"""
-
-
 class Filename(sciline.Scope[Run, str], str):
     """Filename of the raw data"""
