@@ -1,8 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
-from datetime import datetime
 from pathlib import Path
-from typing import Any, Union
+from typing import Union
 
 import scipp as sc
 import scippnexus as snx
@@ -30,8 +29,9 @@ def _tof_correction(data: sc.DataArray, dim: str = 'tof') -> sc.DataArray:
     :
         ToF corrected data array.
     """
-    if 'orso' in data.attrs:
-        data.attrs['orso'].value.reduction.corrections += ['chopper ToF correction']
+    # TODO
+    # if 'orso' in data.attrs:
+    #    data.attrs['orso'].value.reduction.corrections += ['chopper ToF correction']
     tof_unit = data.bins.coords[dim].bins.unit
     tau = sc.to_unit(
         1 / (2 * data.coords['source_chopper_2'].value['frequency'].data),
@@ -138,28 +138,29 @@ def load(filename: Filename[Run], beamline: BeamlineParams[Run]) -> Raw[Run]:
     return data
 
 
-def populate_orso(orso: Any, data: sc.DataGroup, filename: str) -> Any:
-    """
-    Populate the Orso object, by calling the :code:`base_orso` and adding data from the
-    file.
-
-    Parameters
-    ----------
-    orso:
-        The orso object to be populated by additional information from the loaded file.
-    data:
-        Data group to source information from.
-        Should mimic the structure of the NeXus file.
-    filename:
-        Path of the file to load.
-    """
-    orso.data_source.experiment.title = data['title']
-    orso.data_source.experiment.instrument = data['name']
-    orso.data_source.experiment.start_date = datetime.strftime(
-        datetime.strptime(data['start_time'][:-3], '%Y-%m-%dT%H:%M:%S.%f'),
-        '%Y-%m-%d',
-    )
-    orso.data_source.measurement.data_files = [filename]
+# TODO
+# def populate_orso(orso: Any, data: sc.DataGroup, filename: str) -> Any:
+#    """
+#    Populate the Orso object, by calling the :code:`base_orso` and adding data from the
+#    file.
+#
+#    Parameters
+#    ----------
+#    orso:
+#        The orso object to be populated by additional information from the loaded file.
+#    data:
+#        Data group to source information from.
+#        Should mimic the structure of the NeXus file.
+#    filename:
+#        Path of the file to load.
+#    """
+#    orso.data_source.experiment.title = data['title']
+#    orso.data_source.experiment.instrument = data['name']
+#    orso.data_source.experiment.start_date = datetime.strftime(
+#        datetime.strptime(data['start_time'][:-3], '%Y-%m-%dT%H:%M:%S.%f'),
+#        '%Y-%m-%d',
+#    )
+#    orso.data_source.measurement.data_files = [filename]
 
 
 providers = [load]
