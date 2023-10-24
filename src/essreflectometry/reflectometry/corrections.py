@@ -52,16 +52,16 @@ def footprint_correction(data_array: ThetaData[Run]) -> FootprintCorrected[Run]:
 def normalize_sample_by_counts(
     data_array: Histogrammed[Sample],
 ) -> Normalized[Sample]:
-    return Normalized[Sample](_normalize_by_counts(data_array))
+    return Normalized[Sample](normalize_by_counts(data_array))
 
 
 def normalize_reference_by_counts(
     data_array: CalibratedReference,
 ) -> Normalized[Reference]:
-    return Normalized[Reference](_normalize_by_counts(data_array))
+    return Normalized[Reference](normalize_by_counts(data_array))
 
 
-def _normalize_by_counts(
+def normalize_by_counts(
     data_array: sc.DataArray,
 ) -> sc.DataArray:
     """
