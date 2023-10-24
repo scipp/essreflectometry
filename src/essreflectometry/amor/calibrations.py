@@ -4,15 +4,15 @@ import scipp as sc
 
 # from ..reflectometry import orso
 from ..reflectometry.types import CalibratedReference, Histogrammed, Reference
+from .types import Alpha, CriticalEdge, MValue, Supermirror
 
 
 def supermirror_calibration(
     data_array: Histogrammed[Reference],
+    m_value: Supermirror[MValue],
+    critical_edge: Supermirror[CriticalEdge],
+    alpha: Supermirror[Alpha],
 ) -> Histogrammed[CalibratedReference]:
-    # TODO
-    m_value: sc.Variable = None
-    critical_edge: sc.Variable = None
-    alpha: sc.Variable = None
     """
     Calibrate supermirror measurements
 
@@ -21,23 +21,16 @@ def supermirror_calibration(
     data_array:
         Data array to get q-bins/values from.
     m_value:
-        m-value for the supermirror. Defaults to 5.
+        m-value for the supermirror.
     critical_edge:
-        Supermirror critical edge. Defaults to 0.022 1/angstrom.
+        Supermirror critical edge.
     alpha:
-        Supermirror alpha value. Defaults to 0.25 / 0.088 angstrom.
-
+        Supermirror alpha value.
     Returns
     -------
     :
         Calibrated supermirror measurement.
     """
-    if m_value is None:
-        m_value = sc.scalar(5, unit=sc.units.dimensionless)
-    if critical_edge is None:
-        critical_edge = 0.022 * sc.Unit('1/angstrom')
-    if alpha is None:
-        alpha = sc.scalar(0.25 / 0.088, unit=sc.units.angstrom)
     calibration = calibration_factor(data_array, m_value, critical_edge, alpha)
     data_array_cal = data_array * calibration
     # TODO
@@ -52,9 +45,9 @@ def supermirror_calibration(
 
 def calibration_factor(
     data_array: sc.DataArray,
-    m_value: sc.Variable = None,
-    critical_edge: sc.Variable = None,
-    alpha: sc.Variable = None,
+    m_value: sc.Variable,
+    critical_edge: sc.Variable,
+    alpha: sc.Variable,
 ) -> sc.Variable:
     """
     Return the calibration factor for the supermirror.
@@ -64,23 +57,17 @@ def calibration_factor(
     data_array:
         Data array to get q-bins/values from.
     m_value:
-        m-value for the supermirror. Defaults to 5.
+        m-value for the supermirror.
     critical_edge:
-        Supermirror critical edge. Defaults to 0.022 1/angstrom.
+        Supermirror critical edge.
     alpha:
-        Supermirror alpha value. Defaults to 0.25 / 0.088 angstrom.
+        Supermirror alpha value.
 
     Returns
     -------
     :
         Calibration factor at the midpoint of each Q-bin.
     """
-    if m_value is None:
-        m_value = sc.scalar(5, unit=sc.units.dimensionless)
-    if critical_edge is None:
-        critical_edge = 0.022 * sc.Unit('1/angstrom')
-    if alpha is None:
-        alpha = sc.scalar(0.25 / 0.088, unit=sc.units.angstrom)
     q = data_array.coords['Q']
     if data_array.coords.is_edges('Q'):
         q = sc.midpoints(q)

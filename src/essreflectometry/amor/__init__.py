@@ -3,9 +3,13 @@
 # flake8: noqa: F401
 from itertools import chain
 
-from . import calibrations, conversions, load, normalize, resolution, tools
-from .beamline import instrument_view_components
+import scipp as sc
+
+from . import beamline, calibrations, conversions, load, normalize, resolution, tools
+
+# from .beamline import instrument_view_components
 from .instrument_view import instrument_view
+from .types import *
 
 providers = list(
     chain(
@@ -17,3 +21,9 @@ providers = list(
         beamline.providers,
     )
 )
+
+default_parameters = {
+    Supermirror[MValue]: sc.scalar(5, unit=sc.units.dimensionless),
+    Supermirror[CriticalEdge]: 0.022 * sc.Unit('1/angstrom'),
+    Supermirror[Alpha]: sc.scalar(0.25 / 0.088, unit=sc.units.angstrom),
+}
