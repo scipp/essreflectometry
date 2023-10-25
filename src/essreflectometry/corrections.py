@@ -3,7 +3,7 @@
 import numpy as np
 import scipp as sc
 
-from ..amor.tools import fwhm_to_std
+from .tools import fwhm_to_std
 
 # from . import orso
 from .types import (

@@ -7,7 +7,7 @@ import scipp as sc
 import scippnexus as snx
 
 from ..logging import get_logger
-from ..reflectometry.types import BeamlineParams, Filename, Raw, Run
+from ..types import BeamlineParams, Filename, Raw, Run
 from .data import get_path
 
 

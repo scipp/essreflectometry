@@ -3,7 +3,7 @@ from typing import NewType, TypeVar
 import sciline
 import scipp as sc
 
-from ..reflectometry.types import Run
+from ..types import Run
 
 # TODO What do they mean?
 # Supermirror parameters

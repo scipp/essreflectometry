@@ -3,7 +3,7 @@
 import scipp as sc
 
 # from ..reflectometry import orso
-from ..reflectometry.types import CalibratedReference, Histogrammed, Reference
+from ..types import CalibratedReference, Histogrammed, Reference
 from .types import Alpha, CriticalEdge, MValue, Supermirror
 
 

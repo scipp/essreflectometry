@@ -4,7 +4,7 @@ import scipp as sc
 
 from ..choppers import make_chopper
 from ..logging import log_call
-from ..reflectometry.types import BeamlineParams, Run
+from ..types import BeamlineParams, Run
 from .types import (
     BeamSize,
     Chopper1Position,

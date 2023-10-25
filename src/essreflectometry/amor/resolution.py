@@ -2,7 +2,8 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 import scipp as sc
 
-from ..reflectometry.types import (
+from ..tools import fwhm_to_std
+from ..types import (
     AngularResolution,
     QBins,
     QData,
@@ -11,7 +12,6 @@ from ..reflectometry.types import (
     SampleSizeResolution,
     WavelengthResolution,
 )
-from .tools import fwhm_to_std
 
 
 def wavelength_resolution(da: QData[Sample]) -> WavelengthResolution:

@@ -4,13 +4,11 @@
 from itertools import chain
 
 import scipp as sc
-from scipp.constants import g
 
-from ..reflectometry import providers as reflectometry_providers
-from ..reflectometry.types import Run
-from . import beamline, calibrations, conversions, load, normalize, resolution, tools
-
-# from .beamline import instrument_view_components
+from .. import providers as reflectometry_providers
+from ..types import Run
+from . import beamline, calibrations, conversions, load, normalize, resolution
+from .beamline import instrument_view_components
 from .instrument_view import instrument_view
 from .types import *
 
@@ -33,7 +31,7 @@ default_parameters = {
     BeamSize[Run]: 2.0 * sc.units.mm,
     SampleSize[Run]: 10.0 * sc.units.mm,
     DetectorSpatialResolution[Run]: 0.0025 * sc.units.m,
-    Gravity: sc.vector(value=[0, -1, 0]) * g,
+    Gravity: sc.vector(value=[0, -1, 0]) * sc.constants.g,
     ChopperFrequency[Run]: sc.scalar(20 / 3, unit='Hz'),
     ChopperPhase[Run]: sc.scalar(-8.0, unit='deg'),
     Chopper1Position[Run]: sc.vector(value=[0, 0, -15.5], unit='m'),
