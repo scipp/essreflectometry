@@ -6,7 +6,15 @@ import itertools
 import scipp as sc
 
 from .. import providers as reflectometry_providers
-from ..types import Run
+from ..types import (
+    Alpha,
+    BeamSize,
+    CriticalEdge,
+    DetectorSpatialResolution,
+    Gravity,
+    MValue,
+    SampleSize,
+)
 from . import beamline, calibrations, conversions, load, normalize, resolution
 from .beamline import instrument_view_components
 from .instrument_view import instrument_view

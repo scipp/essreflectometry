@@ -1,4 +1,4 @@
-from typing import NewType, TypeVar
+from typing import NewType
 
 import sciline
 import scipp as sc
@@ -12,35 +12,6 @@ SampleSizeResolution = NewType('SampleSizeResolution', sc.Variable)
 
 class BeamlineParams(sciline.Scope[Run, dict], dict):
     """Parameters describing the beamline"""
-
-
-# TODO What do they mean?
-# Supermirror parameters
-MValue = NewType('MValue', sc.Variable)
-CriticalEdge = NewType('CriticalEdge', sc.Variable)
-Alpha = NewType('Alpha', sc.Variable)
-SupermirrorParameter = TypeVar('SupermirrorParameter', MValue, CriticalEdge, Alpha)
-
-
-class SampleRotation(sciline.Scope[Run, sc.Variable], sc.Variable):
-    """The rotation of the sample / the reference sample."""
-
-
-class BeamSize(sciline.Scope[Run, sc.Variable], sc.Variable):
-    """FWHM of the neutron beam."""
-
-
-class DetectorSpatialResolution(sciline.Scope[Run, sc.Variable], sc.Variable):
-    # TODO
-    """Don't know what this is."""
-
-
-class SampleSize(sciline.Scope[Run, sc.Variable], sc.Variable):
-    # TODO is this radius or total length?
-    """Size of the sample."""
-
-
-Gravity = NewType('Gravity', sc.Variable)
 
 
 class ChopperFrequency(sciline.Scope[Run, sc.Variable], sc.Variable):

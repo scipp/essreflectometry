@@ -3,8 +3,14 @@
 import scipp as sc
 
 # from ..reflectometry import orso
-from ..types import CalibratedReference, Histogrammed, Reference
-from .types import Alpha, CriticalEdge, MValue
+from ..types import (
+    Alpha,
+    CalibratedReference,
+    CriticalEdge,
+    Histogrammed,
+    MValue,
+    Reference,
+)
 
 
 def supermirror_calibration(

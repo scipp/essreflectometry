@@ -4,18 +4,20 @@ import scipp as sc
 
 from ..choppers import make_chopper
 from ..logging import log_call
-from ..types import Run
+from ..types import (
+    BeamSize,
+    DetectorSpatialResolution,
+    Gravity,
+    Run,
+    SampleRotation,
+    SampleSize,
+)
 from .types import (
     BeamlineParams,
-    BeamSize,
     Chopper1Position,
     Chopper2Position,
     ChopperFrequency,
     ChopperPhase,
-    DetectorSpatialResolution,
-    Gravity,
-    SampleRotation,
-    SampleSize,
 )
 
 
