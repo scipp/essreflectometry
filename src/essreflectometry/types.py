@@ -8,7 +8,7 @@ Sample = NewType('Sample', str)
 Run = TypeVar('Run', Reference, Sample)
 
 
-class Raw(sciline.Scope[Run, sc.DataArray], sc.DataArray):
+class RawData(sciline.Scope[Run, sc.DataArray], sc.DataArray):
     """Raw data"""
 
 

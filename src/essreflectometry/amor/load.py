@@ -7,7 +7,7 @@ import scipp as sc
 import scippnexus as snx
 
 from ..logging import get_logger
-from ..types import Filename, Raw, Run
+from ..types import Filename, RawData, Run
 from .data import get_path
 from .types import BeamlineParams
 
@@ -85,7 +85,7 @@ def _load_nexus_entry(filename: Union[str, Path]) -> sc.DataGroup:
         return f['entry'][()]
 
 
-def load(filename: Filename[Run], beamline: BeamlineParams[Run]) -> Raw[Run]:
+def load(filename: Filename[Run], beamline: BeamlineParams[Run]) -> RawData[Run]:
     """Load a single Amor data file.
 
     Parameters

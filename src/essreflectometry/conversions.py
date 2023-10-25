@@ -11,7 +11,7 @@ from .types import (
     Histogrammed,
     QBins,
     QData,
-    Raw,
+    RawData,
     Run,
     SpecularReflectionCoordTransformGraph,
     ThetaData,
@@ -116,7 +116,7 @@ def specular_reflection() -> SpecularReflectionCoordTransformGraph:
 
 
 def tof_to_wavelength(
-    data_array: Raw[Run],
+    data_array: RawData[Run],
     graph: SpecularReflectionCoordTransformGraph,
 ) -> WavelengthData[Run]:
     """
