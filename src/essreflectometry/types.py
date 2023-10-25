@@ -24,7 +24,7 @@ class QData(sciline.Scope[Run, sc.DataArray], sc.DataArray):
     """Theta data transformed to momentum transfer"""
 
 
-QStd = NewType('QStd', sc.Variable)
+QResolution = NewType('QResolution', sc.Variable)
 
 
 class FootprintCorrected(sciline.Scope[Run, sc.DataArray], sc.DataArray):

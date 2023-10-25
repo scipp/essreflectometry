@@ -7,7 +7,7 @@ from ..types import (
     AngularResolution,
     QBins,
     QData,
-    QStd,
+    QResolution,
     Sample,
     SampleSizeResolution,
     WavelengthResolution,
@@ -146,7 +146,7 @@ def sigma_Q(
     wavelength_resolution: WavelengthResolution,
     sample_size_resolution: SampleSizeResolution,
     q_bins: QBins,
-) -> QStd:
+) -> QResolution:
     """
     Combine all of the components of the resolution and add Q contribution.
 
