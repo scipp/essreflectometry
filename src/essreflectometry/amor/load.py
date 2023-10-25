@@ -7,8 +7,9 @@ import scipp as sc
 import scippnexus as snx
 
 from ..logging import get_logger
-from ..types import BeamlineParams, Filename, Raw, Run
+from ..types import Filename, Raw, Run
 from .data import get_path
+from .types import BeamlineParams
 
 
 def _tof_correction(data: sc.DataArray, dim: str = 'tof') -> sc.DataArray:

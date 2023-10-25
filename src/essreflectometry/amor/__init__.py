@@ -25,9 +25,9 @@ providers = list(
 )
 
 default_parameters = {
-    Supermirror[MValue]: sc.scalar(5, unit=sc.units.dimensionless),
-    Supermirror[CriticalEdge]: 0.022 * sc.Unit('1/angstrom'),
-    Supermirror[Alpha]: sc.scalar(0.25 / 0.088, unit=sc.units.angstrom),
+    MValue: sc.scalar(5, unit=sc.units.dimensionless),
+    CriticalEdge: 0.022 * sc.Unit('1/angstrom'),
+    Alpha: sc.scalar(0.25 / 0.088, unit=sc.units.angstrom),
     BeamSize[Run]: 2.0 * sc.units.mm,
     SampleSize[Run]: 10.0 * sc.units.mm,
     DetectorSpatialResolution[Run]: 0.0025 * sc.units.m,

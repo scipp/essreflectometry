@@ -4,14 +4,14 @@ import scipp as sc
 
 # from ..reflectometry import orso
 from ..types import CalibratedReference, Histogrammed, Reference
-from .types import Alpha, CriticalEdge, MValue, Supermirror
+from .types import Alpha, CriticalEdge, MValue
 
 
 def supermirror_calibration(
     data_array: Histogrammed[Reference],
-    m_value: Supermirror[MValue],
-    critical_edge: Supermirror[CriticalEdge],
-    alpha: Supermirror[Alpha],
+    m_value: MValue,
+    critical_edge: CriticalEdge,
+    alpha: Alpha,
 ) -> CalibratedReference:
     """
     Calibrate supermirror measurements

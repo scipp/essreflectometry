@@ -5,16 +5,21 @@ import scipp as sc
 
 from ..types import Run
 
+WavelengthResolution = NewType('WavelengthResolution', sc.Variable)
+AngularResolution = NewType('AngularResolution', sc.Variable)
+SampleSizeResolution = NewType('SampleSizeResolution', sc.Variable)
+
+
+class BeamlineParams(sciline.Scope[Run, dict], dict):
+    """Parameters describing the beamline"""
+
+
 # TODO What do they mean?
 # Supermirror parameters
-MValue = NewType('MValue', str)
-CriticalEdge = NewType('CriticalEdge', str)
-Alpha = NewType('Alpha', str)
+MValue = NewType('MValue', sc.Variable)
+CriticalEdge = NewType('CriticalEdge', sc.Variable)
+Alpha = NewType('Alpha', sc.Variable)
 SupermirrorParameter = TypeVar('SupermirrorParameter', MValue, CriticalEdge, Alpha)
-
-
-class Supermirror(sciline.Scope[SupermirrorParameter, sc.Variable], sc.Variable):
-    """Supermirror parameter scope."""
 
 
 class SampleRotation(sciline.Scope[Run, sc.Variable], sc.Variable):

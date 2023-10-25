@@ -3,15 +3,8 @@
 import scipp as sc
 
 from ..tools import fwhm_to_std
-from ..types import (
-    AngularResolution,
-    QBins,
-    QData,
-    QResolution,
-    Sample,
-    SampleSizeResolution,
-    WavelengthResolution,
-)
+from ..types import QBins, QData, QResolution, Sample
+from .types import AngularResolution, SampleSizeResolution, WavelengthResolution
 
 
 def wavelength_resolution(da: QData[Sample]) -> WavelengthResolution:

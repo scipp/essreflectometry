@@ -31,15 +31,6 @@ class FootprintCorrected(sciline.Scope[Run, sc.DataArray], sc.DataArray):
     """Experiment data corrected by footprint on sample"""
 
 
-WavelengthResolution = NewType('WavelengthResolution', sc.Variable)
-AngularResolution = NewType('AngularResolution', sc.Variable)
-SampleSizeResolution = NewType('SampleSizeResolution', sc.Variable)
-
-
-class BeamlineParams(sciline.Scope[Run, dict], dict):
-    """Parameters describing the beamline"""
-
-
 SpecularReflectionCoordTransformGraph = NewType(
     'SpecularReflectionCoordTransformGraph', dict
 )

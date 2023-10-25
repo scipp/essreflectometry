@@ -4,8 +4,9 @@ import scipp as sc
 
 from ..choppers import make_chopper
 from ..logging import log_call
-from ..types import BeamlineParams, Run
+from ..types import Run
 from .types import (
+    BeamlineParams,
     BeamSize,
     Chopper1Position,
     Chopper2Position,
