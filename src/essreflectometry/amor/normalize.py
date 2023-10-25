@@ -3,13 +3,13 @@
 import scipp as sc
 
 # from ..reflectometry import orso
-from ..types import Normalized, NormalizedIOfQ, Reference, Sample
+from ..types import Normalized, NormalizedIofQ, Reference, Sample
 
 
 def normalize_by_supermirror(
     sample: Normalized[Sample],
     supermirror: Normalized[Reference],
-) -> NormalizedIOfQ:
+) -> NormalizedIofQ:
     """
     Normalize the sample measurement by the (ideally calibrated) supermirror.
 
@@ -44,7 +44,7 @@ def normalize_by_supermirror(
     #    ].value.data_source.measurement.data_files
     # except KeyError:
     #    orso.not_found_warning()
-    return NormalizedIOfQ(normalized)
+    return NormalizedIofQ(normalized)
 
 
 providers = [normalize_by_supermirror]

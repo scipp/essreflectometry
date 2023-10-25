@@ -46,7 +46,7 @@ class Normalized(sciline.Scope[Run, sc.DataArray], sc.DataArray):
     """Normalized histogram"""
 
 
-NormalizedIOfQ = NewType('NormalizedIOfQ', sc.DataArray)
+NormalizedIofQ = NewType('NormalizedIofQ', sc.DataArray)
 
 
 ''' Parameters for the workflow '''
