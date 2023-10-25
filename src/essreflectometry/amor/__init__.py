@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 # flake8: noqa: F401
-from itertools import chain
+import itertools
 
 import scipp as sc
 
@@ -13,7 +13,7 @@ from .instrument_view import instrument_view
 from .types import *
 
 providers = list(
-    chain(
+    itertools.chain(
         reflectometry_providers,
         load.providers,
         calibrations.providers,
@@ -37,3 +37,6 @@ default_parameters = {
     Chopper1Position[Run]: sc.vector(value=[0, 0, -15.5], unit='m'),
     Chopper2Position[Run]: sc.vector(value=[0, 0, -14.5], unit='m'),
 }
+
+del sc
+del itertools
