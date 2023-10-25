@@ -9,12 +9,14 @@ from ..types import (
     CriticalEdge,
     Histogrammed,
     MValue,
+    QBins,
     Reference,
 )
 
 
 def supermirror_calibration(
     data_array: Histogrammed[Reference],
+    qbins: QBins,
     m_value: MValue,
     critical_edge: CriticalEdge,
     alpha: Alpha,
@@ -37,7 +39,7 @@ def supermirror_calibration(
     :
         Calibrated supermirror measurement.
     """
-    calibration = calibration_factor(data_array, m_value, critical_edge, alpha)
+    calibration = calibration_factor(qbins, m_value, critical_edge, alpha)
     data_array_cal = data_array * calibration
     # TODO
     # try:
@@ -50,7 +52,7 @@ def supermirror_calibration(
 
 
 def calibration_factor(
-    data_array: sc.DataArray,
+    qbins: sc.Variable,
     m_value: sc.Variable,
     critical_edge: sc.Variable,
     alpha: sc.Variable,
@@ -60,8 +62,8 @@ def calibration_factor(
 
     Parameters
     ----------
-    data_array:
-        Data array to get q-bins/values from.
+    qbins:
+        edges of binning of Q.
     m_value:
         m-value for the supermirror.
     critical_edge:
@@ -74,9 +76,7 @@ def calibration_factor(
     :
         Calibration factor at the midpoint of each Q-bin.
     """
-    q = data_array.coords['Q']
-    if data_array.coords.is_edges('Q'):
-        q = sc.midpoints(q)
+    q = sc.midpoints(qbins)
     max_q = m_value * critical_edge
     lim = (q < critical_edge).astype(float)
     lim.unit = 'one'
