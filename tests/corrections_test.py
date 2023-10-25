@@ -4,7 +4,7 @@ import pytest
 import scipp as sc
 from orsopy import fileio
 
-from essreflectometry.reflectometry import corrections
+from essreflectometry import corrections
 
 
 def test_normalize_by_counts():
