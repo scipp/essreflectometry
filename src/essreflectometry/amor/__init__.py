@@ -6,6 +6,7 @@ from itertools import chain
 import scipp as sc
 from scipp.constants import g
 
+from ..reflectometry import providers as reflectometry_providers
 from ..reflectometry.types import Run
 from . import beamline, calibrations, conversions, load, normalize, resolution, tools
 
@@ -15,6 +16,7 @@ from .types import *
 
 providers = list(
     chain(
+        reflectometry_providers,
         load.providers,
         calibrations.providers,
         conversions.providers,
