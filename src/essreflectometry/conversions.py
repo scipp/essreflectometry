@@ -206,7 +206,7 @@ def wavelength_to_theta(
 
 def theta_to_q(
     data_array: FootprintCorrected[Run],
-    q_edges: QBins,
+    q_bins: QBins,
     graph: SpecularReflectionCoordTransformGraph,
 ) -> QData[Run]:
     """
@@ -226,14 +226,14 @@ def theta_to_q(
     :
         New data array with theta coordinate.
     """
-    data_array_q = data_array.transform_coords(["Q"], graph=graph)
-    data_array_q = data_array_q.bin({q_edges.dim: q_edges})
-    return QData[Run](data_array_q)
+    data_array = data_array.transform_coords(["Q"], graph=graph)
+    data_array = data_array.bin({q_bins.dim: q_bins})
+    return QData[Run](data_array)
 
 
-def sum_bins(data_array: QData[Run]) -> Histogrammed[Run]:
+def histogram(data_array: QData[Run]) -> Histogrammed[Run]:
     """
-    Sum the event bins and propagate the maximum resolution, where available.
+    Sum the event bins.
 
     Parameters
     ----------
@@ -245,12 +245,12 @@ def sum_bins(data_array: QData[Run]) -> Histogrammed[Run]:
     :
         Summed data array.
     """
-    return Histogrammed[Run](data_array.bins.sum())
+    return Histogrammed[Run](data_array.hist())
 
 
 providers = [
     tof_to_wavelength,
     wavelength_to_theta,
     theta_to_q,
-    sum_bins,
+    histogram,
 ]

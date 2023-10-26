@@ -7,13 +7,13 @@ from .tools import fwhm_to_std
 
 # from . import orso
 from .types import (
-    CalibratedReference,
     FootprintCorrected,
     Histogrammed,
     Normalized,
     Reference,
     Run,
     Sample,
+    SupermirrorCalibrationFactor,
     ThetaData,
 )
 
@@ -49,16 +49,17 @@ def footprint_correction(data_array: ThetaData[Run]) -> FootprintCorrected[Run]:
     return FootprintCorrected[Run](data_array_fp_correction)
 
 
-def normalize_sample_by_counts(
+def normalize_sample(
     data_array: Histogrammed[Sample],
 ) -> Normalized[Sample]:
     return Normalized[Sample](normalize_by_counts(data_array))
 
 
-def normalize_reference_by_counts(
-    data_array: CalibratedReference,
+def normalize_reference(
+    data_array: Histogrammed[Reference],
+    calibration_factor: SupermirrorCalibrationFactor,
 ) -> Normalized[Reference]:
-    return Normalized[Reference](normalize_by_counts(data_array))
+    return Normalized[Reference](normalize_by_counts(calibration_factor * data_array))
 
 
 def normalize_by_counts(
@@ -126,6 +127,6 @@ def beam_on_sample(beam_size: sc.Variable, theta: sc.Variable) -> sc.Variable:
 
 providers = [
     footprint_correction,
-    normalize_sample_by_counts,
-    normalize_reference_by_counts,
+    normalize_sample,
+    normalize_reference,
 ]

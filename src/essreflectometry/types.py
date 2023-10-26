@@ -61,7 +61,7 @@ class Filename(sciline.Scope[Run, str], str):
 MValue = NewType('MValue', sc.Variable)
 CriticalEdge = NewType('CriticalEdge', sc.Variable)
 Alpha = NewType('Alpha', sc.Variable)
-SupermirrorParameter = TypeVar('SupermirrorParameter', MValue, CriticalEdge, Alpha)
+SupermirrorCalibrationFactor = NewType('SupermirrorCalibrationFactor', sc.Variable)
 
 
 class SampleRotation(sciline.Scope[Run, sc.Variable], sc.Variable):

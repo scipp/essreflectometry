@@ -3,60 +3,15 @@
 import scipp as sc
 
 # from ..reflectometry import orso
-from ..types import (
-    Alpha,
-    CalibratedReference,
-    CriticalEdge,
-    Histogrammed,
-    MValue,
-    QBins,
-    Reference,
-)
+from ..types import Alpha, CriticalEdge, MValue, QBins, SupermirrorCalibrationFactor
 
 
-def supermirror_calibration(
-    data_array: Histogrammed[Reference],
+def calibration_factor(
     qbins: QBins,
     m_value: MValue,
     critical_edge: CriticalEdge,
     alpha: Alpha,
-) -> CalibratedReference:
-    """
-    Calibrate supermirror measurements
-
-    Parameters
-    ----------
-    data_array:
-        Data array to get q-bins/values from.
-    m_value:
-        m-value for the supermirror.
-    critical_edge:
-        Supermirror critical edge.
-    alpha:
-        Supermirror alpha value.
-    Returns
-    -------
-    :
-        Calibrated supermirror measurement.
-    """
-    calibration = calibration_factor(qbins, m_value, critical_edge, alpha)
-    data_array_cal = data_array * calibration
-    # TODO
-    # try:
-    #    data_array_cal.attrs['orso'].value.reduction.corrections += [
-    #        'supermirror calibration'
-    #    ]
-    # except KeyError:
-    #    orso.not_found_warning()
-    return Histogrammed[CalibratedReference](data_array_cal)
-
-
-def calibration_factor(
-    qbins: sc.Variable,
-    m_value: sc.Variable,
-    critical_edge: sc.Variable,
-    alpha: sc.Variable,
-) -> sc.Variable:
+) -> SupermirrorCalibrationFactor:
     """
     Return the calibration factor for the supermirror.
 
@@ -85,4 +40,4 @@ def calibration_factor(
     return calibration_factor
 
 
-providers = [supermirror_calibration]
+providers = [calibration_factor]
