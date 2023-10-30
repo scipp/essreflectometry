@@ -9,51 +9,67 @@ Run = TypeVar('Run', Reference, Sample)
 
 
 class RawData(sciline.Scope[Run, sc.DataArray], sc.DataArray):
-    """Raw data"""
+    """Event time data from nexus file,
+    binned by `detector_number` (pixel of the detector frame)."""
 
 
 class WavelengthData(sciline.Scope[Run, sc.DataArray], sc.DataArray):
-    """Raw data transformed to wavelength"""
+    """Event data with wavelengths computed for every event,
+    binned by `detector_number` (pixel of the detector frame)"""
 
 
 class ThetaData(sciline.Scope[Run, sc.DataArray], sc.DataArray):
-    """Wavelength data transformed to theta"""
+    """Event data with wavelengths and scattering angle computed for each event,
+    binned by `detector_number` (pixel of the detector frame)"""
 
 
 class QData(sciline.Scope[Run, sc.DataArray], sc.DataArray):
-    """Theta data transformed to momentum transfer"""
+    """Event data with wavelength, incidence angle and momentum transfer computed per event.
+    Binned by momentum transfer according to the QBins provider,
+    and by `detector_number` (pixel of the detector frame).
+    """
 
 
 class FootprintCorrected(sciline.Scope[Run, sc.DataArray], sc.DataArray):
-    """Experiment data corrected by footprint on sample"""
+    """Event data with weight corrected for the footprint of the beam on the sample for the
+    incidence angle of the event."""
 
 
 SpecularReflectionCoordTransformGraph = NewType(
     'SpecularReflectionCoordTransformGraph', dict
 )
 
-CalibratedReference = NewType('CalibratedReference', sc.DataArray)
-
 
 class Histogrammed(sciline.Scope[Run, sc.DataArray], sc.DataArray):
-    """Histogrammmed by Q and detector_number"""
+    """Histogram of event weights by momentum transfer and detector_number."""
 
 
 class Normalized(sciline.Scope[Run, sc.DataArray], sc.DataArray):
-    """Normalized histogram"""
+    """Normalization of the histogram.
+    The normalization for the sample consists of scaling
+    with the inverse of the total weight.
+    The normalization for the reference consists of
+        1. multiplication with the calibration factor
+           from the supermirror calibration and
+        2. scaling with the inverse of the total weight.
+    """
 
 
 NormalizedIofQ = NewType('NormalizedIofQ', sc.DataArray)
+'''Normalized histogram over momentrum transfer and detector number,
+normalized by the calibrated reference measurement.'''
 QResolution = NewType('QResolution', sc.Variable)
+'''Resolution term for the momentum transfer for each bin of QBins.'''
 
 
 ''' Parameters for the workflow '''
 
 QBins = NewType('QBins', sc.Variable)
+'''Bins for the momentum transfer histogram.'''
 
 
 class Filename(sciline.Scope[Run, str], str):
-    """Filename of the raw data"""
+    """Filename of the event data nexus file."""
 
 
 # TODO What do they mean?
@@ -65,11 +81,11 @@ SupermirrorCalibrationFactor = NewType('SupermirrorCalibrationFactor', sc.Variab
 
 
 class SampleRotation(sciline.Scope[Run, sc.Variable], sc.Variable):
-    """The rotation of the sample / the reference sample."""
+    """The rotation of the sample relative to the center of the incoming beam."""
 
 
 class BeamSize(sciline.Scope[Run, sc.Variable], sc.Variable):
-    """FWHM of the neutron beam."""
+    """Full-Width-Half-maximum of the incoming beam."""
 
 
 class DetectorSpatialResolution(sciline.Scope[Run, sc.Variable], sc.Variable):
@@ -83,3 +99,5 @@ class SampleSize(sciline.Scope[Run, sc.Variable], sc.Variable):
 
 
 Gravity = NewType('Gravity', sc.Variable)
+"""This parameter determines if gravity is taken into account
+when computing the scattering angle and momentum transfer."""

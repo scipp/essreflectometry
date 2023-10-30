@@ -11,7 +11,7 @@ SampleSizeResolution = NewType('SampleSizeResolution', sc.Variable)
 
 
 class BeamlineParams(sciline.Scope[Run, dict], dict):
-    """Parameters describing the beamline"""
+    """Parameters describing the beamline and chopper positions."""
 
 
 class ChopperFrequency(sciline.Scope[Run, sc.Variable], sc.Variable):
