@@ -19,6 +19,7 @@
    :recursive:
 
    providers
+   amor.providers
 ```
 
 ## Submodules

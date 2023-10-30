@@ -31,6 +31,11 @@ providers = list(
         beamline.providers,
     )
 )
+"""
+List of providers for setting up a Sciline pipeline.
+
+This provides a default Amor workflow including providers for loadings files.
+"""
 
 default_parameters = {
     MValue: sc.scalar(5, unit=sc.units.dimensionless),
