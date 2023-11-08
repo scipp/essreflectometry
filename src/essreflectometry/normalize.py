@@ -3,7 +3,7 @@
 import scipp as sc
 
 # from ..reflectometry import orso
-from ..types import Normalized, NormalizedIofQ, Reference, Sample
+from .types import Normalized, NormalizedIofQ, Reference, Sample
 
 
 def normalize_by_supermirror(

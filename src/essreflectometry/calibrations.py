@@ -3,7 +3,7 @@
 import scipp as sc
 
 # from ..reflectometry import orso
-from ..types import Alpha, CriticalEdge, MValue, QBins, SupermirrorCalibrationFactor
+from .types import Alpha, CriticalEdge, MValue, QBins, SupermirrorCalibrationFactor
 
 
 def calibration_factor(

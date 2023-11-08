@@ -5,6 +5,7 @@ import itertools
 
 import scipp as sc
 
+from .. import calibrations, normalize
 from .. import providers as reflectometry_providers
 from ..types import (
     Alpha,
@@ -15,7 +16,7 @@ from ..types import (
     MValue,
     SampleSize,
 )
-from . import beamline, calibrations, conversions, load, normalize, resolution
+from . import beamline, conversions, load, resolution
 from .beamline import instrument_view_components
 from .instrument_view import instrument_view
 from .types import *
