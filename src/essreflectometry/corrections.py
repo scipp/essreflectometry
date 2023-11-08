@@ -3,6 +3,7 @@
 import numpy as np
 import scipp as sc
 
+from .supermirror.types import SupermirrorCalibrationFactor
 from .tools import fwhm_to_std
 
 # from . import orso
@@ -13,7 +14,6 @@ from .types import (
     Reference,
     Run,
     Sample,
-    SupermirrorCalibrationFactor,
     ThetaData,
 )
 

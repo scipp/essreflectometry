@@ -5,17 +5,9 @@ import itertools
 
 import scipp as sc
 
-from .. import calibrations, normalize
 from .. import providers as reflectometry_providers
-from ..types import (
-    Alpha,
-    BeamSize,
-    CriticalEdge,
-    DetectorSpatialResolution,
-    Gravity,
-    MValue,
-    SampleSize,
-)
+from ..supermirror.types import Alpha, CriticalEdge, MValue
+from ..types import BeamSize, DetectorSpatialResolution, Gravity, SampleSize
 from . import beamline, conversions, load, resolution
 from .beamline import instrument_view_components
 from .instrument_view import instrument_view
@@ -25,9 +17,7 @@ providers = list(
     itertools.chain(
         reflectometry_providers,
         load.providers,
-        calibrations.providers,
         conversions.providers,
-        normalize.providers,
         resolution.providers,
         beamline.providers,
     )

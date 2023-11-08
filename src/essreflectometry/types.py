@@ -72,14 +72,6 @@ class Filename(sciline.Scope[Run, str], str):
     """Filename of the event data nexus file."""
 
 
-# TODO What do they mean?
-# Supermirror parameters
-MValue = NewType('MValue', sc.Variable)
-CriticalEdge = NewType('CriticalEdge', sc.Variable)
-Alpha = NewType('Alpha', sc.Variable)
-SupermirrorCalibrationFactor = NewType('SupermirrorCalibrationFactor', sc.Variable)
-
-
 class SampleRotation(sciline.Scope[Run, sc.Variable], sc.Variable):
     """The rotation of the sample relative to the center of the incoming beam."""
 

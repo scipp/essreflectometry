@@ -5,7 +5,7 @@
 import importlib.metadata
 import itertools
 
-from . import conversions, corrections, io
+from . import calibrations, conversions, corrections, normalize
 
 try:
     __version__ = importlib.metadata.version(__package__ or __name__)
@@ -16,6 +16,8 @@ providers = list(
     itertools.chain(
         conversions.providers,
         corrections.providers,
+        calibrations.providers,
+        normalize.providers,
     )
 )
 """
