@@ -89,8 +89,8 @@ class BeamSize(sciline.Scope[Run, sc.Variable], sc.Variable):
 
 
 class DetectorSpatialResolution(sciline.Scope[Run, sc.Variable], sc.Variable):
-    # TODO
-    """Don't know what this is."""
+    # TODO what is the definition of this?
+    """Spatial resolution of the detector."""
 
 
 class SampleSize(sciline.Scope[Run, sc.Variable], sc.Variable):
