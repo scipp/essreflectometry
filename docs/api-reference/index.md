@@ -19,7 +19,6 @@
    :recursive:
 
    providers
-   amor.providers
 ```
 
 ## Submodules
@@ -31,5 +30,6 @@
    :recursive:
 
    types
-   amor.types
+   amor
+   supermirror
 ```

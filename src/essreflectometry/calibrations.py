@@ -2,7 +2,7 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 import scipp as sc
 
-from .supermirror.types import Alpha, CriticalEdge, MValue, SupermirrorCalibrationFactor
+from .supermirror import Alpha, CriticalEdge, MValue, SupermirrorCalibrationFactor
 
 # from ..reflectometry import orso
 from .types import QBins

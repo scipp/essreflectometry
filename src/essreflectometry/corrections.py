@@ -3,7 +3,7 @@
 import numpy as np
 import scipp as sc
 
-from .supermirror.types import SupermirrorCalibrationFactor
+from .supermirror import SupermirrorCalibrationFactor
 from .tools import fwhm_to_std
 
 # from . import orso
