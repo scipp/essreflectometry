@@ -3,12 +3,12 @@
 import scipp as sc
 
 # from ..reflectometry import orso
-from .types import Normalized, NormalizedIofQ, Reference, Sample
+from .types import IofQ, NormalizedIofQ, Reference, Sample
 
 
 def normalize_by_supermirror(
-    sample: Normalized[Sample],
-    supermirror: Normalized[Reference],
+    sample: IofQ[Sample],
+    supermirror: IofQ[Reference],
 ) -> NormalizedIofQ:
     """
     Normalize the sample measurement by the (ideally calibrated) supermirror.

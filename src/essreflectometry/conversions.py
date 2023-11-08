@@ -7,8 +7,8 @@ from scippneutron.conversion.graph import beamline, tof
 
 # from . import orso
 from .types import (
-    FootprintCorrected,
-    Histogrammed,
+    FootprintCorrectedData,
+    HistogrammedQData,
     QBins,
     QData,
     RawData,
@@ -205,7 +205,7 @@ def wavelength_to_theta(
 
 
 def theta_to_q(
-    data_array: FootprintCorrected[Run],
+    data_array: FootprintCorrectedData[Run],
     q_bins: QBins,
     graph: SpecularReflectionCoordTransformGraph,
 ) -> QData[Run]:
@@ -231,7 +231,7 @@ def theta_to_q(
     return QData[Run](data_array)
 
 
-def histogram(data_array: QData[Run]) -> Histogrammed[Run]:
+def histogram(data_array: QData[Run]) -> HistogrammedQData[Run]:
     """
     Sum the event bins.
 
@@ -245,7 +245,7 @@ def histogram(data_array: QData[Run]) -> Histogrammed[Run]:
     :
         Summed data array.
     """
-    return Histogrammed[Run](data_array.hist())
+    return HistogrammedQData[Run](data_array.hist())
 
 
 providers = [

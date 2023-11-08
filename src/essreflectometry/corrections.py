@@ -8,9 +8,9 @@ from .tools import fwhm_to_std
 
 # from . import orso
 from .types import (
-    FootprintCorrected,
-    Histogrammed,
-    Normalized,
+    FootprintCorrectedData,
+    HistogrammedQData,
+    IofQ,
     Reference,
     Run,
     Sample,
@@ -18,7 +18,7 @@ from .types import (
 )
 
 
-def footprint_correction(data_array: ThetaData[Run]) -> FootprintCorrected[Run]:
+def footprint_correction(data_array: ThetaData[Run]) -> FootprintCorrectedData[Run]:
     """
     Perform the footprint correction on the data array that has a :code:`beam_size` and
     binned :code:`theta` values.
@@ -46,20 +46,20 @@ def footprint_correction(data_array: ThetaData[Run]) -> FootprintCorrected[Run]:
     #    ]
     # except KeyError:
     #    orso.not_found_warning()
-    return FootprintCorrected[Run](data_array_fp_correction)
+    return FootprintCorrectedData[Run](data_array_fp_correction)
 
 
 def normalize_sample(
-    data_array: Histogrammed[Sample],
-) -> Normalized[Sample]:
-    return Normalized[Sample](normalize_by_counts(data_array))
+    data_array: HistogrammedQData[Sample],
+) -> IofQ[Sample]:
+    return IofQ[Sample](normalize_by_counts(data_array))
 
 
 def normalize_reference(
-    data_array: Histogrammed[Reference],
+    data_array: HistogrammedQData[Reference],
     calibration_factor: SupermirrorCalibrationFactor,
-) -> Normalized[Reference]:
-    return Normalized[Reference](normalize_by_counts(calibration_factor * data_array))
+) -> IofQ[Reference]:
+    return IofQ[Reference](normalize_by_counts(calibration_factor * data_array))
 
 
 def normalize_by_counts(

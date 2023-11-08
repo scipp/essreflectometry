@@ -30,7 +30,7 @@ class QData(sciline.Scope[Run, sc.DataArray], sc.DataArray):
     """
 
 
-class FootprintCorrected(sciline.Scope[Run, sc.DataArray], sc.DataArray):
+class FootprintCorrectedData(sciline.Scope[Run, sc.DataArray], sc.DataArray):
     """Event data with weight corrected for the footprint of the beam on the sample for the
     incidence angle of the event."""
 
@@ -40,11 +40,11 @@ SpecularReflectionCoordTransformGraph = NewType(
 )
 
 
-class Histogrammed(sciline.Scope[Run, sc.DataArray], sc.DataArray):
+class HistogrammedQData(sciline.Scope[Run, sc.DataArray], sc.DataArray):
     """Histogram of event weights by momentum transfer and detector_number."""
 
 
-class Normalized(sciline.Scope[Run, sc.DataArray], sc.DataArray):
+class IofQ(sciline.Scope[Run, sc.DataArray], sc.DataArray):
     """Normalization of the histogram.
     The normalization for the sample consists of scaling
     with the inverse of the total weight.
