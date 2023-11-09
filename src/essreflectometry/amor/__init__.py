@@ -7,11 +7,20 @@ import scipp as sc
 
 from .. import providers as reflectometry_providers
 from .. import supermirror
-from ..types import BeamSize, DetectorSpatialResolution, Gravity, SampleSize
+from ..types import BeamSize, DetectorSpatialResolution, Gravity, Run, SampleSize
 from . import beamline, conversions, load, resolution
 from .beamline import instrument_view_components
 from .instrument_view import instrument_view
-from .types import *
+from .types import (
+    AngularResolution,
+    BeamlineParams,
+    Chopper1Position,
+    Chopper2Position,
+    ChopperFrequency,
+    ChopperPhase,
+    SampleSizeResolution,
+    WavelengthResolution,
+)
 
 providers = list(
     itertools.chain(
