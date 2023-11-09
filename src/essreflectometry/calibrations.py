@@ -2,7 +2,7 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 import scipp as sc
 
-from .supermirror import Alpha, CriticalEdge, MValue, SupermirrorCalibrationFactor
+from . import supermirror
 
 # from ..reflectometry import orso
 from .types import QBins
@@ -10,10 +10,10 @@ from .types import QBins
 
 def calibration_factor(
     qbins: QBins,
-    m_value: MValue,
-    critical_edge: CriticalEdge,
-    alpha: Alpha,
-) -> SupermirrorCalibrationFactor:
+    m_value: supermirror.MValue,
+    critical_edge: supermirror.CriticalEdge,
+    alpha: supermirror.Alpha,
+) -> supermirror.SupermirrorCalibrationFactor:
     """
     Return the calibration factor for the supermirror.
 
