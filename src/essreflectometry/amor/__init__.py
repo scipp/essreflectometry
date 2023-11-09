@@ -6,7 +6,7 @@ import itertools
 import scipp as sc
 
 from .. import providers as reflectometry_providers
-from ..supermirror import Alpha, CriticalEdge, MValue
+from .. import supermirror
 from ..types import BeamSize, DetectorSpatialResolution, Gravity, SampleSize
 from . import beamline, conversions, load, resolution
 from .beamline import instrument_view_components
@@ -29,9 +29,9 @@ This provides a default Amor workflow including providers for loadings files.
 """
 
 default_parameters = {
-    MValue: sc.scalar(5, unit=sc.units.dimensionless),
-    CriticalEdge: 0.022 * sc.Unit('1/angstrom'),
-    Alpha: sc.scalar(0.25 / 0.088, unit=sc.units.angstrom),
+    supermirror.MValue: sc.scalar(5, unit=sc.units.dimensionless),
+    supermirror.CriticalEdge: 0.022 * sc.Unit('1/angstrom'),
+    supermirror.Alpha: sc.scalar(0.25 / 0.088, unit=sc.units.angstrom),
     BeamSize[Run]: 2.0 * sc.units.mm,
     SampleSize[Run]: 10.0 * sc.units.mm,
     DetectorSpatialResolution[Run]: 0.0025 * sc.units.m,
