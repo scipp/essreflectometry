@@ -1,0 +1,749 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>essreflectometry.amor.load &#8212; ESSreflectometry</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../../_static/documentation_options.js?v=1d4d625f"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/modules/essreflectometry.amor.load';</script>
+    <script src="../../_static/anaconda-icon.js?v=461bdc62"></script>
+    <link rel="icon" href="../../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="essreflectometry.amor.load.chopper_tof_correction" href="essreflectometry.amor.load.chopper_tof_correction.html" />
+    <link rel="prev" title="essreflectometry.amor.instrument_view" href="essreflectometry.amor.instrument_view.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="ESSreflectometry - Home"/>
+    <script>document.write(`<img src="../../_static/logo-dark.svg" class="logo__image only-dark" alt="ESSreflectometry - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../examples/index.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../api-reference/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/index.html">
+                        Developer documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../about/index.html">
+                        About
+                      </a>
+                    </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://scipp.github.io/plopp">
+                    Plopp
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://scipp.github.io/sciline">
+                    Sciline
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://scipp.github.io">
+                    Scipp
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://scipp.github.io/scippneutron">
+                    ScippNeutron
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://scipp.github.io/scippnexus">
+                    ScippNexus
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/scipp/essreflectometry" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/essreflectometry/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/scipp/essreflectometry" title="Conda" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-custom fa-anaconda fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Conda</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../examples/index.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../api-reference/index.html">
+                        API Reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/index.html">
+                        Developer documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../about/index.html">
+                        About
+                      </a>
+                    </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links-2">
+                    More
+                </button>
+                <ul id="pst-nav-more-links-2" class="dropdown-menu">
+                    
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://scipp.github.io/plopp">
+                    Plopp
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://scipp.github.io/sciline">
+                    Sciline
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://scipp.github.io">
+                    Scipp
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://scipp.github.io/scippneutron">
+                    ScippNeutron
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link dropdown-item nav-external" href="https://scipp.github.io/scippnexus">
+                    ScippNexus
+                  </a>
+                </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/scipp/essreflectometry" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/essreflectometry/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://anaconda.org/scipp/essreflectometry" title="Conda" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-custom fa-anaconda fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Conda</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../functions/essreflectometry.providers.html">essreflectometry.providers</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="essreflectometry.amor.html">essreflectometry.amor</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.amor.providers.html">essreflectometry.amor.providers</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="essreflectometry.amor.beamline.html">essreflectometry.amor.beamline</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.beamline.instrument_view_components.html">essreflectometry.amor.beamline.instrument_view_components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.beamline.make_beamline.html">essreflectometry.amor.beamline.make_beamline</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="essreflectometry.amor.conversions.html">essreflectometry.amor.conversions</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.conversions.incident_beam.html">essreflectometry.amor.conversions.incident_beam</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.conversions.specular_reflection.html">essreflectometry.amor.conversions.specular_reflection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="essreflectometry.amor.data.html">essreflectometry.amor.data</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.data.get_path.html">essreflectometry.amor.data.get_path</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.amor.instrument_view.html">essreflectometry.amor.instrument_view</a></li>
+<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">essreflectometry.amor.load</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.load.chopper_tof_correction.html">essreflectometry.amor.load.chopper_tof_correction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.load.extract_events.html">essreflectometry.amor.load.extract_events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.load.load_raw_nexus.html">essreflectometry.amor.load.load_raw_nexus</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="essreflectometry.amor.orso.html">essreflectometry.amor.orso</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.orso.build_orso_instrument.html">essreflectometry.amor.orso.build_orso_instrument</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.orso.build_orso_iofq_dataset.html">essreflectometry.amor.orso.build_orso_iofq_dataset</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="essreflectometry.amor.resolution.html">essreflectometry.amor.resolution</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.resolution.angular_resolution.html">essreflectometry.amor.resolution.angular_resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.resolution.sample_size_resolution.html">essreflectometry.amor.resolution.sample_size_resolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.resolution.sigma_Q.html">essreflectometry.amor.resolution.sigma_Q</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.resolution.wavelength_resolution.html">essreflectometry.amor.resolution.wavelength_resolution</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="essreflectometry.amor.types.html">essreflectometry.amor.types</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.types.BeamlineParams.html">essreflectometry.amor.types.BeamlineParams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.types.Chopper1Position.html">essreflectometry.amor.types.Chopper1Position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.types.Chopper2Position.html">essreflectometry.amor.types.Chopper2Position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.types.ChopperFrequency.html">essreflectometry.amor.types.ChopperFrequency</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.amor.types.ChopperPhase.html">essreflectometry.amor.types.ChopperPhase</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="essreflectometry.orso.html">essreflectometry.orso</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.OrsoCreator.html">essreflectometry.orso.OrsoCreator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.OrsoDataSource.html">essreflectometry.orso.OrsoDataSource</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.OrsoExperiment.html">essreflectometry.orso.OrsoExperiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.OrsoInstrument.html">essreflectometry.orso.OrsoInstrument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.OrsoIofQDataset.html">essreflectometry.orso.OrsoIofQDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.OrsoMeasurement.html">essreflectometry.orso.OrsoMeasurement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.OrsoOwner.html">essreflectometry.orso.OrsoOwner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.OrsoReduction.html">essreflectometry.orso.OrsoReduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.OrsoSample.html">essreflectometry.orso.OrsoSample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.build_orso_data_source.html">essreflectometry.orso.build_orso_data_source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.build_orso_measurement.html">essreflectometry.orso.build_orso_measurement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.build_orso_reduction.html">essreflectometry.orso.build_orso_reduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.find_corrections.html">essreflectometry.orso.find_corrections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.parse_orso_experiment.html">essreflectometry.orso.parse_orso_experiment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.parse_orso_owner.html">essreflectometry.orso.parse_orso_owner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.orso.parse_orso_sample.html">essreflectometry.orso.parse_orso_sample</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="essreflectometry.supermirror.html">essreflectometry.supermirror</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="essreflectometry.supermirror.types.html">essreflectometry.supermirror.types</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.supermirror.types.MValue.html">essreflectometry.supermirror.types.MValue</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.supermirror.types.CriticalEdge.html">essreflectometry.supermirror.types.CriticalEdge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.supermirror.types.Alpha.html">essreflectometry.supermirror.types.Alpha</a></li>
+<li class="toctree-l3"><a class="reference internal" href="essreflectometry.supermirror.types.SupermirrorCalibrationFactor.html">essreflectometry.supermirror.types.SupermirrorCalibrationFactor</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="essreflectometry.types.html">essreflectometry.types</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-12"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.NormalizedIofQ.html">essreflectometry.types.NormalizedIofQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.NormalizedIofQ1D.html">essreflectometry.types.NormalizedIofQ1D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.QResolution.html">essreflectometry.types.QResolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.QBins.html">essreflectometry.types.QBins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.WavelengthEdges.html">essreflectometry.types.WavelengthEdges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.Gravity.html">essreflectometry.types.Gravity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.BeamSize.html">essreflectometry.types.BeamSize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.ChopperCorrectedTofEvents.html">essreflectometry.types.ChopperCorrectedTofEvents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.DetectorSpatialResolution.html">essreflectometry.types.DetectorSpatialResolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.Filename.html">essreflectometry.types.Filename</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.FootprintCorrectedData.html">essreflectometry.types.FootprintCorrectedData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.HistogrammedQData.html">essreflectometry.types.HistogrammedQData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.IofQ.html">essreflectometry.types.IofQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.QData.html">essreflectometry.types.QData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.RawData.html">essreflectometry.types.RawData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.RawEvents.html">essreflectometry.types.RawEvents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.SampleRotation.html">essreflectometry.types.SampleRotation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.SampleSize.html">essreflectometry.types.SampleSize</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.ThetaData.html">essreflectometry.types.ThetaData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="essreflectometry.types.WavelengthData.html">essreflectometry.types.WavelengthData</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/generated/modules/essreflectometry.amor.load.rst">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../api-reference/index.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="essreflectometry.amor.html" class="nav-link">essreflectometry.amor</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">essreflectom...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-essreflectometry.amor.load">
+<span id="essreflectometry-amor-load"></span><h1>essreflectometry.amor.load<a class="headerlink" href="#module-essreflectometry.amor.load" title="Link to this heading">#</a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="essreflectometry.amor.load.chopper_tof_correction.html#essreflectometry.amor.load.chopper_tof_correction" title="essreflectometry.amor.load.chopper_tof_correction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">chopper_tof_correction</span></code></a>(data)</p></td>
+<td><p>A correction for the presence of the chopper with respect to the &quot;true&quot; ToF.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="essreflectometry.amor.load.extract_events.html#essreflectometry.amor.load.extract_events" title="essreflectometry.amor.load.extract_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_events</span></code></a>(raw_data, beamline)</p></td>
+<td><p>Extract the events from unprocessed NeXus data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="essreflectometry.amor.load.load_raw_nexus.html#essreflectometry.amor.load.load_raw_nexus" title="essreflectometry.amor.load.load_raw_nexus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_raw_nexus</span></code></a>(filename)</p></td>
+<td><p>Load unprocessed data and metadata from an Amor NeXus file.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="essreflectometry.amor.instrument_view.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">essreflectometry.amor.instrument_view</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="essreflectometry.amor.load.chopper_tof_correction.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">essreflectometry.amor.load.chopper_tof_correction</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023 Scipp contributors.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><!-- This will display the version of the docs -->
+Current ESSreflectometry version: 24.3.0 (<a href="https://github.com/scipp/essreflectometry/releases">older versions</a>).</div>
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
