@@ -6,8 +6,8 @@ import sciline
 from orsopy import fileio
 
 from ess import reflectometry
-from ess.reflectometry import orso
 from ess.amor.load import providers as amor_load_providers
+from ess.reflectometry import orso
 from ess.reflectometry.types import Filename, Sample
 
 

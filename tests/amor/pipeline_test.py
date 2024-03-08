@@ -8,10 +8,10 @@ import sciline
 import scipp as sc
 from orsopy import fileio
 
-from ess.reflectometry import orso
 from ess.amor import default_parameters
 from ess.amor import orso as amor_orso
 from ess.amor import providers
+from ess.reflectometry import orso
 from ess.reflectometry.types import *
 
 
