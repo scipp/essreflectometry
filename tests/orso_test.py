@@ -5,10 +5,10 @@ from datetime import datetime
 import sciline
 from orsopy import fileio
 
-import essreflectometry
-from essreflectometry import orso
-from essreflectometry.amor.load import providers as amor_load_providers
-from essreflectometry.types import Filename, Sample
+from ess import reflectometry
+from ess.reflectometry import orso
+from ess.amor.load import providers as amor_load_providers
+from ess.reflectometry.types import Filename, Sample
 
 
 def test_build_orso_data_source():
@@ -46,7 +46,7 @@ def test_build_orso_reduction_without_creator():
     pipeline = sciline.Pipeline(orso.providers)
     reduction = pipeline.compute(orso.OrsoReduction)
     assert reduction.software.name == 'ess.reflectometry'
-    assert reduction.software.version == str(essreflectometry.__version__)
+    assert reduction.software.version == str(reflectometry.__version__)
     assert reduction.creator is None
 
 
@@ -59,5 +59,5 @@ def test_build_orso_reduction_with_creator():
     )
     reduction = pipeline.compute(orso.OrsoReduction)
     assert reduction.software.name == 'ess.reflectometry'
-    assert reduction.software.version == str(essreflectometry.__version__)
+    assert reduction.software.version == str(reflectometry.__version__)
     assert reduction.creator == creator

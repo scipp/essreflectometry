@@ -8,11 +8,11 @@ import sciline
 import scipp as sc
 from orsopy import fileio
 
-from essreflectometry import orso
-from essreflectometry.amor import default_parameters
-from essreflectometry.amor import orso as amor_orso
-from essreflectometry.amor import providers
-from essreflectometry.types import *
+from ess.reflectometry import orso
+from ess.amor import default_parameters
+from ess.amor import orso as amor_orso
+from ess.amor import providers
+from ess.reflectometry.types import *
 
 
 @pytest.fixture()
