@@ -6,8 +6,14 @@ from typing import Union
 import scipp as sc
 import scippnexus as snx
 
-from ..logging import get_logger
-from ..types import ChopperCorrectedTofEvents, Filename, RawData, RawEvents, Run
+from ..reflectometry.logging import get_logger
+from ..reflectometry.types import (
+    ChopperCorrectedTofEvents,
+    Filename,
+    RawData,
+    RawEvents,
+    Run,
+)
 from .data import get_path
 from .types import BeamlineParams
 

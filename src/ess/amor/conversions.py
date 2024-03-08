@@ -2,8 +2,8 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 import scipp as sc
 
-from ..conversions import specular_reflection as spec_relf_graph
-from ..types import SpecularReflectionCoordTransformGraph
+from ..reflectometry.conversions import specular_reflection as spec_relf_graph
+from ..reflectometry.types import SpecularReflectionCoordTransformGraph
 
 
 def incident_beam(

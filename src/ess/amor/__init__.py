@@ -3,9 +3,9 @@
 # flake8: noqa: F401
 import scipp as sc
 
-from .. import providers as reflectometry_providers
-from .. import supermirror
-from ..types import (
+from ..reflectometry import providers as reflectometry_providers
+from ..reflectometry import supermirror
+from ..reflectometry.types import (
     BeamSize,
     DetectorSpatialResolution,
     Gravity,
