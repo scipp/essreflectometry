@@ -2,8 +2,8 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 import scipp as sc
 
-from ..tools import fwhm_to_std
-from ..types import QBins, QData, QResolution, Sample
+from ..reflectometry.tools import fwhm_to_std
+from ..reflectometry.types import QBins, QData, QResolution, Sample
 from .types import AngularResolution, SampleSizeResolution, WavelengthResolution
 
 

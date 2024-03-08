@@ -13,10 +13,15 @@ def instrument_view(
     Instrument view for the Amor instrument, which automatically populates a list of
     additional beamline components, and sets the pixel size.
 
-    :param da: The input data for which to display the instrument view.
-    :param components: A dict of additional components to display. By default, a
+    Parameters
+    ----------
+    da:
+        The input data for which to display the instrument view.
+    components:
+        A dict of additional components to display. By default, a
         set of components defined in `beamline.instrument_view_components()` are added.
-    :param pixel_size: The detector pixel size. Default is 0.0035.
+    pixel_size:
+        The detector pixel size. Default is 0.0035.
     """
     default_components = instrument_view_components(da)
     if components is not None:

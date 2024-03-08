@@ -24,7 +24,7 @@ List of providers for setting up a Sciline pipeline.
 This does not constitute a complete workflow but only
 a skeleton for a generic reflectometry setting.
 For an example of a complete workflow
-see :py:data:`essreflectometry.amor.providers`.
+see :py:data:`ess.amor.providers`.
 """
 
 del importlib
