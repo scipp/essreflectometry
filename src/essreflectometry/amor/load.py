@@ -73,4 +73,3 @@ def detector_position(
 
 
 providers = (load_detector, load_events, compute_tof, detector_position)
-
