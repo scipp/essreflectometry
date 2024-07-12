@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
+import os
 
 from ..reflectometry.types import Filename, ReferenceRun, SampleRun
 
@@ -54,7 +55,43 @@ def _make_pooch():
     )
 
 
+def _make_pooch_protected():
+    import pooch
+
+    return pooch.create(
+        path=pooch.os_cache("ess/protected/amor"),
+        env="ESS_AMOR_DATA_DIR_PROTECTED",
+        base_url="https://public.esss.dk/groups/scipp/protected/amor/{version}/",
+        version=_version,
+        registry={
+            "test.md": "md5:d41d8cd98f00b204e9800998ecf8427e",
+        },
+    )
+
+
 _pooch = _make_pooch()
+_pooch_protected = _make_pooch_protected()
+
+
+def amor_get_test():
+    import base64
+
+    import pooch
+
+    username = os.environ.get('ESS_PROTECTED_FILESTORE_USERNAME', '')
+    password = os.environ.get('ESS_PROTECTED_FILESTORE_PASSWORD', '')
+    if username == '':
+        raise RuntimeError('No credentials were found')
+
+    return _pooch_protected.fetch(
+        'test.md',
+        downloader=pooch.HTTPDownloader(
+            headers={
+                'Authorization': 'Basic '
+                + str(base64.b64encode(f'{username}:{password}'.encode()), 'utf-8')
+            }
+        ),
+    )
 
 
 def amor_old_sample_run() -> Filename[SampleRun]:
