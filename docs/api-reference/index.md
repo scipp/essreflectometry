@@ -46,7 +46,6 @@
 
    conversions
    data
-   instrument_view
    load
    orso
    resolution
