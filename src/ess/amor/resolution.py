@@ -120,10 +120,11 @@ def angular_resolution(
 
 
 def sigma_Q(
+    da: FootprintCorrectedData[SampleRun],
     angular_resolution: AngularResolution,
     wavelength_resolution: WavelengthResolution,
     sample_size_resolution: SampleSizeResolution,
-    q_bins: QBins,
+    qbins: QBins,
 ) -> QResolution:
     """
     Combine all of the components of the resolution and add Q contribution.
@@ -144,9 +145,21 @@ def sigma_Q(
     :
         Combined resolution function.
     """
-    return sc.sqrt(
-        angular_resolution**2 + wavelength_resolution**2 + sample_size_resolution**2
-    ).flatten(to="detector_number").max("detector_number") * sc.midpoints(q_bins)
+    h = da.bins.concat().hist(Q=qbins)
+    s = (
+        (
+            da
+            * (
+                angular_resolution**2
+                + wavelength_resolution**2
+                + sample_size_resolution**2
+            )
+            * da.bins.coords['Q'] ** 2
+        )
+        .bins.concat()
+        .hist(Q=qbins)
+    )
+    return sc.sqrt(sc.values(s / h))
 
 
 providers = (sigma_Q, angular_resolution, wavelength_resolution, sample_size_resolution)
