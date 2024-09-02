@@ -111,44 +111,38 @@ def linlogspace(
     return sc.concat(grids, dim)
 
 
-def stitch_reflecivity_curves(curves, q):
+def stitch_reflecivity_curves(curves, qgrid):
     '''Stitches the curves by scaling each except the first by a factor.
     The scaling factors are determined by a maximum likelihood estimate
     (assuming the errors are normal distributed).
     '''
-    q = q.values
+    qgrid = qgrid.values
+
+    def evaluate_on_qgrid(f):
+        return np.stack(
+            [
+                np.interp(
+                    qgrid,
+                    sc.midpoints(c.coords['Q']).values,
+                    f(c),
+                    left=np.nan,
+                    right=np.nan,
+                )
+                for c in curves
+            ]
+        )
+
+    r = evaluate_on_qgrid(lambda c: c.data.values)
+    v = evaluate_on_qgrid(lambda c: c.data.variances)
 
     def cost(ps):
-        rs = np.stack(
-            [
-                p
-                * np.interp(
-                    q,
-                    sc.midpoints(v.coords['Q']).values,
-                    v.data.values,
-                    left=np.nan,
-                    right=np.nan,
-                )
-                for p, v in zip(ps, curves, strict=True)
-            ]
-        )
-        ss = np.stack(
-            [
-                p**2
-                * np.interp(
-                    q,
-                    sc.midpoints(v.coords['Q']).values,
-                    v.data.variances,
-                    left=np.nan,
-                    right=np.nan,
-                )
-                for p, v in zip(ps, curves, strict=True)
-            ]
-        )
+        ps = np.concatenate([[1.0], ps])
+        rs = ps[:, None] * r
+        ss = ps[:, None] ** 2 * v
         ss[ss == 0] = np.nan
         iss = 1 / ss
         m = np.nansum(rs * iss, axis=0) / np.nansum(iss, axis=0)
         return np.nansum((rs - m) ** 2 * iss)
 
-    sol = opt.minimize(lambda p: cost((1.0, *p)), [1.0 for _ in curves[1:]])
-    return [p * c for p, c in zip((1, *sol.x), curves, strict=True)]
+    sol = opt.minimize(cost, [1.0] * (len(curves) - 1))
+    return [p * c for p, c in zip((1.0, *sol.x), curves, strict=True)]
