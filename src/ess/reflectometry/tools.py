@@ -2,6 +2,7 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 import numpy as np
 import scipp as sc
+import scipy.optimize as opt
 
 _STD_TO_FWHM = sc.scalar(2.0) * sc.sqrt(sc.scalar(2.0) * sc.log(sc.scalar(2.0)))
 
@@ -108,3 +109,46 @@ def linlogspace(
         grids.append(mesh[dim, start:])
 
     return sc.concat(grids, dim)
+
+
+def stitch_reflecivity_curves(curves, q):
+    '''Stitches the curves by scaling each except the first by a factor.
+    The scaling factors are determined by a maximum likelihood estimate
+    (assuming the errors are normal distributed).
+    '''
+    q = q.values
+
+    def cost(ps):
+        rs = np.stack(
+            [
+                p
+                * np.interp(
+                    q,
+                    sc.midpoints(v.coords['Q']).values,
+                    v.data.values,
+                    left=np.nan,
+                    right=np.nan,
+                )
+                for p, v in zip(ps, curves, strict=True)
+            ]
+        )
+        ss = np.stack(
+            [
+                p**2
+                * np.interp(
+                    q,
+                    sc.midpoints(v.coords['Q']).values,
+                    v.data.variances,
+                    left=np.nan,
+                    right=np.nan,
+                )
+                for p, v in zip(ps, curves, strict=True)
+            ]
+        )
+        ss[ss == 0] = np.nan
+        iss = 1 / ss
+        m = np.nansum(rs * iss, axis=0) / np.nansum(iss, axis=0)
+        return np.nansum((rs - m) ** 2 * iss)
+
+    sol = opt.minimize(lambda p: cost((1.0, *p)), [1.0 for _ in curves[1:]])
+    return [p * c for p, c in zip((1, *sol.x), curves, strict=True)]
