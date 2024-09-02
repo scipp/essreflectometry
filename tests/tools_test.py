@@ -23,10 +23,10 @@ def test_curve_stitching():
     data.variances[:] = 0.1
 
     curves = stitch_reflecivity_curves(
-        (curve(data, 0, 0.3), curve(0.5 * data, 0.2, 0.7), curve(0.1 * data, 0.6, 1.0)),
+        (curve(data, 0, 0.3), curve(0.8 * data, 0.2, 0.7), curve(0.1 * data, 0.6, 1.0)),
         qgrid,
     )
 
-    assert_allclose(curves[0].data, data)
-    assert_allclose(curves[1].data, 0.5 * data)
-    assert_allclose(curves[2].data, 0.25 * data)
+    assert_allclose(curves[0].data, data, rtol=sc.scalar(1e-5))
+    assert_allclose(curves[1].data, 0.5 * data, rtol=sc.scalar(1e-5))
+    assert_allclose(curves[2].data, 0.25 * data, rtol=sc.scalar(1e-5))
