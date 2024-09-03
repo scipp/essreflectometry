@@ -116,13 +116,12 @@ def stitch_reflecivity_curves(curves, qgrid):
     The scaling factors are determined by a maximum likelihood estimate
     (assuming the errors are normal distributed).
     '''
-    qgrid = qgrid.values
 
     def evaluate_on_qgrid(f):
         return np.stack(
             [
                 np.interp(
-                    qgrid,
+                    qgrid.values,
                     sc.midpoints(c.coords['Q']).values,
                     f(c),
                     left=np.nan,
@@ -146,3 +145,37 @@ def stitch_reflecivity_curves(curves, qgrid):
 
     sol = opt.minimize(cost, [1.0] * (len(curves) - 1))
     return [p * c for p, c in zip((1.0, *sol.x), curves, strict=True)]
+
+
+def combine_curves(curves, qgrid, how='mean'):
+    '''Combines the given curves by interpolating them
+    on a grid and merging them by the requested method.
+    The default method is a weighted mean where the weights
+    are proportional to the variances.'''
+
+    def evaluate_on_qgrid(f):
+        return np.stack(
+            [
+                np.interp(
+                    sc.midpoints(qgrid).values,
+                    sc.midpoints(c.coords['Q']).values,
+                    f(c),
+                    left=np.nan,
+                    right=np.nan,
+                )
+                for c in curves
+            ]
+        )
+
+    r = evaluate_on_qgrid(lambda c: c.data.values)
+    v = evaluate_on_qgrid(lambda c: c.data.variances)
+
+    if how == 'mean':
+        v[v == 0] = np.nan
+        iv = 1.0 / v
+        m = np.nansum(r * iv, axis=0) / np.nansum(iv, axis=0)
+        mv = 1 / np.nansum(iv, axis=0)
+        return sc.DataArray(
+            data=sc.array(dims='Q', values=m, variances=mv), coords={'Q': qgrid}
+        )
+    return NotImplementedError
