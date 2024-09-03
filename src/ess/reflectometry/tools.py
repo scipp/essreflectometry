@@ -1,5 +1,8 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
+from collections.abc import Sequence
+from typing import Literal
+
 import numpy as np
 import scipp as sc
 import scipy.optimize as opt
@@ -111,17 +114,19 @@ def linlogspace(
     return sc.concat(grids, dim)
 
 
-def stitch_reflecivity_curves(curves, qgrid):
+def stitch_reflecivity_curves(curves: Sequence[sc.DataArray], qgrid: sc.Variable):
     '''Stitches the curves by scaling each except the first by a factor.
     The scaling factors are determined by a maximum likelihood estimate
     (assuming the errors are normal distributed).
+
+    All curves must be have the same unit for data and the Q-coordinate.
     '''
 
     def evaluate_on_qgrid(f):
         return np.stack(
             [
                 np.interp(
-                    qgrid.values,
+                    sc.midpoints(qgrid).values,
                     sc.midpoints(c.coords['Q']).values,
                     f(c),
                     left=np.nan,
@@ -135,9 +140,9 @@ def stitch_reflecivity_curves(curves, qgrid):
     v = evaluate_on_qgrid(lambda c: c.data.variances)
 
     def cost(ps):
-        ps = np.concatenate([[1.0], ps])
-        rs = ps[:, None] * r
-        ss = ps[:, None] ** 2 * v
+        ps = np.concatenate([[1.0], ps])[:, None]
+        rs = ps * r
+        ss = ps**2 * v
         ss[ss == 0] = np.nan
         iss = 1 / ss
         m = np.nansum(rs * iss, axis=0) / np.nansum(iss, axis=0)
@@ -147,11 +152,19 @@ def stitch_reflecivity_curves(curves, qgrid):
     return [p * c for p, c in zip((1.0, *sol.x), curves, strict=True)]
 
 
-def combine_curves(curves, qgrid, how='mean'):
+def combine_curves(
+    curves: Sequence[sc.DataArray], qgrid: sc.Variable, how: Literal['mean'] = 'mean'
+):
     '''Combines the given curves by interpolating them
     on a grid and merging them by the requested method.
     The default method is a weighted mean where the weights
-    are proportional to the variances.'''
+    are proportional to the variances.
+
+    Unless the curves are already scaled correctly they might
+    need to be scaled using :func:`stitch_reflecivity_curves`.
+
+    All curves must be have the same unit for data and the Q-coordinate.
+    '''
 
     def evaluate_on_qgrid(f):
         return np.stack(
@@ -176,6 +189,7 @@ def combine_curves(curves, qgrid, how='mean'):
         m = np.nansum(r * iv, axis=0) / np.nansum(iv, axis=0)
         mv = 1 / np.nansum(iv, axis=0)
         return sc.DataArray(
-            data=sc.array(dims='Q', values=m, variances=mv), coords={'Q': qgrid}
+            data=sc.array(dims='Q', values=m, variances=mv, unit=curves[0].data.unit),
+            coords={'Q': qgrid},
         )
     return NotImplementedError
