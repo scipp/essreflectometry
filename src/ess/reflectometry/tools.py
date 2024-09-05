@@ -114,7 +114,7 @@ def linlogspace(
     return sc.concat(grids, dim)
 
 
-def stitch_reflecivity_curves(curves: Sequence[sc.DataArray], qgrid: sc.Variable):
+def stitch_reflectivity_curves(curves: Sequence[sc.DataArray], qgrid: sc.Variable):
     '''Stitches the curves by scaling each except the first by a factor.
     The scaling factors are determined by a maximum likelihood estimate
     (assuming the errors are normal distributed).
