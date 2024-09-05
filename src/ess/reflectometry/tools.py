@@ -161,7 +161,7 @@ def combine_curves(
     are proportional to the variances.
 
     Unless the curves are already scaled correctly they might
-    need to be scaled using :func:`stitch_reflecivity_curves`.
+    need to be scaled using :func:`stitch_reflectivity_curves`.
 
     All curves must be have the same unit for data and the Q-coordinate.
     '''

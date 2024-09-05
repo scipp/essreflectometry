@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 import scipp as sc
-from ess.reflectometry.tools import combine_curves, stitch_reflecivity_curves
+from ess.reflectometry.tools import combine_curves, stitch_reflectivity_curves
 from scipp.testing import assert_allclose
 
 
@@ -20,7 +20,7 @@ def test_curve_stitching():
     )
     data.variances[:] = 0.1
 
-    curves = stitch_reflecivity_curves(
+    curves = stitch_reflectivity_curves(
         (curve(data, 0, 0.3), curve(0.8 * data, 0.2, 0.7), curve(0.1 * data, 0.6, 1.0)),
         qgrid,
     )
