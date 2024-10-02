@@ -9,9 +9,12 @@ from scippneutron.conversion.graph import beamline, tof
 from .types import (
     BeamDivergenceLimits,
     DataWithScatteringCoordinates,
+    EventData,
     Gravity,
     IncidentBeam,
     MaskedData,
+    ProtonCurrent,
+    RawEventData,
     ReducibleDetectorData,
     RunType,
     SamplePosition,
@@ -163,11 +166,26 @@ def add_masks(
     da.masks["z_index_range"] = (da.coords["z_index"] < zlim[0]) | (
         da.coords["z_index"] > zlim[1]
     )
-    return da
+    return MaskedData[RunType](da)
+
+
+def add_masks_pulse_dependent(
+    da: RawEventData[RunType],
+    pc: ProtonCurrent[RunType],
+) -> EventData[RunType]:
+    typical_current = sc.median(pc).data
+    pc_lookup = sc.lookup(
+        pc, dim='time', mode='previous', fill_value=sc.scalar(float('nan'))
+    )
+    da.masks["proton_current_too_low"] = (
+        pc_lookup(da.coords['event_time_zero']) < typical_current / 2
+    )
+    return EventData[RunType](da)
 
 
 providers = (
     add_masks,
+    add_masks_pulse_dependent,
     add_coords,
     specular_reflection,
 )

@@ -33,6 +33,15 @@ class RawDetectorData(sciline.Scope[RunType, sc.DataArray], sc.DataArray):
     binned by `detector_number` (pixel of the detector frame)."""
 
 
+class EventData(sciline.Scope[RunType, sc.DataArray], sc.DataArray):
+    """Event data from nexus file, binned by pulse.
+    Holds time dependent masks and coords."""
+
+
+class RawEventData(sciline.Scope[RunType, sc.DataArray], sc.DataArray):
+    """Raw event data from nexus file, binned by pulse."""
+
+
 class LoadedNeXusDetector(sciline.Scope[RunType, sc.DataGroup], sc.DataGroup):
     """NXdetector loaded from file"""
 
@@ -50,9 +59,16 @@ class MaskedData(sciline.Scope[RunType, sc.DataArray], sc.DataArray):
     """Event data that has been masked in wavelength and logical detector coordinates"""
 
 
-class FootprintCorrectedData(sciline.Scope[RunType, sc.DataArray], sc.DataArray):
-    """Event data with weights corrected for the footprint of the beam
-    on the sample for the incidence angle of the event."""
+class FootprintCorrection(sciline.Scope[RunType, sc.DataArray], sc.DataArray):
+    """Weights of the footprint of the beam on the sample."""
+
+
+class ProtonCurrentCorrection(sciline.Scope[RunType, sc.DataArray], sc.DataArray):
+    """Weights of the proton current correction"""
+
+
+class CorrectedData(sciline.Scope[RunType, sc.DataArray], sc.DataArray):
+    """MaskedData corrected by footprint and proton current"""
 
 
 ReferenceIntensity = NewType("ReferenceIntensity", sc.DataArray)
@@ -109,6 +125,10 @@ class DetectorSpatialResolution(sciline.Scope[RunType, sc.Variable], sc.Variable
 class SampleSize(sciline.Scope[RunType, sc.Variable], sc.Variable):
     # TODO is this radius or total length?
     """Size of the sample. If None it is assumed to be the same as the reference."""
+
+
+class ProtonCurrent(sciline.Scope[RunType, sc.Variable], sc.Variable):
+    """Proton current log of the measurement"""
 
 
 Gravity = NewType("Gravity", sc.Variable)

@@ -6,7 +6,7 @@ import scipp as sc
 from scipy.optimize import OptimizeWarning
 
 from .types import (
-    FootprintCorrectedData,
+    CorrectedData,
     IdealReferenceIntensity,
     NormalizationFactor,
     NormalizedIofQ,
@@ -18,7 +18,7 @@ from .types import (
 
 
 def normalization_factor(
-    da: FootprintCorrectedData[SampleRun],
+    da: CorrectedData[SampleRun],
     corr: IdealReferenceIntensity,
     wbins: WavelengthBins,
 ) -> NormalizationFactor:
@@ -77,21 +77,23 @@ def normalization_factor(
             ),
             p0={"a": sc.scalar(-1e-3, unit="1/angstrom")},
         )
-    return sc.DataArray(
-        data=corr.data,
-        coords={
-            "Q": q_of_z_wavelength(
-                wm,
-                sc.values(p["a"]),
-                sc.values(p["b"]),
-            ).data,
-        },
-        masks=corr.masks,
+    return NormalizationFactor(
+        sc.DataArray(
+            data=corr.data,
+            coords={
+                "Q": q_of_z_wavelength(
+                    wm,
+                    sc.values(p["a"]),
+                    sc.values(p["b"]),
+                ).data,
+            },
+            masks=corr.masks,
+        )
     )
 
 
 def reflectivity_over_q(
-    da: FootprintCorrectedData[SampleRun],
+    da: CorrectedData[SampleRun],
     n: NormalizationFactor,
     qbins: QBins,
 ) -> NormalizedIofQ:
@@ -116,7 +118,7 @@ def reflectivity_over_q(
 
 
 def reflectivity_per_event(
-    da: FootprintCorrectedData[SampleRun],
+    da: CorrectedData[SampleRun],
     n: IdealReferenceIntensity,
     wbins: WavelengthBins,
 ) -> ReflectivityData:
