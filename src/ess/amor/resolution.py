@@ -4,8 +4,8 @@ import scipp as sc
 
 from ..reflectometry.tools import fwhm_to_std
 from ..reflectometry.types import (
+    CorrectedData,
     DetectorSpatialResolution,
-    FootprintCorrectedData,
     QBins,
     QResolution,
     SampleRun,
@@ -21,7 +21,7 @@ from .types import (
 
 
 def wavelength_resolution(
-    da: FootprintCorrectedData[SampleRun],
+    da: CorrectedData[SampleRun],
     chopper_1_position: Chopper1Position[SampleRun],
     chopper_2_position: Chopper2Position[SampleRun],
 ) -> WavelengthResolution:
@@ -53,7 +53,7 @@ def wavelength_resolution(
 
 
 def sample_size_resolution(
-    da: FootprintCorrectedData[SampleRun],
+    da: CorrectedData[SampleRun],
     sample_size: SampleSize[SampleRun],
 ) -> SampleSizeResolution:
     """
@@ -84,7 +84,7 @@ def sample_size_resolution(
 
 
 def angular_resolution(
-    da: FootprintCorrectedData[SampleRun],
+    da: CorrectedData[SampleRun],
     detector_spatial_resolution: DetectorSpatialResolution[SampleRun],
 ) -> AngularResolution:
     """
@@ -126,7 +126,7 @@ def angular_resolution(
 
 
 def sigma_Q(
-    da: FootprintCorrectedData[SampleRun],
+    da: CorrectedData[SampleRun],
     angular_resolution: AngularResolution,
     wavelength_resolution: WavelengthResolution,
     sample_size_resolution: SampleSizeResolution,
