@@ -261,7 +261,8 @@ def combine_curves(
     inv_v = 1.0 / v
     r_avg = np.nansum(r * inv_v, axis=0) / np.nansum(inv_v, axis=0)
     v_avg = 1 / np.nansum(inv_v, axis=0)
-    return sc.DataArray(
+
+    out = sc.DataArray(
         data=sc.array(
             dims='Q',
             values=r_avg,
@@ -270,3 +271,25 @@ def combine_curves(
         ),
         coords={'Q': qgrid},
     )
+    if any('Q_resolution' in c.coords for c in curves):
+        # This might need to be revisited. The question about how to combine curves
+        # with different Q-resolution is not completely resolved.
+        # However, in practice the difference in Q-resolution between different curves
+        # is small so it's not likely to make a big difference.
+        q_res = (
+            sc.DataArray(
+                data=c.coords.get(
+                    'Q_resolution', sc.scalar(float('nan')) * sc.values(c.data.copy())
+                ),
+                coords={'Q': c.coords['Q']},
+            )
+            for c in curves
+        )
+        qs = _interpolate_on_qgrid(q_res, qgrid).values
+        qs_avg = np.nansum(qs * inv_v, axis=0) / np.nansum(
+            ~np.isnan(qs) * inv_v, axis=0
+        )
+        out.coords['Q_resolution'] = sc.array(
+            dims='Q', values=qs_avg, unit=next(iter(curves)).coords['Q_resolution'].unit
+        )
+    return out
