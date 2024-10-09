@@ -1,10 +1,14 @@
+from collections.abc import Sequence
+
+import numpy as np
+import plopp as pp
 import scipp as sc
 
 from ess.reflectometry.types import (
     DetectorRotation,
-    NormalizedIofQ,
     QBins,
     ReflectivityData,
+    ReflectivityOverQ,
     RunType,
     SampleRotation,
     SampleRun,
@@ -70,22 +74,168 @@ def theta_grid(
     return grid
 
 
-def wavelength_theta_diagnostic_figure(
-    da: ReflectivityData,
-    thbins: ThetaBins[SampleRun],
-) -> WavelengthThetaFigure:
-    da = da.bins.concat(set(da.dims) - {"wavelength"}).hist(theta=thbins).transpose()
-    p = da.plot(norm="log")
-    for a in sc.linspace("_", 0.1, 3, 10):
+def wavelength_theta_figure(
+    da: sc.DataArray | Sequence[sc.DataArray],
+    *,
+    wavelength_bins: (sc.Variable | None) | Sequence[sc.Variable | None] = None,
+    theta_bins: (sc.Variable | None) | Sequence[sc.Variable | None] = None,
+    q_edges_to_display: Sequence[sc.Variable] = (),
+    linewidth: float = 1.0,
+    **kwargs,
+):
+    if isinstance(da, sc.DataArray):
+        return wavelength_theta_figure(
+            (da,),
+            wavelength_bins=(wavelength_bins,),
+            theta_bins=(theta_bins,),
+            q_edges_to_display=q_edges_to_display,
+            **kwargs,
+        )
+
+    wavelength_bins, theta_bins = (
+        (None,) * len(da)
+        if v is None
+        else (v,) * len(da)
+        if isinstance(v, sc.Variable)
+        else v
+        for v in (wavelength_bins, theta_bins)
+    )
+
+    hs = []
+    for da, wavelength_bins, theta_bins in zip(  # noqa: B020
+        da, wavelength_bins, theta_bins, strict=True
+    ):
+        if da.bins:
+            da = da.bins.concat(set(da.dims) - {"wavelength", "theta"})
+        all_coords = {*da.coords, *(da.bins or da).coords}
+        if 'wavelength' not in all_coords or 'theta' not in all_coords:
+            raise ValueError('Data must have wavelength and theta coord')
+        if da.bins or set(da.dims) != {"wavelength", "theta"}:
+            bins = {}
+            if 'sample_rotation' in da.coords and 'detector_rotation' in da.coords:
+                bins['theta'] = theta_grid(
+                    nu=da.coords['detector_rotation'], mu=da.coords['sample_rotation']
+                )
+            if theta_bins is not None:
+                bins['theta'] = theta_bins
+            if wavelength_bins is not None:
+                bins['wavelength'] = wavelength_bins
+            if 'theta' not in da.dims and 'theta' not in bins:
+                raise ValueError('No theta binning provided')
+            if 'wavelength' not in da.dims and 'wavelength' not in bins:
+                raise ValueError('No wavelength binning provided')
+            da = da.hist(**bins)
+
+        hs.append(da.transpose(('theta', 'wavelength')))
+
+    kwargs.setdefault('cbar', True)
+    kwargs.setdefault('norm', 'log')
+    p = pp.imagefigure(*(pp.Node(h) for h in hs), **kwargs)
+    for q in q_edges_to_display:
+        thmax = max(h.coords["theta"].max() for h in hs)
         p.ax.plot(
-            [sc.scalar(0.0), da.coords["wavelength"].max().value],
-            [sc.scalar(0.0), a * da.coords["theta"].max().value],
+            [0.0, 4 * np.pi * (sc.sin(thmax) / q).value],
+            [0.0, thmax.value],
             linestyle="solid",
-            linewidth=0.5,
+            linewidth=linewidth,
             color="black",
             marker=None,
         )
     return p
+
+
+def q_theta_figure(
+    da: sc.DataArray | Sequence[sc.DataArray],
+    *,
+    q_bins: (sc.Variable | None) | Sequence[sc.Variable | None] = None,
+    theta_bins: (sc.Variable | None) | Sequence[sc.Variable | None] = None,
+    **kwargs,
+):
+    if isinstance(da, sc.DataArray):
+        return q_theta_figure(
+            (da,), q_bins=(q_bins,), theta_bins=(theta_bins,), **kwargs
+        )
+
+    q_bins, theta_bins = (
+        (None,) * len(da)
+        if v is None
+        else (v,) * len(da)
+        if isinstance(v, sc.Variable)
+        else v
+        for v in (q_bins, theta_bins)
+    )
+
+    hs = []
+    for da, q_bins, theta_bins in zip(da, q_bins, theta_bins, strict=True):  # noqa: B020
+        if da.bins:
+            da = da.bins.concat(set(da.dims) - {'theta', 'Q'})
+
+        all_coords = {*da.coords, *(da.bins or da).coords}
+        if 'theta' not in all_coords or 'Q' not in all_coords:
+            raise ValueError('Data must have theta and Q coord')
+        if da.bins or set(da.dims) != {"theta", "Q"}:
+            bins = {}
+            if theta_bins is not None:
+                bins['theta'] = theta_bins
+            if q_bins is not None:
+                bins['Q'] = q_bins
+            if 'theta' not in da.dims and 'theta' not in bins:
+                raise ValueError('No theta binning provided')
+            if 'Q' not in da.dims and 'Q' not in bins:
+                raise ValueError('No Q binning provided')
+            da = da.hist(**bins)
+
+        hs.append(da.transpose(('theta', 'Q')))
+
+    kwargs.setdefault('cbar', True)
+    kwargs.setdefault('norm', 'log')
+    kwargs.setdefault('grid', True)
+    return pp.imagefigure(*(pp.Node(h) for h in hs), **kwargs)
+
+
+def wavelength_z_figure(
+    da: sc.DataArray | Sequence[sc.DataArray],
+    *,
+    wavelength_bins: (sc.Variable | None) | Sequence[sc.Variable | None] = None,
+    **kwargs,
+):
+    if isinstance(da, sc.DataArray):
+        return wavelength_z_figure((da,), wavelength_bins=(wavelength_bins,), **kwargs)
+
+    (wavelength_bins,) = (
+        (None,) * len(da)
+        if v is None
+        else (v,) * len(da)
+        if isinstance(v, sc.Variable)
+        else v
+        for v in (wavelength_bins,)
+    )
+
+    hs = []
+    for da, wavelength_bins in zip(da, wavelength_bins, strict=True):  # noqa: B020
+        if da.bins:
+            da = da.bins.concat(set(da.dims) - {'blade', 'wire', 'wavelength'})
+            bins = {}
+            if wavelength_bins is not None:
+                bins['wavelength'] = wavelength_bins
+            if 'wavelength' not in da.dims and 'wavelength' not in bins:
+                raise ValueError('No wavelength binning provided')
+            da = da.hist(**bins)
+
+        da = da.flatten(("blade", "wire"), to="z_index")
+        hs.append(da.transpose(('z_index', 'wavelength')))
+
+    kwargs.setdefault('cbar', True)
+    kwargs.setdefault('norm', 'log')
+    kwargs.setdefault('grid', True)
+    return pp.imagefigure(*(pp.Node(h) for h in hs), **kwargs)
+
+
+def wavelength_theta_diagnostic_figure(
+    da: ReflectivityData,
+    thbins: ThetaBins[SampleRun],
+) -> WavelengthThetaFigure:
+    return wavelength_theta_figure(da, theta_bins=thbins)
 
 
 def q_theta_diagnostic_figure(
@@ -93,26 +243,20 @@ def q_theta_diagnostic_figure(
     thbins: ThetaBins[SampleRun],
     qbins: QBins,
 ) -> QThetaFigure:
-    da = da.bins.concat().hist(theta=thbins, Q=qbins)
-    return da.plot(grid=True, norm="log")
+    return q_theta_figure(da, q_bins=qbins, theta_bins=thbins)
 
 
 def wavelength_z_diagnostic_figure(
     da: ReflectivityData,
 ) -> WavelengthZIndexFigure:
-    return (
-        da.bins.concat("stripe")
-        .flatten(("blade", "wire"), to="z_index")
-        .hist()
-        .plot(norm="log", grid=True)
-    )
+    return wavelength_z_figure(da)
 
 
 def diagnostic_view(
     lath: WavelengthThetaFigure,
     laz: WavelengthZIndexFigure,
     qth: QThetaFigure,
-    ioq: NormalizedIofQ,
+    ioq: ReflectivityOverQ,
 ) -> ReflectivityDiagnosticsView:
     ioq = ioq.hist().plot(norm="log")
     return (ioq + laz) / (lath + qth)

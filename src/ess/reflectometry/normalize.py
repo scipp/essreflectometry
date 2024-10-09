@@ -9,9 +9,10 @@ from .types import (
     FootprintCorrectedData,
     IdealReferenceIntensity,
     NormalizationFactor,
-    NormalizedIofQ,
     QBins,
+    QResolution,
     ReflectivityData,
+    ReflectivityOverQ,
     SampleRun,
     WavelengthBins,
 )
@@ -94,7 +95,8 @@ def reflectivity_over_q(
     da: FootprintCorrectedData[SampleRun],
     n: NormalizationFactor,
     qbins: QBins,
-) -> NormalizedIofQ:
+    qres: QResolution,
+) -> ReflectivityOverQ:
     """
     Normalize the sample measurement by the (ideally calibrated) supermirror.
 
@@ -110,9 +112,15 @@ def reflectivity_over_q(
     :
         Reflectivity as a function of Q
     """
-    return NormalizedIofQ(
-        da.bin(Q=qbins, dim=da.dims) / sc.values(n.hist(Q=qbins, dim=n.dims))
-    )
+    reflectivity = da.bin(Q=qbins, dim=da.dims) / sc.values(n.hist(Q=qbins, dim=n.dims))
+    reflectivity.coords['Q_resolution'] = qres.data
+    for coord, value in da.coords.items():
+        if (
+            not isinstance(value, sc.Variable)
+            or len(set(value.dims) - set(reflectivity.dims)) == 0
+        ):
+            reflectivity.coords[coord] = value
+    return ReflectivityOverQ(reflectivity)
 
 
 def reflectivity_per_event(
@@ -126,7 +134,16 @@ def reflectivity_per_event(
     Returns:
         reflectivity "per event"
     """
-    return da.bin(wavelength=wbins) / sc.values(n)
+    reflectivity = da.bin(wavelength=wbins, dim=set(da.dims) - set(n.dims)) / sc.values(
+        n
+    )
+    for coord, value in da.coords.items():
+        if (
+            not isinstance(value, sc.Variable)
+            or len(set(value.dims) - set(reflectivity.dims)) == 0
+        ):
+            reflectivity.coords[coord] = value
+    return ReflectivityData(reflectivity)
 
 
 providers = (reflectivity_over_q, normalization_factor, reflectivity_per_event)
