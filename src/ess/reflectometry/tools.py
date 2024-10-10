@@ -7,6 +7,9 @@ import numpy as np
 import scipp as sc
 import scipy.optimize as opt
 
+from ess.reflectometry import orso
+from ess.reflectometry.types import Filename, NormalizedIofQ, SampleRun
+
 _STD_TO_FWHM = sc.scalar(2.0) * sc.sqrt(sc.scalar(2.0) * sc.log(sc.scalar(2.0)))
 
 
@@ -270,3 +273,37 @@ def combine_curves(
         ),
         coords={'Q': qgrid},
     )
+
+
+def orso_datasets_from_measurements(workflow, files, scale_to_overlap=True):
+    reflectivity_curves = []
+    for fname, quantities in files.items():
+        wf = workflow.copy()
+        wf[Filename[SampleRun]] = fname
+        for name, value in quantities.items():
+            wf[name] = value
+        reflectivity_curves.append(wf.compute(NormalizedIofQ))
+
+    scale_factors = (
+        scale_reflectivity_curves_to_overlap(
+            [r.hist() for r in reflectivity_curves], return_scaling_factors=True
+        )
+        if scale_to_overlap
+        else (1,) * len(files)
+    )
+
+    datasets = []
+    for (fname, quantities), curve, scale_factor in zip(
+        files.items(), reflectivity_curves, scale_factors, strict=True
+    ):
+        wf = workflow.copy()
+        wf[Filename[SampleRun]] = fname
+        for name, value in quantities.items():
+            wf[name] = value
+        wf[NormalizedIofQ] = scale_factor * curve
+        dataset = wf.compute(orso.OrsoIofQDataset)
+        dataset.info.reduction.corrections = orso.find_corrections(
+            wf.get(orso.OrsoIofQDataset)
+        )
+        datasets.append(dataset)
+    return datasets
