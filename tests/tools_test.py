@@ -13,6 +13,7 @@ from ess.reflectometry.tools import (
     orso_datasets_from_measurements,
     scale_reflectivity_curves_to_overlap,
 )
+from ess.reflectometry.types import Filename, NormalizedIofQ, SampleRun
 
 
 def curve(d, qmin, qmax):
@@ -139,8 +140,6 @@ def test_combined_curves():
 
 @pytest.mark.filterwarnings("ignore:No suitable")
 def test_orso_datasets_tool():
-    from ess.reflectometry.types import Filename, NormalizedIofQ, SampleRun
-
     def normalized_ioq(filename: Filename[SampleRun]) -> NormalizedIofQ:
         return filename
 
