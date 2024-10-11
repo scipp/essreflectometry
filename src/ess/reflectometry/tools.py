@@ -1,14 +1,17 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from itertools import chain
+from typing import Any
 
 import numpy as np
+import sciline
 import scipp as sc
 import scipy.optimize as opt
+from orsopy.fileio.orso import OrsoDataset
 
 from ess.reflectometry import orso
-from ess.reflectometry.types import Filename, NormalizedIofQ, SampleRun
+from ess.reflectometry.types import NormalizedIofQ
 
 _STD_TO_FWHM = sc.scalar(2.0) * sc.sqrt(sc.scalar(2.0) * sc.log(sc.scalar(2.0)))
 
@@ -275,12 +278,41 @@ def combine_curves(
     )
 
 
-def orso_datasets_from_measurements(workflow, files, scale_to_overlap=True):
+def orso_datasets_from_measurements(
+    workflow: sciline.Pipeline,
+    runs: Sequence[Mapping[type, Any]],
+    *,
+    scale_to_overlap: bool = True,
+) -> list[OrsoDataset]:
+    '''Produces a list of ORSO datasets containing one
+    reflectivity curve for each of the provided runs.
+    Each entry of :code:`runs` is a mapping of parameters and
+    values needed to produce the dataset.
+
+    Optionally, the reflectivity curves can be scaled to overlap in
+    the regions where they have the same Q-value.
+
+    Parameters
+    -----------
+    workflow:
+        The sciline workflow used to compute `NormalizedIofQ` for each of the runs.
+
+    runs:
+        The sciline parameters to be used for each run
+
+    scale_to_overlap:
+        If True the curves will be scaled to overlap.
+        Note that the curve of the first run is unscaled and
+        the rest are scaled to match it.
+
+    Returns
+    ---------
+    list of the computed ORSO datasets, containing one reflectivity curve each
+    '''
     reflectivity_curves = []
-    for fname, quantities in files.items():
+    for parameters in runs:
         wf = workflow.copy()
-        wf[Filename[SampleRun]] = fname
-        for name, value in quantities.items():
+        for name, value in parameters.items():
             wf[name] = value
         reflectivity_curves.append(wf.compute(NormalizedIofQ))
 
@@ -289,16 +321,15 @@ def orso_datasets_from_measurements(workflow, files, scale_to_overlap=True):
             [r.hist() for r in reflectivity_curves], return_scaling_factors=True
         )
         if scale_to_overlap
-        else (1,) * len(files)
+        else (1,) * len(runs)
     )
 
     datasets = []
-    for (fname, quantities), curve, scale_factor in zip(
-        files.items(), reflectivity_curves, scale_factors, strict=True
+    for parameters, curve, scale_factor in zip(
+        runs, reflectivity_curves, scale_factors, strict=True
     ):
         wf = workflow.copy()
-        wf[Filename[SampleRun]] = fname
-        for name, value in quantities.items():
+        for name, value in parameters.items():
             wf[name] = value
         wf[NormalizedIofQ] = scale_factor * curve
         dataset = wf.compute(orso.OrsoIofQDataset)

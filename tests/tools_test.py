@@ -1,9 +1,18 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
+import numpy as np
+import pytest
+import sciline as sl
 import scipp as sc
+from orsopy.fileio import Orso, OrsoDataset
 from scipp.testing import assert_allclose
 
-from ess.reflectometry.tools import combine_curves, scale_reflectivity_curves_to_overlap
+from ess.reflectometry.orso import OrsoIofQDataset
+from ess.reflectometry.tools import (
+    combine_curves,
+    orso_datasets_from_measurements,
+    scale_reflectivity_curves_to_overlap,
+)
 
 
 def curve(d, qmin, qmax):
@@ -126,3 +135,30 @@ def test_combined_curves():
             ],
         ),
     )
+
+
+@pytest.mark.filterwarnings("ignore:No suitable")
+def test_orso_datasets_tool():
+    from ess.reflectometry.types import Filename, NormalizedIofQ, SampleRun
+
+    def normalized_ioq(filename: Filename[SampleRun]) -> NormalizedIofQ:
+        return filename
+
+    def orso_dataset(filename: Filename[SampleRun]) -> OrsoIofQDataset:
+        class Reduction:
+            corrections = []  # noqa: RUF012
+
+        return OrsoDataset(
+            Orso({}, Reduction, [], name=f'{filename}.orso'), np.ones((0, 0))
+        )
+
+    workflow = sl.Pipeline(
+        [normalized_ioq, orso_dataset], params={Filename[SampleRun]: 'default'}
+    )
+    datasets = orso_datasets_from_measurements(
+        workflow,
+        [{}, {Filename[SampleRun]: 'special'}],
+        scale_to_overlap=False,
+    )
+    assert len(datasets) == 2
+    assert tuple(d.info.name for d in datasets) == ('default.orso', 'special.orso')
