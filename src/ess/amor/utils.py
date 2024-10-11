@@ -108,7 +108,7 @@ def wavelength_theta_figure(
         if da.bins:
             da = da.bins.concat(set(da.dims) - {"wavelength", "theta"})
         all_coords = {*da.coords, *(da.bins or da).coords}
-        if 'wavelength' not in all_coords or 'theta' not in all_coords:
+        if not {'wavelength', 'theta'}.issubset(all_coords):
             raise ValueError('Data must have wavelength and theta coord')
         if da.bins or set(da.dims) != {"wavelength", "theta"}:
             bins = {}
