@@ -2,6 +2,7 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 from collections.abc import Mapping, Sequence
 from itertools import chain
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -11,7 +12,8 @@ import scipy.optimize as opt
 from orsopy.fileio.orso import OrsoDataset
 
 from ess.reflectometry import orso
-from ess.reflectometry.types import ReflectivityOverQ
+from ess.reflectometry.types import Filename, ReferenceRun, ReflectivityOverQ, SampleRun
+from ess.reflectometry.workflow import with_filenames
 
 _STD_TO_FWHM = sc.scalar(2.0) * sc.sqrt(sc.scalar(2.0) * sc.log(sc.scalar(2.0)))
 
@@ -312,6 +314,13 @@ def orso_datasets_from_measurements(
     reflectivity_curves = []
     for parameters in runs:
         wf = workflow.copy()
+        parameters = parameters.copy()
+
+        for runtype in (SampleRun, ReferenceRun):
+            if Filename[runtype] in parameters:
+                if isinstance(parameters[Filename[runtype]], str | Path):
+                    parameters[Filename[runtype]] = (parameters[Filename[runtype]],)
+                wf = with_filenames(wf, runtype, parameters.pop(Filename[runtype]))
         for name, value in parameters.items():
             wf[name] = value
         reflectivity_curves.append(wf.compute(ReflectivityOverQ))
@@ -329,6 +338,12 @@ def orso_datasets_from_measurements(
         runs, reflectivity_curves, scale_factors, strict=True
     ):
         wf = workflow.copy()
+        parameters = parameters.copy()
+        for runtype in (SampleRun, ReferenceRun):
+            if Filename[runtype] in parameters:
+                if isinstance(parameters[Filename[runtype]], str | Path):
+                    parameters[Filename[runtype]] = (parameters[Filename[runtype]],)
+                wf = with_filenames(wf, runtype, parameters.pop(Filename[runtype]))
         for name, value in parameters.items():
             wf[name] = value
         wf[ReflectivityOverQ] = scale_factor * curve
