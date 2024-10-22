@@ -142,6 +142,7 @@ def add_coords(
     da = da.transform_coords(
         ["theta", "wavelength", "Q", "detector_rotation"], graph=graph
     )
+    da.coords.set_aligned('detector_rotation', False)
     da.coords["z_index"] = sc.arange(
         "row", 0, da.sizes["blade"] * da.sizes["wire"], unit=None
     ).fold("row", sizes={dim: da.sizes[dim] for dim in ("blade", "wire")})
