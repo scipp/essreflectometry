@@ -27,8 +27,6 @@ def with_filenames(
     df = pd.DataFrame({Filename[runtype]: runs}).rename_axis(axis_name)
     wf = workflow.copy()
 
-    wf[Filename[runtype]] = runs[0]
-
     wf[FootprintCorrectedData[runtype]] = (
         wf[FootprintCorrectedData[runtype]]
         .map(df)
