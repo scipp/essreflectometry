@@ -13,6 +13,7 @@ from orsopy.fileio.orso import OrsoDataset
 from ess.reflectometry import orso
 from ess.reflectometry.types import ReflectivityOverQ
 
+
 _STD_TO_FWHM = sc.scalar(2.0) * sc.sqrt(sc.scalar(2.0) * sc.log(sc.scalar(2.0)))
 
 
