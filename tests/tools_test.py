@@ -4,9 +4,7 @@ import numpy as np
 import pytest
 import sciline as sl
 import scipp as sc
-
 from numpy.testing import assert_allclose as np_assert_allclose
-
 from orsopy.fileio import Orso, OrsoDataset
 from scipp.testing import assert_allclose
 
