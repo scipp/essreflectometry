@@ -7,6 +7,7 @@ import pytest
 import sciline
 import scipp as sc
 from orsopy import fileio
+from scipp.testing import assert_allclose
 
 from ess import amor
 from ess.amor import data  # noqa: F401
@@ -23,6 +24,7 @@ from ess.reflectometry.types import (
     YIndexLimits,
     ZIndexLimits,
 )
+from ess.reflectometry.workflow import with_filenames
 
 
 @pytest.fixture
@@ -73,6 +75,42 @@ def test_run_full_pipeline(amor_pipeline: sciline.Pipeline):
     assert res.data.ndim == 2
     assert res.data.shape[1] == 4
     assert np.all(res.data[:, 1] >= 0)
+
+
+@pytest.mark.filterwarnings("ignore:Failed to convert .* into a transformation")
+@pytest.mark.filterwarnings("ignore:Invalid transformation, missing attribute")
+def test_pipeline_can_compute_reflectivity_merging_events_from_multiple_runs(
+    amor_pipeline: sciline.Pipeline,
+):
+    sample_runs = [
+        amor.data.amor_sample_run(608),
+        amor.data.amor_sample_run(609),
+    ]
+    pipeline = with_filenames(amor_pipeline, SampleRun, sample_runs)
+    result = pipeline.compute(ReflectivityOverQ)
+    assert result.dims == ('Q',)
+
+
+@pytest.mark.filterwarnings("ignore:Failed to convert .* into a transformation")
+@pytest.mark.filterwarnings("ignore:Invalid transformation, missing attribute")
+def test_pipeline_merging_events_result_unchanged(amor_pipeline: sciline.Pipeline):
+    sample_runs = [
+        amor.data.amor_sample_run(608),
+    ]
+    pipeline = with_filenames(amor_pipeline, SampleRun, sample_runs)
+    result = pipeline.compute(ReflectivityOverQ).hist()
+    sample_runs = [
+        amor.data.amor_sample_run(608),
+        amor.data.amor_sample_run(608),
+    ]
+    pipeline = with_filenames(amor_pipeline, SampleRun, sample_runs)
+    result2 = pipeline.compute(ReflectivityOverQ).hist()
+    assert_allclose(
+        2 * sc.values(result.data), sc.values(result2.data), rtol=sc.scalar(1e-6)
+    )
+    assert_allclose(
+        2 * sc.variances(result.data), sc.variances(result2.data), rtol=sc.scalar(1e-6)
+    )
 
 
 def test_find_corrections(amor_pipeline: sciline.Pipeline):
