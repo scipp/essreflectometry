@@ -36,6 +36,9 @@ def amor_pipeline() -> sciline.Pipeline:
     pl[WavelengthBins] = sc.geomspace("wavelength", 2.8, 12, 300, unit="angstrom")
     pl[YIndexLimits] = sc.scalar(11, unit=None), sc.scalar(41, unit=None)
     pl[ZIndexLimits] = sc.scalar(80, unit=None), sc.scalar(370, unit=None)
+    pl[QBins] = sc.geomspace(
+        dim="Q", start=0.005, stop=0.115, num=391, unit="1/angstrom"
+    )
 
     # The sample rotation value in the file is slightly off, so we set it manually
     pl[SampleRotation[ReferenceRun]] = sc.scalar(0.65, unit="deg")
@@ -48,19 +51,15 @@ def amor_pipeline() -> sciline.Pipeline:
             contact="max.mustermann@ess.eu",
         )
     )
-
-    # The sample rotation value in the file is slightly off, so we set it manually
-    pl[SampleRotation[SampleRun]] = sc.scalar(0.85, unit="deg")
-    pl[Filename[SampleRun]] = amor.data.amor_sample_run(608)
-    pl[QBins] = sc.geomspace(
-        dim="Q", start=0.005, stop=0.115, num=391, unit="1/angstrom"
-    )
     return pl
 
 
 @pytest.mark.filterwarnings("ignore:Failed to convert .* into a transformation")
 @pytest.mark.filterwarnings("ignore:Invalid transformation, missing attribute")
 def test_run_data_pipeline(amor_pipeline: sciline.Pipeline):
+    # The sample rotation value in the file is slightly off, so we set it manually
+    amor_pipeline[SampleRotation[SampleRun]] = sc.scalar(0.85, unit="deg")
+    amor_pipeline[Filename[SampleRun]] = amor.data.amor_sample_run(608)
     res = amor_pipeline.compute(ReflectivityOverQ)
     assert "Q" in res.coords
     assert "Q_resolution" in res.coords
@@ -69,6 +68,8 @@ def test_run_data_pipeline(amor_pipeline: sciline.Pipeline):
 @pytest.mark.filterwarnings("ignore:Failed to convert .* into a transformation")
 @pytest.mark.filterwarnings("ignore:Invalid transformation, missing attribute")
 def test_run_full_pipeline(amor_pipeline: sciline.Pipeline):
+    amor_pipeline[SampleRotation[SampleRun]] = sc.scalar(0.85, unit="deg")
+    amor_pipeline[Filename[SampleRun]] = amor.data.amor_sample_run(608)
     res = amor_pipeline.compute(orso.OrsoIofQDataset)
     assert res.info.data_source.experiment.instrument == "Amor"
     assert res.info.reduction.software.name == "ess.reflectometry"
@@ -87,6 +88,9 @@ def test_pipeline_can_compute_reflectivity_merging_events_from_multiple_runs(
         amor.data.amor_sample_run(609),
     ]
     pipeline = with_filenames(amor_pipeline, SampleRun, sample_runs)
+    pipeline[SampleRotation[SampleRun]] = pipeline.compute(
+        SampleRotation[SampleRun]
+    ) + sc.scalar(0.05, unit="deg")
     result = pipeline.compute(ReflectivityOverQ)
     assert result.dims == ('Q',)
 
@@ -98,12 +102,18 @@ def test_pipeline_merging_events_result_unchanged(amor_pipeline: sciline.Pipelin
         amor.data.amor_sample_run(608),
     ]
     pipeline = with_filenames(amor_pipeline, SampleRun, sample_runs)
+    pipeline[SampleRotation[SampleRun]] = pipeline.compute(
+        SampleRotation[SampleRun]
+    ) + sc.scalar(0.05, unit="deg")
     result = pipeline.compute(ReflectivityOverQ).hist()
     sample_runs = [
         amor.data.amor_sample_run(608),
         amor.data.amor_sample_run(608),
     ]
     pipeline = with_filenames(amor_pipeline, SampleRun, sample_runs)
+    pipeline[SampleRotation[SampleRun]] = pipeline.compute(
+        SampleRotation[SampleRun]
+    ) + sc.scalar(0.05, unit="deg")
     result2 = pipeline.compute(ReflectivityOverQ).hist()
     assert_allclose(
         2 * sc.values(result.data), sc.values(result2.data), rtol=sc.scalar(1e-6)
@@ -114,6 +124,7 @@ def test_pipeline_merging_events_result_unchanged(amor_pipeline: sciline.Pipelin
 
 
 def test_find_corrections(amor_pipeline: sciline.Pipeline):
+    amor_pipeline[Filename[SampleRun]] = amor.data.amor_sample_run(608)
     graph = amor_pipeline.get(orso.OrsoIofQDataset)
     # In topological order
     assert orso.find_corrections(graph) == [
