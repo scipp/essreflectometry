@@ -136,9 +136,30 @@ R^{\downarrow\downarrow}
 \end{bmatrix}
 (q_{n+\frac{1}{2}}).
 ```
-The integral on the righ-hand-side can be evaluated using the reference measurement.
+The integral on the righ-hand-side can be evaluated using the reference measurement, call evaluated integral $\bar{D}(q_{n+{\frac{1}{2}}})$
 $R$ was moved outside of the integral because if $Q$ is almost constant so is $R(Q)$.
-
+Finally we have
+```math
+\int_{Q\in[q_{n}, q_{n+1}]}
+\mathbf{a}^{-1}(\lambda)
+\bar{D}(q_{n+{\frac{1}{2}}})
+\begin{bmatrix}
+I^{0+} \\
+I^{0-} \\
+I^{1+} \\
+I^{1-}
+\end{bmatrix}
+\big(\lambda, j\big)
+d\lambda dj
+\approx
+\begin{bmatrix}
+R^{\uparrow\uparrow} \\
+R^{\uparrow\downarrow} \\
+R^{\downarrow\uparrow} \\
+R^{\downarrow\downarrow}
+\end{bmatrix}
+(q_{n+\frac{1}{2}}).
+```
 
 ### How to use the reference measurement to compute the integral over $D(\lambda, j)$?
 
