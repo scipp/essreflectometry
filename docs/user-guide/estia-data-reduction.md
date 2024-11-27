@@ -150,7 +150,7 @@ I_{ref}^{-}
 \end{bmatrix}
 \big(\lambda, j\big)
 =
-D(\lambda)
+D(\lambda, j)
 \begin{bmatrix}
 1 - a^{\uparrow} & 1 - a^{\downarrow} \\
 a^{\uparrow} & a^{\downarrow}
@@ -162,13 +162,13 @@ R_{ref}^{\uparrow\downarrow} & R_{ref}^{\downarrow\downarrow}
 \begin{bmatrix}
 1 - p^{\uparrow} \\
 1 - p^{\downarrow}
-\end{bmatrix}
+\end{bmatrix}.
 ```
-or, simplified by collecting the known terms in $r^{\pm}$
+But in practice, the analyzer/polarizer will be efficient enough to make only one of $I^\pm$ have enough intensity to be useful:
 ```math
-\frac{1}{2}\bigg(\frac{I_{ref}^{+}(\lambda, j)}{r^+(\lambda, j)} + \frac{I_{ref}^{-}(\lambda, j)}{r^-(\lambda, j)}\bigg)
+\frac{I_{ref}^{+}(\lambda, j)}{r^+(\lambda, j)}
 =
 D(\lambda, j).
 ```
-The expression for $D$ above can be used to evaluate integrals of $D$.
+The expression for $D$ above can be used to evaluate integrals of $D$, but only in the region of the detector where the transmitted beam hits.
 
