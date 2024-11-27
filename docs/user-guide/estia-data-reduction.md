@@ -171,8 +171,8 @@ But in practice, the analyzer/polarizer will be efficient enough to make only on
 D(\lambda, j)
 ```
 where $r^+$ is a known term involving the reflectivity of the supermirror and the pol-/analyzer efficiencies.
-The expression for $D$ above can be used to evaluate integrals of $D$.
-But in this case, only in the region of the detector where the transmitted beam hits, because we only got data in that region from our reference measurement.
+The expression for $D$ above can be used to evaluate integrals of $D$,
+but in this case only in the region of the detector where the transmitted beam hits, because we only got data in that region from our reference measurement.
 
 To measure $D$ for the entire detector we need to make several reference measurements with different flipper settings so that every part of the detector is illuminated in at least one measurement.
 It might be unecessary to use all 4 flipper settings, but to illustrate the idea imagine we make reference measurements using all 4 flipper settings:
