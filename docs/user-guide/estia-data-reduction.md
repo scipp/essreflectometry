@@ -193,7 +193,7 @@ R_{ref}^{\uparrow\downarrow} & R_{ref}^{\downarrow\downarrow}
 \begin{bmatrix}
 1 - p^{\uparrow} \\
 1 - p^{\downarrow}
-\end{bmatrix}.
+\end{bmatrix}
 ```
 ```math
 \begin{bmatrix}
@@ -217,7 +217,7 @@ R_{ref}^{\uparrow\downarrow} & R_{ref}^{\downarrow\downarrow}
 \begin{bmatrix}
 1 - p^{\uparrow} \\
 1 - p^{\downarrow}
-\end{bmatrix}.
+\end{bmatrix}
 ```
 ```math
 \begin{bmatrix}
@@ -241,7 +241,7 @@ R_{ref}^{\uparrow\downarrow} & R_{ref}^{\downarrow\downarrow}
 \begin{bmatrix}
 1 - p^{\uparrow} \\
 1 - p^{\downarrow}
-\end{bmatrix}.
+\end{bmatrix}
 ```
 ```math
 \begin{bmatrix}
