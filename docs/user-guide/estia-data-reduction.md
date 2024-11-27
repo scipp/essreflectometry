@@ -136,8 +136,9 @@ R^{\downarrow\downarrow}
 \end{bmatrix}
 (q_{n+\frac{1}{2}}).
 ```
-The integral on the righ-hand-side can be evaluated using the reference measurement, call evaluated integral $\bar{D}(q_{n+{\frac{1}{2}}})$
+The integral on the righ-hand-side can be evaluated using the reference measurement, call evaluated integral $\bar{D}(q_{n+{\frac{1}{2}}})$.
 $R$ was moved outside of the integral because if $Q$ is almost constant so is $R(Q)$.
+
 Finally we have
 ```math
 \int_{Q\in[q_{n}, q_{n+1}]}
