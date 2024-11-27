@@ -164,7 +164,7 @@ R_{ref}^{\uparrow\downarrow} & R_{ref}^{\downarrow\downarrow}
 1 - p^{\downarrow}
 \end{bmatrix}.
 ```
-But in practice, the analyzer/polarizer will be efficient enough to make only one of $I^\pm$ have enough intensity to be useful:
+But in practice, the analyzer/polarizer will be efficient enough to make only one of $I_{ref}^\pm$ have enough intensity to be useful:
 ```math
 \frac{I_{ref}^{+}(\lambda, j)}{r^+(\lambda, j)}
 =
