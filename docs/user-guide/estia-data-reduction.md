@@ -149,7 +149,7 @@ The integral on the righ-hand-side can be evaluated using the reference measurem
 
 ### How to compute the integral over $D(\lambda, j)$?
 
-For a reference measurement using flipper setting $f=0$ we have
+For a reference measurement using flipper setting $f_1=0, f_2=0$ we have
 ```math
 \begin{bmatrix}
 I_{ref}^{+} \\
@@ -190,7 +190,8 @@ D^-
 ```
 where $\mathbf{ar}$ is a diagonal matrix.
 
-For some $b,\Omega$
+The expression for $D$ above can be used to evaluate integrals of $D$ multiplied by explicitly known terms.
+For example, for some term $b$ and region of integration $\Omega$
 ```math
 \int_{\Omega} D^+(\lambda, j) b(\lambda, j) d\lambda j
 =
