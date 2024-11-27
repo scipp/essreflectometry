@@ -208,9 +208,9 @@ D(\lambda, j)
 a^{\uparrow} & a^{\downarrow}
 \end{bmatrix}
 \begin{bmatrix}
-\begin{bmatrix}
 0 & 1 \\ 1 & 0
 \end{bmatrix}
+\begin{bmatrix}
 R_{ref}^{\uparrow\uparrow} & R_{ref}^{\downarrow\uparrow} \\
 R_{ref}^{\uparrow\downarrow} & R_{ref}^{\downarrow\downarrow}
 \end{bmatrix}
