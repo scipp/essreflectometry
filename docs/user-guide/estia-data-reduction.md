@@ -17,11 +17,14 @@ D^+ & 0 \\
 a^{\uparrow} & a^{\downarrow}
 \end{bmatrix}
 \begin{bmatrix}
+(1 - f_2) & f_2 \\ f_2 & (1 - f_2)
+\end{bmatrix}
+\begin{bmatrix}
 R^{\uparrow\uparrow} & R^{\downarrow\uparrow} \\
 R^{\uparrow\downarrow} & R^{\downarrow\downarrow}
 \end{bmatrix}
 \begin{bmatrix}
-(1 - f) & f \\ f & (1 - f)
+(1 - f_1) & f_1 \\ f_1 & (1 - f_1)
 \end{bmatrix}
 \begin{bmatrix}
 1 - p^{\uparrow} \\
@@ -38,7 +41,7 @@ and $I^-$ is the intensity of the neutron beam reflected by the analyzer,
   - etc..
 * $a^\uparrow$ is the analyzer reflectivity for spin up neutrons and $a^\downarrow$ is the analyzer reflectivity for spin down neutrons,
 * $p^\uparrow$ is the polarizer reflectivity for spin up neutrons and $p^\downarrow$ is the polarizer reflectivity for spin down neutrons,
-* $f$ is the probability of spin flip by the flipper,
+* $f_1$ is the probability of spin flip by the polarizer spin flipper, $f_2$ is the probability of spin flip by the analyzer spin flipper
 * $D^\pm$ represents the inhomogeneity from the beam- and detector efficiency (and all other polarization unrelated terms). They are different for the transmitted and the reflected beam
    because the transmitted and reflected beam hit different areas of the detector.
 
@@ -46,7 +49,7 @@ and $I^-$ is the intensity of the neutron beam reflected by the analyzer,
 
 ## Reducing a measurement
 
-If the sample is measured at two different flipper settings $f=0$ and $f=1$, then we have
+If the sample is measured at two different flipper settings $f_1=0, f_2=0$ and $f_1=1, f_2=0$, then we have four measurement in total:
 ```math
 \begin{bmatrix}
 I^{0+} \\
