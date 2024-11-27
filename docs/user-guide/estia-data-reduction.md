@@ -147,9 +147,10 @@ R^{\downarrow\downarrow}
 (q_{n+\frac{1}{2}}).
 ```
 The integral on the righ-hand-side can be evaluated using the reference measurement.
+$R$ was moved outside of the integral because if $Q$ is almost constant so is $R(Q)$.
 
 
-### How to compute the integral over $D(\lambda, j)$?
+### How to use the reference measurement to compute the integral over $D(\lambda, j)$?
 
 For a reference measurement using flipper setting $f_1=0, f_2=0$ we have
 ```math
