@@ -1,3 +1,7 @@
+# Polarization data reduction for ESTIA
+
+Based on https://confluence.ess.eu/display/ESTIA/Polarised+Neutron+Reflectometry+%28PNR%29+-+Reduction+Notes
+
 ## Model
 
 Intensity in the detector is related to the reflectivity of the sample by the model
