@@ -14,7 +14,7 @@ D^+ & 0 \\
 \end{bmatrix}
 \begin{bmatrix}
 1 - a^{\uparrow} & 1 - a^{\downarrow} \\
-a^{\uparrow} & a^{\downarrow} \\
+a^{\uparrow} & a^{\downarrow}
 \end{bmatrix}
 \begin{bmatrix}
 R^{\uparrow\uparrow} & R^{\downarrow\uparrow} \\
