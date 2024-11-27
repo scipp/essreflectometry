@@ -141,7 +141,7 @@ R^{\downarrow\downarrow}
 \end{bmatrix}
 (q_{n+\frac{1}{2}}).
 ```
-Integrating $\mathbf{D}$ can be done using the reference measurement. $\mathbf{a}$ is known.
+The integral on the righ-hand-side can be evaluated using the reference measurement.
 
 
 ### How to compute the integral over $D(\lambda, j)$?
