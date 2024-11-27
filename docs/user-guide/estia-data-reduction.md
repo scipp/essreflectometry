@@ -12,10 +12,7 @@ I^{-}
 \end{bmatrix}
 \big(\lambda, j\big)
 =
-\begin{bmatrix}
-D^+ & 0 \\
-0 & D^-
-\end{bmatrix}
+D(\lambda, j)
 \begin{bmatrix}
 1 - a^{\uparrow} & 1 - a^{\downarrow} \\
 a^{\uparrow} & a^{\downarrow}
@@ -46,8 +43,7 @@ and $I^-$ is the intensity of the neutron beam reflected by the analyzer,
 * $a^\uparrow$ is the analyzer reflectivity for spin up neutrons and $a^\downarrow$ is the analyzer reflectivity for spin down neutrons,
 * $p^\uparrow$ is the polarizer reflectivity for spin up neutrons and $p^\downarrow$ is the polarizer reflectivity for spin down neutrons,
 * $f_1$ is the probability of spin flip by the polarizer spin flipper, $f_2$ is the probability of spin flip by the analyzer spin flipper
-* $D^\pm$ represents the inhomogeneity from the beam- and detector efficiency (and all other polarization unrelated terms). They are different for the transmitted and the reflected beam
-   because the transmitted and reflected beam hit different areas of the detector.
+* $D$ represents the inhomogeneity from the beam- and detector efficiency (and all other polarization unrelated terms).
 
 ## Reducing a measurement
 
@@ -59,10 +55,7 @@ I^{0-}
 \end{bmatrix}
 \big(\lambda, j\big)
 =
-\begin{bmatrix}
-D^+ & 0 \\
-0 & D^-
-\end{bmatrix}
+D(\lambda, j)
 \begin{bmatrix}
 1 - a^{\uparrow} & 1 - a^{\downarrow} \\
 a^{\uparrow} & a^{\downarrow}
@@ -83,10 +76,7 @@ I^{1-}
 \end{bmatrix}
 \big(\lambda, j\big)
 =
-\begin{bmatrix}
-D^+ & 0 \\
-0 & D^-
-\end{bmatrix}
+D(\lambda, j)
 \begin{bmatrix}
 1 - a^{\uparrow} & 1 - a^{\downarrow} \\
 a^{\uparrow} & a^{\downarrow}
@@ -101,7 +91,7 @@ R^{\uparrow\downarrow} & R^{\downarrow\downarrow}
 \end{bmatrix}.
 ```
 
-To simplify the above, collect the terms in the diagonal matrix $\mathbf{D}$ and the (typically full) matrix $\mathbf{a}$
+To simplify the above, collect the terms in the matrix $\mathbf{a}$
 ```math
 \begin{bmatrix}
 I^{0+} \\
@@ -111,7 +101,7 @@ I^{1-}
 \end{bmatrix}
 \big(\lambda, j\big)
 =
-\mathbf{D}(\lambda, j)
+D(\lambda, j)
 \mathbf{a}(\lambda)
 \begin{bmatrix}
 R^{\uparrow\uparrow} \\
@@ -125,6 +115,7 @@ R^{\downarrow\downarrow}
 To compute the reflectivities, integrate over a region of (almost) constant $Q$
 ```math
 \int_{Q\in[q_{n}, q_{n+1}]}
+\mathbf{a}^{-1}(\lambda)
 \begin{bmatrix}
 I^{0+} \\
 I^{0-} \\
@@ -135,8 +126,7 @@ I^{1-}
 d\lambda dj
 \approx
 \int_{Q\in[q_{n}, q_{n+1}]}
-\mathbf{D}(\lambda, j)
-\mathbf{a}(\lambda)
+D(\lambda, j)
 d\lambda dj
 \begin{bmatrix}
 R^{\uparrow\uparrow} \\
@@ -160,10 +150,7 @@ I_{ref}^{-}
 \end{bmatrix}
 \big(\lambda, j\big)
 =
-\begin{bmatrix}
-D^+ & 0 \\
-0 & D^-
-\end{bmatrix}
+D(\lambda)
 \begin{bmatrix}
 1 - a^{\uparrow} & 1 - a^{\downarrow} \\
 a^{\uparrow} & a^{\downarrow}
@@ -177,33 +164,11 @@ R_{ref}^{\uparrow\downarrow} & R_{ref}^{\downarrow\downarrow}
 1 - p^{\downarrow}
 \end{bmatrix}
 ```
-or, simplified by collecting the known terms in the matrix $\mathbf{ar}$
+or, simplified by collecting the known terms in $r^{\pm}$
 ```math
-\begin{bmatrix}
-I_{ref}^{+} \\
-I_{ref}^{-}    
-\end{bmatrix}
-\big(\lambda, j\big)
+\frac{1}{2}\bigg(\frac{I_{ref}^{+}(\lambda, j)}{r^+(\lambda, j)} + \frac{I_{ref}^{-}(\lambda, j)}{r^-(\lambda, j)}\bigg)
 =
-\mathbf{ar}(\lambda, j)
-\begin{bmatrix}
-D^+ \\
-D^-
-\end{bmatrix}  
+D(\lambda, j).
 ```
-where $\mathbf{ar}$ is a diagonal matrix.
-
-The expression for $D$ above can be used to evaluate integrals of $D$ multiplied by explicitly known terms.
-For example, for some term $b$ and region of integration $\Omega$
-```math
-\int_{\Omega} D^+(\lambda, j) b(\lambda, j) d\lambda j
-=
-\int_{\Omega}
-\frac{I_{ref}^+(\lambda, j)}
-{ar^+(\lambda, j)}
-b(\lambda, j)
-d\lambda j
-\approx \frac{1}{N}\sum_{i\in E_{ref}^+, (\lambda_{i}, j_{i}) \in \Omega} \frac{b(\lambda_{i}, j_{i})}{ar^{+}(\lambda_{i}, j_{i})}
-```
-where the last integral can be approximated using the reference measurement $E_{ref}^+$ (set of events in the reference measurement), $N$ is the number of events in $E_{ref}^+$ that are in $\Omega$.
+The expression for $D$ above can be used to evaluate integrals of $D$.
 
