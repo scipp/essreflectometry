@@ -44,6 +44,8 @@ and $I^-$ is the intensity of the neutron beam reflected by the analyzer,
 
 **For simplicity the second flipper was omitted in the above description.**
 
+## Reducing a measurement
+
 If the sample is measured at two different flipper settings $f=0$ and $f=1$, then we have
 ```math
 \begin{bmatrix}
