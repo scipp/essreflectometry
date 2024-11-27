@@ -283,14 +283,14 @@ I_{ref}^{10-}(\lambda, j) +
 I_{ref}^{11+}(\lambda, j) +
 I_{ref}^{11-}(\lambda, j)
 }{
-r^00+(\lambda, j)
-r^00-(\lambda, j)
-r^01+(\lambda, j)
-r^01-(\lambda, j)
-r^10+(\lambda, j)
-r^10-(\lambda, j)
-r^11+(\lambda, j)
-r^11-(\lambda, j)
+r^{00+}(\lambda, j) +
+r^{00-}(\lambda, j) +
+r^{01+}(\lambda, j) +
+r^{01-}(\lambda, j) +
+r^{10+}(\lambda, j) +
+r^{10-}(\lambda, j) +
+r^{11+}(\lambda, j) +
+r^{11-}(\lambda, j)
 }
 =
 D(\lambda, j).
