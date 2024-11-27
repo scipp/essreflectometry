@@ -172,3 +172,126 @@ D(\lambda, j).
 ```
 The expression for $D$ above can be used to evaluate integrals of $D$, but only in the region of the detector where the transmitted beam hits.
 
+To measure $D$ for the entire detector we need to make several reference measurements with different flipper settings so that every part of the detector is illuminated in at least one measurement.
+It might be unecessary to use all 4 flipper settings, but to illustrate the idea imagine we make reference measurements using all 4 flipper settings:
+```math
+\begin{bmatrix}
+I_{ref}^{00+} \\
+I_{ref}^{00-}
+\end{bmatrix}
+\big(\lambda, j\big)
+=
+D(\lambda, j)
+\begin{bmatrix}
+1 - a^{\uparrow} & 1 - a^{\downarrow} \\
+a^{\uparrow} & a^{\downarrow}
+\end{bmatrix}
+\begin{bmatrix}
+R_{ref}^{\uparrow\uparrow} & R_{ref}^{\downarrow\uparrow} \\
+R_{ref}^{\uparrow\downarrow} & R_{ref}^{\downarrow\downarrow}
+\end{bmatrix}
+\begin{bmatrix}
+1 - p^{\uparrow} \\
+1 - p^{\downarrow}
+\end{bmatrix}.
+```
+```math
+\begin{bmatrix}
+I_{ref}^{01+} \\
+I_{ref}^{01-}
+\end{bmatrix}
+\big(\lambda, j\big)
+=
+D(\lambda, j)
+\begin{bmatrix}
+1 - a^{\uparrow} & 1 - a^{\downarrow} \\
+a^{\uparrow} & a^{\downarrow}
+\end{bmatrix}
+\begin{bmatrix}
+\begin{bmatrix}
+0 & 1 \\ 1 & 0
+\end{bmatrix}
+R_{ref}^{\uparrow\uparrow} & R_{ref}^{\downarrow\uparrow} \\
+R_{ref}^{\uparrow\downarrow} & R_{ref}^{\downarrow\downarrow}
+\end{bmatrix}
+\begin{bmatrix}
+1 - p^{\uparrow} \\
+1 - p^{\downarrow}
+\end{bmatrix}.
+```
+```math
+\begin{bmatrix}
+I_{ref}^{10+} \\
+I_{ref}^{10-}
+\end{bmatrix}
+\big(\lambda, j\big)
+=
+D(\lambda, j)
+\begin{bmatrix}
+1 - a^{\uparrow} & 1 - a^{\downarrow} \\
+a^{\uparrow} & a^{\downarrow}
+\end{bmatrix}
+\begin{bmatrix}
+R_{ref}^{\uparrow\uparrow} & R_{ref}^{\downarrow\uparrow} \\
+R_{ref}^{\uparrow\downarrow} & R_{ref}^{\downarrow\downarrow}
+\end{bmatrix}
+\begin{bmatrix}
+0 & 1 \\ 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+1 - p^{\uparrow} \\
+1 - p^{\downarrow}
+\end{bmatrix}.
+```
+```math
+\begin{bmatrix}
+I_{ref}^{11+} \\
+I_{ref}^{11-}
+\end{bmatrix}
+\big(\lambda, j\big)
+=
+D(\lambda, j)
+\begin{bmatrix}
+1 - a^{\uparrow} & 1 - a^{\downarrow} \\
+a^{\uparrow} & a^{\downarrow}
+\end{bmatrix}
+\begin{bmatrix}
+0 & 1 \\ 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+R_{ref}^{\uparrow\uparrow} & R_{ref}^{\downarrow\uparrow} \\
+R_{ref}^{\uparrow\downarrow} & R_{ref}^{\downarrow\downarrow}
+\end{bmatrix}
+\begin{bmatrix}
+0 & 1 \\ 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+1 - p^{\uparrow} \\
+1 - p^{\downarrow}
+\end{bmatrix}.
+```
+
+Summing all 8 measurements gives us an expression for $D$ that ought to be valid for the entire detector:
+```math
+\frac{
+I_{ref}^{00+}(\lambda, j) +
+I_{ref}^{00-}(\lambda, j) +
+I_{ref}^{01+}(\lambda, j) +
+I_{ref}^{01-}(\lambda, j) +
+I_{ref}^{10+}(\lambda, j) +
+I_{ref}^{10-}(\lambda, j) +
+I_{ref}^{11+}(\lambda, j) +
+I_{ref}^{11-}(\lambda, j)
+}{
+r^00+(\lambda, j)
+r^00-(\lambda, j)
+r^01+(\lambda, j)
+r^01-(\lambda, j)
+r^10+(\lambda, j)
+r^10-(\lambda, j)
+r^11+(\lambda, j)
+r^11-(\lambda, j)
+}
+=
+D(\lambda, j).
+```
