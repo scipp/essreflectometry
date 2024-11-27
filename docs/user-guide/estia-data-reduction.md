@@ -142,7 +142,7 @@ Finally we have
 ```math
 \int_{Q\in[q_{n}, q_{n+1}]}
 \mathbf{a}^{-1}(\lambda)
-\bar{D}(q_{n+{\frac{1}{2}}})
+\bar{D}^{-1}(q_{n+{\frac{1}{2}}})
 \begin{bmatrix}
 I^{0+} \\
 I^{0-} \\
