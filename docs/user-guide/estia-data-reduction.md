@@ -1,6 +1,6 @@
 ## Model
 
-Intensities in the detector are related to the reflectivities of the sample by the model
+Intensity in the detector is related to the reflectivity of the sample by the model
 ```math
 \begin{bmatrix}
 I^{+} \\
