@@ -96,7 +96,7 @@ R^{\uparrow\downarrow} & R^{\downarrow\downarrow}
 \end{bmatrix}.
 ```
 
-To simplify the above expressions, collect the terms in the diagonal matrix $\mathbf{D}$ and the (typically full) matrix $\mathbf{a}$
+To simplify the above, collect the terms in the diagonal matrix $\mathbf{D}$ and the (typically full) matrix $\mathbf{a}$
 ```math
 \begin{bmatrix}
 I^{0+} \\
@@ -141,7 +141,7 @@ R^{\downarrow\downarrow}
 \end{bmatrix}
 (q_{n+\frac{1}{2}}).
 ```
-Integrating $\mathbf{D}$ can be done using the reference measurement, $\mathbf{a}$ is known.
+Integrating $\mathbf{D}$ can be done using the reference measurement. $\mathbf{a}$ is known.
 
 
 ### How to compute the integral over $D(\lambda, j)$?
