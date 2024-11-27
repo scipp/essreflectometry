@@ -49,8 +49,6 @@ and $I^-$ is the intensity of the neutron beam reflected by the analyzer,
 * $D^\pm$ represents the inhomogeneity from the beam- and detector efficiency (and all other polarization unrelated terms). They are different for the transmitted and the reflected beam
    because the transmitted and reflected beam hit different areas of the detector.
 
-**For simplicity the second flipper was omitted in the above description.**
-
 ## Reducing a measurement
 
 If the sample is measured at two different flipper settings $f_1=0, f_2=0$ and $f_1=1, f_2=0$, then we have four measurement in total:
