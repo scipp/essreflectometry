@@ -40,7 +40,7 @@ and $I^-$ is the intensity of the neutron beam reflected by the analyzer,
 * $p^\uparrow$ is the polarizer reflectivity for spin up neutrons and $p^\downarrow$ is the polarizer reflectivity for spin down neutrons,
 * $f$ is the probability of spin flip by the flipper,
 * $D^\pm$ represents the inhomogeneity from the beam- and detector efficiency (and all other polarization unrelated terms). They are different for the transmitted and the reflected beam
-   because the transmitted and reflected beam hit different pixels.
+   because the transmitted and reflected beam hit different areas of the detector.
 
 **For simplicity the second flipper was omitted in the above description.**
 
