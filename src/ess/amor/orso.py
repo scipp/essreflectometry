@@ -26,7 +26,9 @@ def build_orso_instrument(events: ReflectivityOverQ) -> OrsoInstrument:
     return OrsoInstrument(
         orso_data_source.InstrumentSettings(
             wavelength=orso_base.ValueRange(*_limits_of_coord(events, "wavelength")),
-            incident_angle=orso_base.ValueRange(*_limits_of_coord(events, "theta")),
+            incident_angle=orso_base.ValueRange(
+                *_limits_of_coord(events, "angle_of_reflection")
+            ),
             polarization=None,  # TODO how can we determine this from the inputs?
         )
     )

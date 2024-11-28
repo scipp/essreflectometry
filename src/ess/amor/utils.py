@@ -10,19 +10,20 @@ from .geometry import Detector
 from .types import ThetaBins
 
 
-def theta_grid(
+def angle_of_reflection_grid(
     nu: DetectorRotation[RunType], mu: SampleRotation[RunType]
 ) -> ThetaBins[RunType]:
-    """Special grid used to create intensity maps over (theta, wavelength).
+    """Special grid used to create intensity maps over
+    (angle_of_reflection, wavelength).
     The grid avoids aliasing artifacts that occur if the
-    theta bins overlap the blade edges."""
+    angle_of_reflection bins overlap the blade edges."""
     # angular offset of two blades:
     bladeAngle = 2.0 * sc.asin(0.5 * Detector.bladeZ / Detector.distance)
     # associate an angle with each z-coordinate on one blade
     blade_grid = sc.atan(
-        sc.arange("theta", 0, 33)
+        sc.arange("angle_of_reflection", 0, 33)
         * Detector.dZ
-        / (Detector.distance + sc.arange("theta", 0, 33) * Detector.dX)
+        / (Detector.distance + sc.arange("angle_of_reflection", 0, 33) * Detector.dX)
     )
     # approximate angular step width on one blade
     stepWidth = blade_grid[1] - blade_grid[0]
@@ -30,19 +31,22 @@ def theta_grid(
     blade_grid = blade_grid - 0.2 * stepWidth
 
     delta_grid = sc.array(
-        dims=["theta"], values=[], unit=blade_grid.unit, dtype=blade_grid.dtype
+        dims=["angle_of_reflection"],
+        values=[],
+        unit=blade_grid.unit,
+        dtype=blade_grid.dtype,
     )
     # loop over all blades but one:
     for _ in range(Detector.nBlades.value - 1):
         # append the actual blade's grid to the array of detector-local angles
-        delta_grid = sc.concat((delta_grid, blade_grid), "theta")
+        delta_grid = sc.concat((delta_grid, blade_grid), "angle_of_reflection")
         # shift the blade grid by the angular offset
         blade_grid = blade_grid + bladeAngle
         # remove all entries in the detector local grid which are above the
         #  expected next value (plus some space to avoid very thin bins)
         delta_grid = delta_grid[delta_grid < blade_grid[0] - 0.5 * stepWidth]
     # append the grid of the last blade.
-    delta_grid = sc.concat((delta_grid, blade_grid), "theta")
+    delta_grid = sc.concat((delta_grid, blade_grid), "angle_of_reflection")
 
     # add angular position of the detector
     grid = (
@@ -53,11 +57,7 @@ def theta_grid(
         ).to(unit="rad")
         + 0.5 * Detector.nBlades * bladeAngle.to(unit="rad")
     )
-    # TODO: If theta filtering is added, use it here
-    # some filtering
-    # theta_grid = theta_grid[theta_grid>=thetaMin]
-    # theta_grid = theta_grid[theta_grid<=thetaMax]
     return grid
 
 
-providers = (theta_grid,)
+providers = (angle_of_reflection_grid,)

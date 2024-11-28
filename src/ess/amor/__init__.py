@@ -5,23 +5,21 @@ import importlib.metadata
 import sciline
 import scipp as sc
 
+
 from ..reflectometry import providers as reflectometry_providers
 from ..reflectometry import supermirror
 from ..reflectometry.types import (
     BeamSize,
     DetectorSpatialResolution,
-    Gravity,
     NeXusDetectorName,
     RunType,
     SamplePosition,
     BeamDivergenceLimits,
 )
-from . import conversions, load, orso, resolution, utils, figures
+from . import conversions, load, orso, resolution, utils, figures, normalization
 from .instrument_view import instrument_view
 from .types import (
     AngularResolution,
-    Chopper1Position,
-    Chopper2Position,
     ChopperFrequency,
     ChopperPhase,
     QThetaFigure,
@@ -42,6 +40,7 @@ providers = (
     *reflectometry_providers,
     *load.providers,
     *conversions.providers,
+    *normalization.providers,
     *resolution.providers,
     *utils.providers,
     *figures.providers,
@@ -61,7 +60,6 @@ def default_parameters() -> dict:
         supermirror.Alpha: sc.scalar(0.25 / 0.088, unit=sc.units.angstrom),
         BeamSize[RunType]: 2.0 * sc.units.mm,
         DetectorSpatialResolution[RunType]: 0.0025 * sc.units.m,
-        Gravity: sc.vector(value=[0, -1, 0]) * sc.constants.g,
         SamplePosition[RunType]: sc.vector([0, 0, 0], unit="m"),
         NeXusDetectorName[RunType]: "detector",
         ChopperPhase[RunType]: sc.scalar(7.0, unit="deg"),

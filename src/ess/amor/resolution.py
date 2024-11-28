@@ -2,60 +2,82 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 import scipp as sc
 
-from ..reflectometry.tools import fwhm_to_std
 from ..reflectometry.types import (
     DetectorSpatialResolution,
-    FootprintCorrectedData,
     QBins,
     QResolution,
+    Reference,
     SampleRun,
     SampleSize,
 )
 from .types import (
     AngularResolution,
-    Chopper1Position,
-    Chopper2Position,
+    ChopperSeparation,
     SampleSizeResolution,
     WavelengthResolution,
 )
 
+_STD_TO_FWHM = sc.scalar(2.0) * sc.sqrt(sc.scalar(2.0) * sc.log(sc.scalar(2.0)))
+
+
+def fwhm_to_std(fwhm: sc.Variable) -> sc.Variable:
+    """
+    Convert from full-width half maximum to standard deviation.
+
+    Parameters
+    ----------
+    fwhm:
+        Full-width half maximum.
+
+    Returns
+    -------
+    :
+        Standard deviation.
+    """
+    # Enables the conversion from full width half
+    # maximum to standard deviation
+    return fwhm / _STD_TO_FWHM
+
 
 def wavelength_resolution(
-    da: FootprintCorrectedData[SampleRun],
-    chopper_1_position: Chopper1Position[SampleRun],
-    chopper_2_position: Chopper2Position[SampleRun],
-) -> WavelengthResolution:
+    L1,
+    L2,
+    chopper_separation,
+):
     """
     Find the wavelength resolution contribution as described in Section 4.3.3 of the
     Amor publication (doi: 10.1016/j.nima.2016.03.007).
 
     Parameters
     ----------
-    chopper_1_position:
-        Position of first chopper (the one closer to the source).
-    chopper_2_position:
-        Position of second chopper (the one closer to the sample).
-    pixel_position:
-        Positions for detector pixels.
+
+    L1:
+        Distance from midpoint between choppers to sample.
+    L2:
+        Distance from sample to detector.
+    chopper_separation:
+        Distance between choppers.
 
     Returns
     -------
     :
         The angular resolution variable, as standard deviation.
     """
-    pixel_position = da.coords["position"]
-    chopper_midpoint = (chopper_1_position + chopper_2_position) * sc.scalar(0.5)
-    distance_between_choppers = sc.norm(chopper_2_position - chopper_1_position)
-    chopper_detector_distance = sc.norm(pixel_position - chopper_midpoint)
-    return WavelengthResolution(
-        fwhm_to_std(distance_between_choppers / chopper_detector_distance)
+    return fwhm_to_std(chopper_separation / (L1 + L2))
+
+
+def _wavelength_resolution(
+    da: Reference, chopper_separation: ChopperSeparation[SampleRun]
+) -> WavelengthResolution:
+    return wavelength_resolution(
+        L1=da.coords['L1'], L2=da.coords['L2'], chopper_separation=chopper_separation
     )
 
 
 def sample_size_resolution(
-    da: FootprintCorrectedData[SampleRun],
-    sample_size: SampleSize[SampleRun],
-) -> SampleSizeResolution:
+    L2,
+    sample_size,
+):
     """
     The resolution from the projected sample size, where it may be bigger
     than the detector pixel resolution as described in Section 4.3.3 of the Amor
@@ -63,8 +85,8 @@ def sample_size_resolution(
 
     Parameters
     ----------
-    pixel_position:
-        Positions for detector pixels.
+    L2:
+        Distance from sample to detector.
     sample_size:
         Size of sample.
 
@@ -73,30 +95,30 @@ def sample_size_resolution(
     :
         Standard deviation of contribution from the sample size.
     """
-    return fwhm_to_std(
-        sc.to_unit(sample_size, "m")
-        / sc.to_unit(
-            sc.norm(da.coords["position"] - da.coords["sample_position"]),
-            "m",
-            copy=False,
-        )
-    )
+    return fwhm_to_std(sample_size / L2.to(unit=sample_size.unit))
+
+
+def _sample_size_resolution(
+    da: Reference, sample_size: SampleSize[SampleRun]
+) -> SampleSizeResolution:
+    return sample_size_resolution(L2=da.coords['L2'], sample_size=sample_size)
 
 
 def angular_resolution(
-    da: FootprintCorrectedData[SampleRun],
-    detector_spatial_resolution: DetectorSpatialResolution[SampleRun],
-) -> AngularResolution:
+    angle_of_reflection,
+    L2,
+    detector_spatial_resolution,
+):
     """
     Determine the angular resolution as described in Section 4.3.3 of the Amor
     publication (doi: 10.1016/j.nima.2016.03.007).
 
     Parameters
     ----------
-    pixel_position:
-        Positions for detector pixels.
-    theta:
-        Theta values for events.
+    angle_of_reflection:
+        Angle of reflection.
+    L2:
+        Distance between sample and detector.
     detector_spatial_resolution:
         FWHM of detector pixel resolution.
 
@@ -105,28 +127,29 @@ def angular_resolution(
     :
         Angular resolution standard deviation
     """
-    theta = da.bins.coords["theta"]
     return (
         fwhm_to_std(
-            sc.to_unit(
-                sc.atan(
-                    sc.to_unit(detector_spatial_resolution, "m")
-                    / sc.to_unit(
-                        sc.norm(da.coords["position"] - da.coords["sample_position"]),
-                        "m",
-                        copy=False,
-                    )
-                ),
-                theta.bins.unit,
-                copy=False,
+            sc.atan(
+                detector_spatial_resolution
+                / L2.to(unit=detector_spatial_resolution.unit)
             )
-        )
-        / theta
+        ).to(unit=angle_of_reflection.unit)
+        / angle_of_reflection
+    )
+
+
+def _angular_resolution(
+    da: Reference, detector_spatial_resolution: DetectorSpatialResolution[SampleRun]
+) -> AngularResolution:
+    return angular_resolution(
+        angle_of_reflection=da.coords['angle_of_reflection'],
+        L2=da.coords['L2'],
+        detector_spatial_resolution=detector_spatial_resolution,
     )
 
 
 def sigma_Q(
-    da: FootprintCorrectedData[SampleRun],
+    ref: Reference,
     angular_resolution: AngularResolution,
     wavelength_resolution: WavelengthResolution,
     sample_size_resolution: SampleSizeResolution,
@@ -151,21 +174,26 @@ def sigma_Q(
     :
         Combined resolution function.
     """
-    h = da.bins.concat().hist(Q=qbins)
+    h = ref.flatten(to='Q').hist(Q=qbins)
     s = (
         (
-            da
+            ref
             * (
                 angular_resolution**2
                 + wavelength_resolution**2
                 + sample_size_resolution**2
             )
-            * da.bins.coords['Q'] ** 2
+            * ref.coords['Q'] ** 2
         )
-        .bins.concat()
+        .flatten(to='Q')
         .hist(Q=qbins)
     )
     return sc.sqrt(sc.values(s / h))
 
 
-providers = (sigma_Q, angular_resolution, wavelength_resolution, sample_size_resolution)
+providers = (
+    sigma_Q,
+    _angular_resolution,
+    _wavelength_resolution,
+    _sample_size_resolution,
+)
