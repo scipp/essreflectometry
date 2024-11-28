@@ -3,11 +3,13 @@
 import numpy as np
 import scipp as sc
 
+from ..reflectometry.conversions import reflectometry_q
 from ..reflectometry.types import (
     BeamDivergenceLimits,
     RawDetectorData,
     ReducibleData,
     RunType,
+    WavelengthBins,
     YIndexLimits,
 )
 
@@ -58,25 +60,19 @@ def add_common_coords_and_masks(
     da: RawDetectorData[RunType],
     ylim: YIndexLimits,
     bdlim: BeamDivergenceLimits,
+    wbins: WavelengthBins,
 ) -> ReducibleData[RunType]:
-    da.bins.coords["wavelength"] = wavelength(
-        event_time_offset=da.bins.coords["event_time_offset"],
-        divergence_angle=da.coords["pixel_divergence_angle"],
-        L1=da.coords["L1"],
-        L2=da.coords["L2"],
-        chopper_phase=da.coords["chopper_phase"],
-        chopper_frequency=da.coords["chopper_frequency"],
-    )
-    da.bins.coords["angle_of_reflection"] = angle_of_reflection(
-        wavelength=da.bins.coords["wavelength"],
-        divergence_angle=da.coords["pixel_divergence_angle"],
-        L2=da.coords["L2"],
-        sample_rotation=da.coords["sample_rotation"],
-        detector_rotation=da.coords["detector_rotation"],
-    )
-    da.bins.coords["angle_of_divergence"] = angle_of_divergence(
-        angle_of_reflection=da.bins.coords["angle_of_reflection"],
-        sample_rotation=da.coords["sample_rotation"],
+    da = da.transform_coords(
+        ("wavelength", "angle_of_reflection", "angle_of_divergence", "Q"),
+        {
+            "divergence_angle": "pixel_divergence_angle",
+            "wavelength": wavelength,
+            "angle_of_reflection": angle_of_reflection,
+            "angle_of_divergence": angle_of_divergence,
+            "Q": reflectometry_q,
+        },
+        rename_dims=False,
+        keep_intermediate=False,
     )
     da.masks["stripe_range"] = (da.coords["stripe"] < ylim[0]) | (
         da.coords["stripe"] > ylim[1]
@@ -88,6 +84,10 @@ def add_common_coords_and_masks(
         da.bins.coords["angle_of_divergence"]
         > bdlim[1].to(unit=da.bins.coords["angle_of_divergence"].bins.unit)
     )
+    da.bins.masks['wavelength'] = (wbins[0] > da.bins.coords['wavelength']) | (
+        wbins[-1] < da.bins.coords['wavelength']
+    )
+
     # Footprint correction
     da /= sc.sin(da.bins.coords['angle_of_reflection'])
     return da
