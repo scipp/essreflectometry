@@ -37,10 +37,7 @@ def reduce_reference(
     alpha: Alpha,
 ) -> ReducedReference:
     R = supermirror_reflectivity(
-        reflectometry_q(
-            wavelength=reference.bins.coords['wavelength'],
-            angle_of_reflection=reference.bins.coords['angle_of_reflection'],
-        ),
+        reference.bins.coords['Q'],
         c=critical_edge,
         m=mvalue,
         alpha=alpha,
@@ -54,17 +51,9 @@ def reduce_sample_over_q(
     sample: ReducibleData[SampleRun],
     reference: Reference,
     qbins: QBins,
-    wavelength_bins: WavelengthBins,
     zlims: ZIndexLimits,
     qresolution: QResolution,
 ) -> ReflectivityOverQ:
-    sample.bins.coords['Q'] = reflectometry_q(
-        sample.bins.coords['wavelength'],
-        sample.bins.coords['angle_of_reflection'],
-    )
-    sample.bins.masks['wavelength'] = (
-        wavelength_bins[0] > sample.bins.coords['wavelength']
-    ) | (wavelength_bins[-1] < sample.bins.coords['wavelength'])
     _add_pre_reduction_masks(sample, zlims)
     R = sample.bins.concat().bin(Q=qbins) / reference.flatten(to='Q').hist(Q=qbins).data
     R.coords['Q_resolution'] = qresolution.data
@@ -74,18 +63,11 @@ def reduce_sample_over_q(
 def reduce_sample_over_zw(
     sample: ReducibleData[SampleRun],
     reference: Reference,
-    wavelength_bins: WavelengthBins,
     zlims: ZIndexLimits,
+    wbins: WavelengthBins,
 ) -> ReflectivityOverZW:
-    sample.bins.coords['Q'] = reflectometry_q(
-        sample.bins.coords['wavelength'],
-        sample.bins.coords['angle_of_reflection'],
-    )
-    sample.bins.masks['wavelength'] = (
-        wavelength_bins[0] > sample.bins.coords['wavelength']
-    ) | (wavelength_bins[-1] < sample.bins.coords['wavelength'])
     _add_pre_reduction_masks(sample, zlims)
-    R = sample.bins.concat(('stripe',)).bin(wavelength=wavelength_bins) / reference.data
+    R = sample.bins.concat(('stripe',)).bin(wavelength=wbins) / reference.data
     R.masks["too_few_events"] = reference.data < sc.scalar(1, unit="counts")
     return R
 
@@ -97,16 +79,17 @@ def evaluate_reference(
     zlims: ZIndexLimits,
 ) -> Reference:
     ref = reference.copy()
-    ref.coords['angle_of_reflection'] = angle_of_reflection(
-        wavelength=sc.midpoints(ref.coords["wavelength"]),
-        divergence_angle=ref.coords["pixel_divergence_angle"],
-        L2=ref.coords["L2"],
-        sample_rotation=sample.coords["sample_rotation"],
-        detector_rotation=sample.coords["detector_rotation"],
-    )
-    ref.coords['Q'] = reflectometry_q(
-        wavelength=sc.midpoints(ref.coords["wavelength"]),
-        angle_of_reflection=ref.coords["angle_of_reflection"],
+    ref.coords["sample_rotation"] = sample.coords["sample_rotation"]
+    ref.coords["detector_rotation"] = sample.coords["detector_rotation"]
+    ref.coords["wavelength"] = sc.midpoints(ref.coords["wavelength"])
+    ref = ref.transform_coords(
+        ("angle_of_reflection", "Q"),
+        {
+            "divergence_angle": "pixel_divergence_angle",
+            "angle_of_reflection": angle_of_reflection,
+            "Q": reflectometry_q,
+        },
+        rename_dims=False,
     )
     _add_pre_reduction_masks(ref, zlims)
     return sc.values(ref)
