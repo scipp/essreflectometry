@@ -2,6 +2,8 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 import scipp as sc
 
+from ess.reduce import nexus
+
 from ..reflectometry.load import load_nx
 from ..reflectometry.types import (
     DetectorRotation,
@@ -9,16 +11,15 @@ from ..reflectometry.types import (
     LoadedNeXusDetector,
     NeXusDetectorName,
     RawDetectorData,
-    ReducibleDetectorData,
     RunType,
     SampleRotation,
 )
-from .geometry import Detector, pixel_coordinate_in_lab_frame
+from .geometry import Detector, pixel_coordinates_in_detector_system
 from .types import (
-    Chopper1Position,
-    Chopper2Position,
+    ChopperDistance,
     ChopperFrequency,
     ChopperPhase,
+    ChopperSeparation,
     RawChopper,
 )
 
@@ -26,102 +27,55 @@ from .types import (
 def load_detector(
     file_path: Filename[RunType], detector_name: NeXusDetectorName[RunType]
 ) -> LoadedNeXusDetector[RunType]:
-    return next(load_nx(file_path, f"NXentry/NXinstrument/{detector_name}"))
+    return nexus.load_detector(file_path=file_path, detector_name=detector_name)
 
 
 def load_events(
-    detector: LoadedNeXusDetector[RunType], detector_rotation: DetectorRotation[RunType]
+    detector: LoadedNeXusDetector[RunType],
+    detector_rotation: DetectorRotation[RunType],
+    sample_rotation: SampleRotation[RunType],
+    chopper_phase: ChopperPhase[RunType],
+    chopper_frequency: ChopperFrequency[RunType],
+    chopper_distance: ChopperDistance[RunType],
 ) -> RawDetectorData[RunType]:
-    detector_numbers = sc.arange(
-        "event_id",
-        start=1,
-        stop=(Detector.nBlades * Detector.nWires * Detector.nStripes).value + 1,
-        unit=None,
-        dtype="int32",
-    )
+    detector_numbers = pixel_coordinates_in_detector_system()
     data = (
-        detector['data']
+        nexus.extract_detector_data(detector)
         .bins.constituents["data"]
-        .group(detector_numbers)
-        .fold(
-            "event_id",
-            sizes={
-                "blade": Detector.nBlades,
-                "wire": Detector.nWires,
-                "stripe": Detector.nStripes,
-            },
-        )
+        .group(detector_numbers.data.flatten(to='event_id'))
+        .fold("event_id", sizes=detector_numbers.sizes)
     )
-    # Recent versions of scippnexus no longer add variances for events by default, so
-    # we add them here if they are missing.
+    for name, coord in detector_numbers.coords.items():
+        data.coords[name] = coord
+
+    data.coords['iz'] = Detector.nWires * data.coords['blade'] + data.coords['wire']
+
     if data.bins.constituents["data"].data.variances is None:
         data.bins.constituents["data"].data.variances = data.bins.constituents[
             "data"
         ].data.values
 
-    pixel_inds = sc.array(dims=data.dims, values=data.coords["event_id"].values - 1)
-    position, angle_from_center_of_beam = pixel_coordinate_in_lab_frame(
-        pixelID=pixel_inds, nu=detector_rotation
-    )
-    data.coords["position"] = position.to(unit="m", copy=False)
-    data.coords["angle_from_center_of_beam"] = angle_from_center_of_beam
+    data.coords["sample_rotation"] = sample_rotation.to(unit='rad')
+    data.coords["detector_rotation"] = detector_rotation.to(unit='rad')
+    data.coords["chopper_phase"] = chopper_phase
+    data.coords["chopper_frequency"] = chopper_frequency
+    data.coords["L1"] = sc.abs(chopper_distance)
+    data.coords["L2"] = data.coords['distance_in_detector'] + Detector.distance
     return RawDetectorData[RunType](data)
-
-
-def compute_tof(
-    data: RawDetectorData[RunType],
-    phase: ChopperPhase[RunType],
-    frequency: ChopperFrequency[RunType],
-) -> ReducibleDetectorData[RunType]:
-    data.bins.coords["tof"] = data.bins.coords.pop("event_time_offset").to(
-        unit="ns", dtype="float64", copy=False
-    )
-
-    tof_unit = data.bins.coords["tof"].bins.unit
-    tau = sc.to_unit(1 / (2 * frequency), tof_unit)
-    tof_offset = tau * phase / (180.0 * sc.units.deg)
-
-    event_time_offset = data.bins.coords["tof"]
-
-    minimum = -tof_offset
-    frame_bound = tau - tof_offset
-    maximum = 2 * tau - tof_offset
-
-    offset = sc.where(
-        (minimum < event_time_offset) & (event_time_offset < frame_bound),
-        tof_offset,
-        sc.where(
-            (frame_bound < event_time_offset) & (event_time_offset < maximum),
-            tof_offset - tau,
-            0.0 * tof_unit,
-        ),
-    )
-    data.bins.masks["outside_of_pulse"] = (minimum > event_time_offset) | (
-        event_time_offset > maximum
-    )
-    data.bins.coords["tof"] += offset
-    data.bins.coords["tof"] -= (
-        data.coords["angle_from_center_of_beam"].to(unit="deg") / (180.0 * sc.units.deg)
-    ) * tau
-    return ReducibleDetectorData[RunType](data)
 
 
 def amor_chopper(f: Filename[RunType]) -> RawChopper[RunType]:
     return next(load_nx(f, "NXentry/NXinstrument/NXdisk_chopper"))
 
 
-def load_amor_chopper_1_position(ch: RawChopper[RunType]) -> Chopper1Position[RunType]:
+def load_amor_chopper_distance(ch: RawChopper[RunType]) -> ChopperDistance[RunType]:
     # We know the value has unit 'mm'
-    return sc.vector([0, 0, ch["distance"] - ch["pair_separation"] / 2], unit="mm").to(
-        unit="m"
-    )
+    return sc.scalar(ch["distance"], unit="mm").to(unit="mm")
 
 
-def load_amor_chopper_2_position(ch: RawChopper[RunType]) -> Chopper2Position[RunType]:
+def load_amor_chopper_separation(ch: RawChopper[RunType]) -> ChopperSeparation[RunType]:
     # We know the value has unit 'mm'
-    return sc.vector([0, 0, ch["distance"] + ch["pair_separation"] / 2], unit="mm").to(
-        unit="m"
-    )
+    return sc.scalar(ch["pair_separation"], unit="mm").to(unit="mm")
 
 
 def load_amor_ch_phase(ch: RawChopper[RunType]) -> ChopperPhase[RunType]:
@@ -157,11 +111,10 @@ def load_amor_detector_rotation(fp: Filename[RunType]) -> DetectorRotation[RunTy
 providers = (
     load_detector,
     load_events,
-    compute_tof,
     load_amor_ch_frequency,
     load_amor_ch_phase,
-    load_amor_chopper_1_position,
-    load_amor_chopper_2_position,
+    load_amor_chopper_distance,
+    load_amor_chopper_separation,
     load_amor_sample_rotation,
     load_amor_detector_rotation,
     amor_chopper,

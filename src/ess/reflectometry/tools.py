@@ -13,46 +13,6 @@ from orsopy.fileio.orso import OrsoDataset
 from ess.reflectometry import orso
 from ess.reflectometry.types import ReflectivityOverQ
 
-_STD_TO_FWHM = sc.scalar(2.0) * sc.sqrt(sc.scalar(2.0) * sc.log(sc.scalar(2.0)))
-
-
-def fwhm_to_std(fwhm: sc.Variable) -> sc.Variable:
-    """
-    Convert from full-width half maximum to standard deviation.
-
-    Parameters
-    ----------
-    fwhm:
-        Full-width half maximum.
-
-    Returns
-    -------
-    :
-        Standard deviation.
-    """
-    # Enables the conversion from full width half
-    # maximum to standard deviation
-    return fwhm / _STD_TO_FWHM
-
-
-def std_to_fwhm(std: sc.Variable) -> sc.Variable:
-    """
-    Convert from standard deviation to full-width half maximum.
-
-    Parameters
-    ----------
-    std:
-        Standard deviation.
-
-    Returns
-    -------
-    :
-        Full-width half maximum.
-    """
-    # Enables the conversion from full width half
-    # maximum to standard deviation
-    return std * _STD_TO_FWHM
-
 
 def linlogspace(
     dim: str,
@@ -168,9 +128,14 @@ def _create_qgrid_where_overlapping(qgrids):
     return sc.concat(pieces, dim='Q')
 
 
+def _same_dtype(arrays):
+    return [arr.to(dtype='float64') for arr in arrays]
+
+
 def _interpolate_on_qgrid(curves, grid):
     return sc.concat(
-        [sc.lookup(c, grid.dim)[sc.midpoints(grid)] for c in curves], dim='curves'
+        _same_dtype([sc.lookup(c, grid.dim)[sc.midpoints(grid)] for c in curves]),
+        dim='curves',
     )
 
 

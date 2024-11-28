@@ -14,7 +14,7 @@ from ess.reflectometry.orso import (
 )
 from ess.reflectometry.types import (
     Filename,
-    FootprintCorrectedData,
+    ReducibleData,
     RunType,
     SampleRotation,
     SampleRun,
@@ -68,9 +68,9 @@ def with_filenames(
 
     mapped = wf.map(df)
 
-    wf[FootprintCorrectedData[runtype]] = mapped[
-        FootprintCorrectedData[runtype]
-    ].reduce(index=axis_name, func=_concatenate_event_lists)
+    wf[ReducibleData[runtype]] = mapped[ReducibleData[runtype]].reduce(
+        index=axis_name, func=_concatenate_event_lists
+    )
     wf[RawChopper[runtype]] = mapped[RawChopper[runtype]].reduce(
         index=axis_name, func=_any_value
     )
