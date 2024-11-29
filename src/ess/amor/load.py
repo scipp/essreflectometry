@@ -48,7 +48,9 @@ def load_events(
     for name, coord in detector_numbers.coords.items():
         data.coords[name] = coord
 
-    data.coords['iz'] = Detector.nWires * data.coords['blade'] + data.coords['wire']
+    data.coords['z_index'] = (
+        Detector.nWires * data.coords['blade'] + data.coords['wire']
+    )
 
     if data.bins.constituents["data"].data.variances is None:
         data.bins.constituents["data"].data.variances = data.bins.constituents[

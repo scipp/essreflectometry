@@ -24,8 +24,8 @@ from .conversions import theta
 
 
 def _add_pre_reduction_masks(da, zindex_limits):
-    da.masks['z_range'] = (da.coords["iz"] < zindex_limits[0]) | (
-        da.coords["iz"] > zindex_limits[1]
+    da.masks['z_range'] = (da.coords["z_index"] < zindex_limits[0]) | (
+        da.coords["z_index"] > zindex_limits[1]
     )
 
 
