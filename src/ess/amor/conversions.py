@@ -14,9 +14,7 @@ from ..reflectometry.types import (
 )
 
 
-def angle_of_reflection(
-    wavelength, divergence_angle, L2, sample_rotation, detector_rotation
-):
+def theta(wavelength, divergence_angle, L2, sample_rotation, detector_rotation):
     c = sc.constants.g * sc.constants.m_n**2 / sc.constants.h**2
     out = (c * L2 * wavelength**2).to(unit='dimensionless') + sc.sin(
         divergence_angle + detector_rotation
@@ -26,8 +24,8 @@ def angle_of_reflection(
     return out
 
 
-def angle_of_divergence(angle_of_reflection, sample_rotation):
-    return angle_of_reflection - sample_rotation
+def angle_of_divergence(theta, sample_rotation):
+    return theta - sample_rotation
 
 
 def wavelength(
@@ -63,11 +61,11 @@ def add_common_coords_and_masks(
     wbins: WavelengthBins,
 ) -> ReducibleData[RunType]:
     da = da.transform_coords(
-        ("wavelength", "angle_of_reflection", "angle_of_divergence", "Q"),
+        ("wavelength", "theta", "angle_of_divergence", "Q"),
         {
             "divergence_angle": "pixel_divergence_angle",
             "wavelength": wavelength,
-            "angle_of_reflection": angle_of_reflection,
+            "theta": theta,
             "angle_of_divergence": angle_of_divergence,
             "Q": reflectometry_q,
         },
@@ -89,7 +87,7 @@ def add_common_coords_and_masks(
     )
 
     # Footprint correction
-    da /= sc.sin(da.bins.coords['angle_of_reflection'])
+    da /= sc.sin(da.bins.coords['theta'])
     return da
 
 

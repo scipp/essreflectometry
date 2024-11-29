@@ -18,7 +18,7 @@ from .types import (
     WavelengthThetaFigure,
     WavelengthZIndexFigure,
 )
-from .utils import angle_of_reflection_grid
+from .utils import theta_grid
 
 
 def _reshape_array_to_expected_shape(da, dims, **bins):
@@ -52,40 +52,39 @@ def _repeat_variable_argument(n, arg):
     )
 
 
-def _try_to_create_angle_of_reflection_grid_if_missing(bins, da):
+def _try_to_create_theta_grid_if_missing(bins, da):
     if (
-        'angle_of_reflection' not in bins
-        and 'angle_of_reflection' not in da.dims
+        'theta' not in bins
+        and 'theta' not in da.dims
         and 'sample_rotation' in da.coords
         and 'detector_rotation' in da.coords
     ):
-        bins['angle_of_reflection'] = angle_of_reflection_grid(
+        bins['theta'] = theta_grid(
             nu=da.coords['detector_rotation'], mu=da.coords['sample_rotation']
         )
 
 
-def wavelength_angle_of_reflection_figure(
+def wavelength_theta_figure(
     da: sc.DataArray | Sequence[sc.DataArray],
     *,
     wavelength_bins: (sc.Variable | None) | Sequence[sc.Variable | None] = None,
-    angle_of_reflection_bins: (sc.Variable | None)
-    | Sequence[sc.Variable | None] = None,
+    theta_bins: (sc.Variable | None) | Sequence[sc.Variable | None] = None,
     q_edges_to_display: Sequence[sc.Variable] = (),
     linewidth: float = 1.0,
     **kwargs,
 ):
     '''
-    Creates a figure displaying a histogram over :math:`\\angle_of_reflection`
+    Creates a figure displaying a histogram over :math:`\\theta`
     and :math:`\\lambda`.
 
     The input can either be a single data array containing the data to display, or
     a sequence of data arrays.
 
-    The inputs must either have coordinates called "angle_of_reflection"
+    The inputs must either have coordinates called "theta"
     and "wavelength", or they must be histograms with dimensions
-    "angle_of_reflection" and "wavelength".
+    "theta" and "wavelength".
 
-    If :code:`wavelength_bins` or :code:`angle_of_reflection_bins` are provided,
+    If :code:`wavelength_bins` or :code:`theta_bins` are provided,
     they are used to construct the histogram. If not provided, the function uses the
     bin edges that already exist on the data arrays.
 
@@ -98,8 +97,8 @@ def wavelength_angle_of_reflection_figure(
         Data arrays to display.
     wavelength_bins : array-like, optional
         Bins used to histogram the data in wavelength.
-    angle_of_reflection_bins : array-like, optional
-        Bins used to histogram the data in angle_of_reflection.
+    theta_bins : array-like, optional
+        Bins used to histogram the data in theta.
     q_edges_to_display : sequence of float, optional
         Values of :math:`Q` to be displayed as straight lines in the figure.
     linewidth : float, optional
@@ -114,44 +113,39 @@ def wavelength_angle_of_reflection_figure(
     '''
 
     if isinstance(da, sc.DataArray):
-        return wavelength_angle_of_reflection_figure(
+        return wavelength_theta_figure(
             (da,),
             wavelength_bins=(wavelength_bins,),
-            angle_of_reflection_bins=(angle_of_reflection_bins,),
+            theta_bins=(theta_bins,),
             q_edges_to_display=q_edges_to_display,
             **kwargs,
         )
 
-    wavelength_bins, angle_of_reflection_bins = (
-        _repeat_variable_argument(len(da), arg)
-        for arg in (wavelength_bins, angle_of_reflection_bins)
+    wavelength_bins, theta_bins = (
+        _repeat_variable_argument(len(da), arg) for arg in (wavelength_bins, theta_bins)
     )
 
     hs = []
-    for d, wavelength_bin, angle_of_reflection_bin in zip(
-        da, wavelength_bins, angle_of_reflection_bins, strict=True
+    for d, wavelength_bin, theta_bin in zip(
+        da, wavelength_bins, theta_bins, strict=True
     ):
         bins = {}
 
         if wavelength_bin is not None:
             bins['wavelength'] = wavelength_bin
 
-        if angle_of_reflection_bin is not None:
-            bins['angle_of_reflection'] = angle_of_reflection_bin
+        if theta_bin is not None:
+            bins['theta'] = theta_bin
 
-        _try_to_create_angle_of_reflection_grid_if_missing(bins, d)
+        _try_to_create_theta_grid_if_missing(bins, d)
 
-        hs.append(
-            _reshape_array_to_expected_shape(
-                d, ('angle_of_reflection', 'wavelength'), **bins
-            )
-        )
+        hs.append(_reshape_array_to_expected_shape(d, ('theta', 'wavelength'), **bins))
 
     kwargs.setdefault('cbar', True)
     kwargs.setdefault('norm', 'log')
     p = pp.imagefigure(*(pp.Node(h) for h in hs), **kwargs)
     for q in q_edges_to_display:
-        thmax = max(h.coords["angle_of_reflection"].max() for h in hs)
+        thmax = max(h.coords["theta"].max() for h in hs)
         p.ax.plot(
             [0.0, 4 * np.pi * (sc.sin(thmax) / q).value],
             [0.0, thmax.value],
@@ -163,25 +157,24 @@ def wavelength_angle_of_reflection_figure(
     return p
 
 
-def q_angle_of_reflection_figure(
+def q_theta_figure(
     da: sc.DataArray | Sequence[sc.DataArray],
     *,
     q_bins: (sc.Variable | None) | Sequence[sc.Variable | None] = None,
-    angle_of_reflection_bins: (sc.Variable | None)
-    | Sequence[sc.Variable | None] = None,
+    theta_bins: (sc.Variable | None) | Sequence[sc.Variable | None] = None,
     **kwargs,
 ):
     '''
-    Creates a figure displaying a histogram over :math:`\\angle_of_reflection`
+    Creates a figure displaying a histogram over :math:`\\theta`
     and :math:`Q`.
 
     The input can either be a single data array containing the data to display, or
     a sequence of data arrays.
 
-    The inputs must either have coordinates called "angle_of_reflection" and "Q",
-    or they must be histograms with dimensions "angle_of_reflection" and "Q".
+    The inputs must either have coordinates called "theta" and "Q",
+    or they must be histograms with dimensions "theta" and "Q".
 
-    If :code:`angle_of_reflection_bins` or :code:`q_bins` are provided, they are used
+    If :code:`theta_bins` or :code:`q_bins` are provided, they are used
     to construct the histogram. If not provided, the function uses the
     bin edges that already exist on the data arrays.
 
@@ -191,8 +184,8 @@ def q_angle_of_reflection_figure(
         Data arrays to display.
     q_bins : array-like, optional
         Bins used to histogram the data in Q.
-    angle_of_reflection_bins : array-like, optional
-        Bins used to histogram the data in angle_of_reflection.
+    theta_bins : array-like, optional
+        Bins used to histogram the data in theta.
 
     Returns
     -------
@@ -200,35 +193,30 @@ def q_angle_of_reflection_figure(
     '''
 
     if isinstance(da, sc.DataArray):
-        return q_angle_of_reflection_figure(
+        return q_theta_figure(
             (da,),
             q_bins=(q_bins,),
-            angle_of_reflection_bins=(angle_of_reflection_bins,),
+            theta_bins=(theta_bins,),
             **kwargs,
         )
 
-    q_bins, angle_of_reflection_bins = (
-        _repeat_variable_argument(len(da), arg)
-        for arg in (q_bins, angle_of_reflection_bins)
+    q_bins, theta_bins = (
+        _repeat_variable_argument(len(da), arg) for arg in (q_bins, theta_bins)
     )
 
     hs = []
-    for d, q_bin, angle_of_reflection_bin in zip(
-        da, q_bins, angle_of_reflection_bins, strict=True
-    ):
+    for d, q_bin, theta_bin in zip(da, q_bins, theta_bins, strict=True):
         bins = {}
 
         if q_bin is not None:
             bins['Q'] = q_bin
 
-        if angle_of_reflection_bin is not None:
-            bins['angle_of_reflection'] = angle_of_reflection_bin
+        if theta_bin is not None:
+            bins['theta'] = theta_bin
 
-        _try_to_create_angle_of_reflection_grid_if_missing(bins, d)
+        _try_to_create_theta_grid_if_missing(bins, d)
 
-        hs.append(
-            _reshape_array_to_expected_shape(d, ('angle_of_reflection', 'Q'), **bins)
-        )
+        hs.append(_reshape_array_to_expected_shape(d, ('theta', 'Q'), **bins))
 
     kwargs.setdefault('cbar', True)
     kwargs.setdefault('norm', 'log')
@@ -290,21 +278,19 @@ def wavelength_z_figure(
     return pp.imagefigure(*(pp.Node(h) for h in hs), **kwargs)
 
 
-def wavelength_angle_of_reflection_diagnostic_figure(
+def wavelength_theta_diagnostic_figure(
     da: ReflectivityOverZW,
     thbins: ThetaBins[SampleRun],
 ) -> WavelengthThetaFigure:
-    return wavelength_angle_of_reflection_figure(da, angle_of_reflection_bins=thbins)
+    return wavelength_theta_figure(da, theta_bins=thbins)
 
 
-def q_angle_of_reflection_diagnostic_figure(
+def q_theta_diagnostic_figure(
     da: ReflectivityOverZW,
     thbins: ThetaBins[SampleRun],
     qbins: QBins,
 ) -> QThetaFigure:
-    return q_angle_of_reflection_figure(
-        da, q_bins=qbins, angle_of_reflection_bins=thbins
-    )
+    return q_theta_figure(da, q_bins=qbins, theta_bins=thbins)
 
 
 def wavelength_z_diagnostic_figure(
@@ -325,7 +311,7 @@ def diagnostic_view(
 
 providers = (
     wavelength_z_diagnostic_figure,
-    wavelength_angle_of_reflection_diagnostic_figure,
-    q_angle_of_reflection_diagnostic_figure,
+    wavelength_theta_diagnostic_figure,
+    q_theta_diagnostic_figure,
     diagnostic_view,
 )

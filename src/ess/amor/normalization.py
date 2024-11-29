@@ -20,7 +20,7 @@ from ..reflectometry.types import (
     WavelengthBins,
     ZIndexLimits,
 )
-from .conversions import angle_of_reflection
+from .conversions import theta
 
 
 def _add_pre_reduction_masks(da, zindex_limits):
@@ -83,10 +83,10 @@ def evaluate_reference(
     ref.coords["detector_rotation"] = sample.coords["detector_rotation"]
     ref.coords["wavelength"] = sc.midpoints(ref.coords["wavelength"])
     ref = ref.transform_coords(
-        ("angle_of_reflection", "Q"),
+        ("theta", "Q"),
         {
             "divergence_angle": "pixel_divergence_angle",
-            "angle_of_reflection": angle_of_reflection,
+            "theta": theta,
             "Q": reflectometry_q,
         },
         rename_dims=False,
