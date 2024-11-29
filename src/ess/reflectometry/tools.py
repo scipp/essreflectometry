@@ -13,6 +13,27 @@ from orsopy.fileio.orso import OrsoDataset
 from ess.reflectometry import orso
 from ess.reflectometry.types import ReflectivityOverQ
 
+_STD_TO_FWHM = sc.scalar(2.0) * sc.sqrt(sc.scalar(2.0) * sc.log(sc.scalar(2.0)))
+
+
+def fwhm_to_std(fwhm: sc.Variable) -> sc.Variable:
+    """
+    Convert from full-width half maximum to standard deviation.
+
+    Parameters
+    ----------
+    fwhm:
+        Full-width half maximum.
+
+    Returns
+    -------
+    :
+        Standard deviation.
+    """
+    # Enables the conversion from full width half
+    # maximum to standard deviation
+    return fwhm / _STD_TO_FWHM
+
 
 def linlogspace(
     dim: str,
