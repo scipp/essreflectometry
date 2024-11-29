@@ -19,8 +19,7 @@ def footprint_on_sample(
     beam_size:
         Full width half maximum of the beam.
     sample_size:
-        Size of the sample.
-        TODO: check what sample size actually means. Is it the sample diameter? etc.
+        Size of the sample, width in the beam direction.
 
     Returns
     -------
