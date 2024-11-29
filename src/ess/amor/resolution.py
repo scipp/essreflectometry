@@ -105,7 +105,7 @@ def _sample_size_resolution(
 
 
 def angular_resolution(
-    angle_of_reflection,
+    theta,
     L2,
     detector_spatial_resolution,
 ):
@@ -115,7 +115,7 @@ def angular_resolution(
 
     Parameters
     ----------
-    angle_of_reflection:
+    theta:
         Angle of reflection.
     L2:
         Distance between sample and detector.
@@ -133,8 +133,8 @@ def angular_resolution(
                 detector_spatial_resolution
                 / L2.to(unit=detector_spatial_resolution.unit)
             )
-        ).to(unit=angle_of_reflection.unit)
-        / angle_of_reflection
+        ).to(unit=theta.unit)
+        / theta
     )
 
 
@@ -142,7 +142,7 @@ def _angular_resolution(
     da: Reference, detector_spatial_resolution: DetectorSpatialResolution[SampleRun]
 ) -> AngularResolution:
     return angular_resolution(
-        angle_of_reflection=da.coords['angle_of_reflection'],
+        theta=da.coords['theta'],
         L2=da.coords['L2'],
         detector_spatial_resolution=detector_spatial_resolution,
     )
