@@ -2,6 +2,7 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 import scipp as sc
 
+from ..reflectometry.tools import fwhm_to_std
 from ..reflectometry.types import (
     DetectorSpatialResolution,
     QBins,
@@ -16,27 +17,6 @@ from .types import (
     SampleSizeResolution,
     WavelengthResolution,
 )
-
-_STD_TO_FWHM = sc.scalar(2.0) * sc.sqrt(sc.scalar(2.0) * sc.log(sc.scalar(2.0)))
-
-
-def fwhm_to_std(fwhm: sc.Variable) -> sc.Variable:
-    """
-    Convert from full-width half maximum to standard deviation.
-
-    Parameters
-    ----------
-    fwhm:
-        Full-width half maximum.
-
-    Returns
-    -------
-    :
-        Standard deviation.
-    """
-    # Enables the conversion from full width half
-    # maximum to standard deviation
-    return fwhm / _STD_TO_FWHM
 
 
 def wavelength_resolution(

@@ -4,11 +4,14 @@ import numpy as np
 import scipp as sc
 
 from ..reflectometry.conversions import reflectometry_q
+from ..reflectometry.corrections import footprint_on_sample
 from ..reflectometry.types import (
     BeamDivergenceLimits,
+    BeamSize,
     RawDetectorData,
     ReducibleData,
     RunType,
+    SampleSize,
     WavelengthBins,
     YIndexLimits,
 )
@@ -59,6 +62,8 @@ def add_common_coords_and_masks(
     ylim: YIndexLimits,
     bdlim: BeamDivergenceLimits,
     wbins: WavelengthBins,
+    beam_size: BeamSize[RunType],
+    sample_size: SampleSize[RunType],
 ) -> ReducibleData[RunType]:
     da = da.transform_coords(
         ("wavelength", "theta", "angle_of_divergence", "Q"),
@@ -85,9 +90,11 @@ def add_common_coords_and_masks(
     da.bins.masks['wavelength'] = (wbins[0] > da.bins.coords['wavelength']) | (
         wbins[-1] < da.bins.coords['wavelength']
     )
-
-    # Footprint correction
-    da /= sc.sin(da.bins.coords['theta'])
+    da /= footprint_on_sample(
+        da.bins.coords['theta'],
+        beam_size,
+        sample_size,
+    )
     return da
 
 
