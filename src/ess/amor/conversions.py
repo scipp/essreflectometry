@@ -11,9 +11,9 @@ from ..reflectometry.types import (
     RawDetectorData,
     ReducibleData,
     RunType,
-    SampleSize,
     WavelengthBins,
     YIndexLimits,
+    ZIndexLimits,
 )
 
 
@@ -60,10 +60,10 @@ def wavelength(
 def add_common_coords_and_masks(
     da: RawDetectorData[RunType],
     ylim: YIndexLimits,
+    zlims: ZIndexLimits,
     bdlim: BeamDivergenceLimits,
     wbins: WavelengthBins,
     beam_size: BeamSize[RunType],
-    sample_size: SampleSize[RunType],
 ) -> ReducibleData[RunType]:
     da = da.transform_coords(
         ("wavelength", "theta", "angle_of_divergence", "Q"),
@@ -80,6 +80,9 @@ def add_common_coords_and_masks(
     da.masks["stripe_range"] = (da.coords["stripe"] < ylim[0]) | (
         da.coords["stripe"] > ylim[1]
     )
+    da.masks['z_range'] = (da.coords["z_index"] < zlims[0]) | (
+        da.coords["z_index"] > zlims[1]
+    )
     da.bins.masks["divergence_too_large"] = (
         da.bins.coords["angle_of_divergence"]
         < bdlim[0].to(unit=da.bins.coords["angle_of_divergence"].bins.unit)
@@ -93,7 +96,7 @@ def add_common_coords_and_masks(
     da /= footprint_on_sample(
         da.bins.coords['theta'],
         beam_size,
-        sample_size,
+        da.coords['sample_size'],
     )
     return da
 

@@ -3,20 +3,6 @@
 import scipp as sc
 
 from ..reflectometry.tools import fwhm_to_std
-from ..reflectometry.types import (
-    DetectorSpatialResolution,
-    QBins,
-    QResolution,
-    Reference,
-    SampleRun,
-    SampleSize,
-)
-from .types import (
-    AngularResolution,
-    ChopperSeparation,
-    SampleSizeResolution,
-    WavelengthResolution,
-)
 
 
 def wavelength_resolution(
@@ -41,17 +27,9 @@ def wavelength_resolution(
     Returns
     -------
     :
-        The angular resolution variable, as standard deviation.
+        The wavelength resolution variable, as standard deviation.
     """
     return fwhm_to_std(chopper_separation / (L1 + L2))
-
-
-def _wavelength_resolution(
-    da: Reference, chopper_separation: ChopperSeparation[SampleRun]
-) -> WavelengthResolution:
-    return wavelength_resolution(
-        L1=da.coords['L1'], L2=da.coords['L2'], chopper_separation=chopper_separation
-    )
 
 
 def sample_size_resolution(
@@ -76,12 +54,6 @@ def sample_size_resolution(
         Standard deviation of contribution from the sample size.
     """
     return fwhm_to_std(sample_size / L2.to(unit=sample_size.unit))
-
-
-def _sample_size_resolution(
-    da: Reference, sample_size: SampleSize[SampleRun]
-) -> SampleSizeResolution:
-    return sample_size_resolution(L2=da.coords['L2'], sample_size=sample_size)
 
 
 def angular_resolution(
@@ -118,62 +90,32 @@ def angular_resolution(
     )
 
 
-def _angular_resolution(
-    da: Reference, detector_spatial_resolution: DetectorSpatialResolution[SampleRun]
-) -> AngularResolution:
-    return angular_resolution(
-        theta=da.coords['theta'],
-        L2=da.coords['L2'],
-        detector_spatial_resolution=detector_spatial_resolution,
-    )
-
-
-def sigma_Q(
-    ref: Reference,
-    angular_resolution: AngularResolution,
-    wavelength_resolution: WavelengthResolution,
-    sample_size_resolution: SampleSizeResolution,
-    qbins: QBins,
-) -> QResolution:
+def q_resolution(
+    Q,
+    angular_resolution,
+    wavelength_resolution,
+    sample_size_resolution,
+):
     """
-    Combine all of the components of the resolution and add Q contribution.
+    Compute resolution in Q.
 
     Parameters
     ----------
+    Q:
+        Momentum transfer.
     angular_resolution:
         Angular resolution contribution.
     wavelength_resolution:
         Wavelength resolution contribution.
     sample_size_resolution:
         Sample size resolution contribution.
-    q_bins:
-        Q-bin values.
 
     Returns
     -------
     :
-        Combined resolution function.
+        Q resolution function.
     """
-    h = ref.flatten(to='Q').hist(Q=qbins)
-    s = (
-        (
-            ref
-            * (
-                angular_resolution**2
-                + wavelength_resolution**2
-                + sample_size_resolution**2
-            )
-            * ref.coords['Q'] ** 2
-        )
-        .flatten(to='Q')
-        .hist(Q=qbins)
+    return sc.sqrt(
+        (angular_resolution**2 + wavelength_resolution**2 + sample_size_resolution**2)
+        * Q**2
     )
-    return sc.sqrt(sc.values(s / h))
-
-
-providers = (
-    sigma_Q,
-    _angular_resolution,
-    _wavelength_resolution,
-    _sample_size_resolution,
-)

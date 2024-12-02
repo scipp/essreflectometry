@@ -13,6 +13,7 @@ from ..reflectometry.types import (
     RawDetectorData,
     RunType,
     SampleRotation,
+    SampleSize,
 )
 from .geometry import Detector, pixel_coordinates_in_detector_system
 from .types import (
@@ -37,6 +38,8 @@ def load_events(
     chopper_phase: ChopperPhase[RunType],
     chopper_frequency: ChopperFrequency[RunType],
     chopper_distance: ChopperDistance[RunType],
+    chopper_separation: ChopperSeparation[RunType],
+    sample_size: SampleSize[RunType],
 ) -> RawDetectorData[RunType]:
     detector_numbers = pixel_coordinates_in_detector_system()
     data = (
@@ -61,8 +64,10 @@ def load_events(
     data.coords["detector_rotation"] = detector_rotation.to(unit='rad')
     data.coords["chopper_phase"] = chopper_phase
     data.coords["chopper_frequency"] = chopper_frequency
+    data.coords["chopper_separation"] = sc.abs(chopper_separation)
     data.coords["L1"] = sc.abs(chopper_distance)
     data.coords["L2"] = data.coords['distance_in_detector'] + Detector.distance
+    data.coords["sample_size"] = sample_size
     return RawDetectorData[RunType](data)
 
 

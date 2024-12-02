@@ -8,25 +8,51 @@ from ..reflectometry.supermirror import (
     supermirror_reflectivity,
 )
 from ..reflectometry.types import (
+    DetectorSpatialResolution,
     QBins,
-    QResolution,
     ReducedReference,
     ReducibleData,
     Reference,
     ReferenceRun,
     ReflectivityOverQ,
     ReflectivityOverZW,
+    Sample,
     SampleRun,
     WavelengthBins,
-    ZIndexLimits,
 )
 from .conversions import theta
+from .resolution import (
+    angular_resolution,
+    q_resolution,
+    sample_size_resolution,
+    wavelength_resolution,
+)
 
 
-def _add_pre_reduction_masks(da, zindex_limits):
-    da.masks['z_range'] = (da.coords["z_index"] < zindex_limits[0]) | (
-        da.coords["z_index"] > zindex_limits[1]
+def mask_events_where_supermirror_does_not_cover(
+    sam: ReducibleData[SampleRun],
+    ref: ReducedReference,
+    critical_edge: CriticalEdge,
+    mvalue: MValue,
+    alpha: Alpha,
+) -> Sample:
+    R = supermirror_reflectivity(
+        reflectometry_q(
+            sam.bins.coords["wavelength"],
+            theta(
+                sam.bins.coords["wavelength"],
+                sam.coords["pixel_divergence_angle"],
+                sam.coords["L2"],
+                ref.coords["sample_rotation"],
+                ref.coords["detector_rotation"],
+            ),
+        ),
+        c=critical_edge,
+        m=mvalue,
+        alpha=alpha,
     )
+    sam.bins.masks["supermirror_does_not_cover"] = sc.isnan(R)
+    return sam
 
 
 def reduce_reference(
@@ -48,25 +74,28 @@ def reduce_reference(
 
 
 def reduce_sample_over_q(
-    sample: ReducibleData[SampleRun],
+    sample: Sample,
     reference: Reference,
     qbins: QBins,
-    zlims: ZIndexLimits,
-    qresolution: QResolution,
 ) -> ReflectivityOverQ:
-    _add_pre_reduction_masks(sample, zlims)
-    R = sample.bins.concat().bin(Q=qbins) / reference.flatten(to='Q').hist(Q=qbins).data
-    R.coords['Q_resolution'] = qresolution.data
+    h = reference.flatten(to='Q').hist(Q=qbins)
+    R = sample.bins.concat().bin(Q=qbins) / h.data
+    R.coords['Q_resolution'] = sc.sqrt(
+        (
+            (reference * reference.coords['Q_resolution'] ** 2)
+            .flatten(to='Q')
+            .hist(Q=qbins)
+        )
+        / h
+    ).data
     return R
 
 
 def reduce_sample_over_zw(
-    sample: ReducibleData[SampleRun],
+    sample: Sample,
     reference: Reference,
-    zlims: ZIndexLimits,
     wbins: WavelengthBins,
 ) -> ReflectivityOverZW:
-    _add_pre_reduction_masks(sample, zlims)
     R = sample.bins.concat(('stripe',)).bin(wavelength=wbins) / reference.data
     R.masks["too_few_events"] = reference.data < sc.scalar(1, unit="counts")
     return R
@@ -76,22 +105,33 @@ def evaluate_reference(
     reference: ReducedReference,
     sample: ReducibleData[SampleRun],
     qbins: QBins,
-    zlims: ZIndexLimits,
+    detector_spatial_resolution: DetectorSpatialResolution[SampleRun],
 ) -> Reference:
     ref = reference.copy()
     ref.coords["sample_rotation"] = sample.coords["sample_rotation"]
     ref.coords["detector_rotation"] = sample.coords["detector_rotation"]
+    ref.coords["sample_size"] = sample.coords["sample_size"]
+    ref.coords["detector_spatial_resolution"] = detector_spatial_resolution
     ref.coords["wavelength"] = sc.midpoints(ref.coords["wavelength"])
     ref = ref.transform_coords(
-        ("theta", "Q"),
+        (
+            "Q",
+            "wavelength_resolution",
+            "sample_size_resolution",
+            "angular_resolution",
+            "Q_resolution",
+        ),
         {
             "divergence_angle": "pixel_divergence_angle",
             "theta": theta,
             "Q": reflectometry_q,
+            "wavelength_resolution": wavelength_resolution,
+            "sample_size_resolution": sample_size_resolution,
+            "angular_resolution": angular_resolution,
+            "Q_resolution": q_resolution,
         },
         rename_dims=False,
     )
-    _add_pre_reduction_masks(ref, zlims)
     return sc.values(ref)
 
 
@@ -100,4 +140,5 @@ providers = (
     reduce_sample_over_q,
     reduce_sample_over_zw,
     evaluate_reference,
+    mask_events_where_supermirror_does_not_cover,
 )

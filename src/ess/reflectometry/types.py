@@ -43,6 +43,9 @@ ReducedReference = NewType("ReducedReference", sc.DataArray)
 Reference = NewType("NormalizationFactor", sc.DataArray)
 """:code`ReducedReference` histogrammed in sample ``Q``"""
 
+Sample = NewType("Sample", sc.DataArray)
+""":code`Sample` measurement prepared for reduction"""
+
 ReflectivityOverQ = NewType("ReflectivityOverQ", sc.DataArray)
 """Intensity histogram over momentum transfer
 normalized by the calibrated reference measurement."""
