@@ -14,7 +14,7 @@ from ..reflectometry.orso import (
     OrsoIofQDataset,
     OrsoReduction,
 )
-from ..reflectometry.types import QResolution, ReflectivityOverQ
+from ..reflectometry.types import ReflectivityOverQ
 
 
 def build_orso_instrument(events: ReflectivityOverQ) -> OrsoInstrument:
@@ -34,7 +34,6 @@ def build_orso_instrument(events: ReflectivityOverQ) -> OrsoInstrument:
 
 def build_orso_iofq_dataset(
     iofq: ReflectivityOverQ,
-    sigma_q: QResolution,
     data_source: OrsoDataSource,
     reduction: OrsoReduction,
 ) -> OrsoIofQDataset:
@@ -60,7 +59,7 @@ def build_orso_iofq_dataset(
         qz = sc.midpoints(qz)
     r = sc.values(iofq.data)
     sr = sc.stddevs(iofq.data)
-    sqz = sigma_q.to(unit="1/angstrom", copy=False)
+    sqz = iofq.coords["Q_resolution"].to(unit="1/angstrom", copy=False)
 
     data = np.column_stack(tuple(map(_extract_values_array, (qz, r, sr, sqz))))
     data = data[np.isfinite(data).all(axis=-1)]
