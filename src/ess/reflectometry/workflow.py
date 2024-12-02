@@ -22,16 +22,9 @@ from ess.reflectometry.types import (
 
 
 def _concatenate_event_lists(*das):
-    return (
-        sc.reduce(das)
-        .bins.concat()
-        .assign_coords(
-            {
-                name: das[0].coords[name]
-                for name in ('position', 'sample_rotation', 'detector_rotation')
-            }
-        )
-    )
+    da = sc.reduce(das).bins.concat()
+    missing_coords = set(das[0].coords) - set(da.coords)
+    return da.assign_coords({coord: das[0].coords[coord] for coord in missing_coords})
 
 
 def _any_value(x, *_):

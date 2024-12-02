@@ -2,8 +2,6 @@
 # Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
 import scipp as sc
 
-from ess.reduce import nexus
-
 from ..reflectometry.load import load_nx
 from ..reflectometry.types import (
     DetectorRotation,
@@ -28,7 +26,7 @@ from .types import (
 def load_detector(
     file_path: Filename[RunType], detector_name: NeXusDetectorName[RunType]
 ) -> LoadedNeXusDetector[RunType]:
-    return nexus.load_detector(file_path=file_path, detector_name=detector_name)
+    return next(load_nx(file_path, f"NXentry/NXinstrument/{detector_name}"))
 
 
 def load_events(
@@ -43,7 +41,7 @@ def load_events(
 ) -> RawDetectorData[RunType]:
     detector_numbers = pixel_coordinates_in_detector_system()
     data = (
-        nexus.extract_detector_data(detector)
+        detector["data"]
         .bins.constituents["data"]
         .group(detector_numbers.data.flatten(to='event_id'))
         .fold("event_id", sizes=detector_numbers.sizes)
