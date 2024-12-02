@@ -63,7 +63,13 @@ def build_orso_iofq_dataset(
 
     data = np.column_stack(tuple(map(_extract_values_array, (qz, r, sr, sqz))))
     data = data[np.isfinite(data).all(axis=-1)]
-    return OrsoIofQDataset(OrsoDataset(header, data))
+    ds = OrsoIofQDataset(OrsoDataset(header, data))
+    ds.info.reduction.corrections = [
+        "chopper ToF correction",
+        "footprint correction",
+        "supermirror calibration",
+    ]
+    return ds
 
 
 def _extract_values_array(var: sc.Variable) -> np.ndarray:
