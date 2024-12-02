@@ -63,7 +63,10 @@ def default_parameters() -> dict:
         NeXusDetectorName[RunType]: "detector",
         ChopperPhase[RunType]: sc.scalar(7.0, unit="deg"),
         ChopperFrequency[RunType]: sc.scalar(8.333, unit="Hz"),
-        BeamDivergenceLimits: (sc.scalar(-0.7, unit='deg'), sc.scalar(0.7, unit='deg')),
+        BeamDivergenceLimits: (
+            sc.scalar(-0.75, unit='deg'),
+            sc.scalar(0.75, unit='deg'),
+        ),
     }
 
 
