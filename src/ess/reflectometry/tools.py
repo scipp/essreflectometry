@@ -333,8 +333,5 @@ def orso_datasets_from_measurements(
             wf[name] = value
         wf[ReflectivityOverQ] = scale_factor * curve
         dataset = wf.compute(orso.OrsoIofQDataset)
-        dataset.info.reduction.corrections = orso.find_corrections(
-            wf.get(orso.OrsoIofQDataset)
-        )
         datasets.append(dataset)
     return datasets
