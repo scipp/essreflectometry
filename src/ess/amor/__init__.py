@@ -41,7 +41,6 @@ providers = (
     *load.providers,
     *conversions.providers,
     *normalization.providers,
-    *resolution.providers,
     *utils.providers,
     *figures.providers,
     *orso.providers,
