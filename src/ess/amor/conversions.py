@@ -27,8 +27,13 @@ def theta(wavelength, divergence_angle, L2, sample_rotation, detector_rotation):
     return out
 
 
-def angle_of_divergence(theta, sample_rotation):
-    return theta - sample_rotation
+def angle_of_divergence(theta, sample_rotation, angle_to_center_of_beam):
+    return (
+        theta
+        - sample_rotation
+        - angle_to_center_of_beam
+        - sc.scalar(0.245, unit='deg').to(unit='rad')
+    )
 
 
 def wavelength(
@@ -57,6 +62,10 @@ def wavelength(
     return out.to(unit='angstrom', copy=False)
 
 
+def _not_between(v, a, b):
+    return (v < a) | (v > b)
+
+
 def add_common_coords_and_masks(
     da: RawDetectorData[RunType],
     ylim: YIndexLimits,
@@ -77,21 +86,17 @@ def add_common_coords_and_masks(
         rename_dims=False,
         keep_intermediate=False,
     )
-    da.masks["stripe_range"] = (da.coords["stripe"] < ylim[0]) | (
-        da.coords["stripe"] > ylim[1]
+    da.masks["stripe_range"] = _not_between(da.coords["stripe"], *ylim)
+    da.masks['z_range'] = _not_between(da.coords["z_index"], *zlims)
+    da.bins.masks["divergence_too_large"] = _not_between(
+        da.bins.coords["angle_of_divergence"],
+        bdlim[0].to(unit=da.bins.coords["angle_of_divergence"].bins.unit),
+        bdlim[1].to(unit=da.bins.coords["angle_of_divergence"].bins.unit),
     )
-    da.masks['z_range'] = (da.coords["z_index"] < zlims[0]) | (
-        da.coords["z_index"] > zlims[1]
-    )
-    da.bins.masks["divergence_too_large"] = (
-        da.bins.coords["angle_of_divergence"]
-        < bdlim[0].to(unit=da.bins.coords["angle_of_divergence"].bins.unit)
-    ) | (
-        da.bins.coords["angle_of_divergence"]
-        > bdlim[1].to(unit=da.bins.coords["angle_of_divergence"].bins.unit)
-    )
-    da.bins.masks['wavelength'] = (wbins[0] > da.bins.coords['wavelength']) | (
-        wbins[-1] < da.bins.coords['wavelength']
+    da.bins.masks['wavelength'] = _not_between(
+        da.bins.coords['wavelength'],
+        wbins[0],
+        wbins[-1],
     )
     da /= footprint_on_sample(
         da.bins.coords['theta'],

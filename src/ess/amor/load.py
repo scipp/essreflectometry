@@ -15,6 +15,7 @@ from ..reflectometry.types import (
 )
 from .geometry import Detector, pixel_coordinates_in_detector_system
 from .types import (
+    AngleCenterOfIncomingToHorizon,
     ChopperDistance,
     ChopperFrequency,
     ChopperPhase,
@@ -38,6 +39,7 @@ def load_events(
     chopper_distance: ChopperDistance[RunType],
     chopper_separation: ChopperSeparation[RunType],
     sample_size: SampleSize[RunType],
+    angle_to_center_of_beam: AngleCenterOfIncomingToHorizon[RunType],
 ) -> RawDetectorData[RunType]:
     detector_numbers = pixel_coordinates_in_detector_system()
     data = (
@@ -66,6 +68,7 @@ def load_events(
     data.coords["L1"] = sc.abs(chopper_distance)
     data.coords["L2"] = data.coords['distance_in_detector'] + Detector.distance
     data.coords["sample_size"] = sample_size
+    data.coords["angle_to_center_of_beam"] = angle_to_center_of_beam.to(unit='rad')
     return RawDetectorData[RunType](data)
 
 
@@ -113,6 +116,13 @@ def load_amor_detector_rotation(fp: Filename[RunType]) -> DetectorRotation[RunTy
     return sc.scalar(nu['value'].data['dim_1', 0]['time', 0].value, unit='deg')
 
 
+def load_amor_angle_from_horizon_to_center_of_incident_beam(
+    fp: Filename[RunType],
+) -> AngleCenterOfIncomingToHorizon[RunType]:
+    (kad,) = load_nx(fp, "NXentry/NXinstrument/master_parameters/kad")
+    return sc.scalar(kad['value'].data['dim_1', 0]['time', 0].value, unit='deg')
+
+
 providers = (
     load_detector,
     load_events,
@@ -122,5 +132,6 @@ providers = (
     load_amor_chopper_separation,
     load_amor_sample_rotation,
     load_amor_detector_rotation,
+    load_amor_angle_from_horizon_to_center_of_incident_beam,
     amor_chopper,
 )
