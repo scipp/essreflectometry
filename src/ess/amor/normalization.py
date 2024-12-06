@@ -36,13 +36,29 @@ def mask_events_where_supermirror_does_not_cover(
     mvalue: MValue,
     alpha: Alpha,
 ) -> Sample:
+    """
+    Mask events in regions of the detector the reference does not cover.
+
+    Regions of the detector that the reference
+    measurement doesn't cover cannot be used to compute reflectivity.
+
+    Preferably the reference measurement should cover the entire
+    detector, but sometimes that is not possible, for example
+    if the supermirror :math:`M` value was too limited or because the reference
+    was measured at too high angle.
+
+    To figure out what events need to be masked,
+    compute the supermirror reflectivity as a function
+    of the :math:`Q` the event would have had if it had belonged to
+    the reference measurement.
+    """
     R = supermirror_reflectivity(
         reflectometry_q(
             sam.bins.coords["wavelength"],
             theta(
                 sam.bins.coords["wavelength"],
                 sam.coords["pixel_divergence_angle"],
-                sam.coords["L2"],
+                ref.coords["L2"],
                 ref.coords["sample_rotation"],
                 ref.coords["detector_rotation"],
             ),
@@ -62,6 +78,11 @@ def reduce_reference(
     mvalue: MValue,
     alpha: Alpha,
 ) -> ReducedReference:
+    """
+    Reduces the reference measurement to estimate the
+    intensity distribution in the detector for
+    an ideal sample with reflectivity :math:`R = 1`.
+    """
     R = supermirror_reflectivity(
         reference.bins.coords['Q'],
         c=critical_edge,
@@ -78,6 +99,13 @@ def reduce_sample_over_q(
     reference: Reference,
     qbins: QBins,
 ) -> ReflectivityOverQ:
+    """
+    Computes reflectivity as ratio of
+    sample intensity and intensity from a sample
+    with ideal reflectivity.
+
+    Returns reflectivity as a function of :math:`Q`.
+    """
     h = reference.flatten(to='Q').hist(Q=qbins)
     R = sample.bins.concat().bin(Q=qbins) / h.data
     R.coords['Q_resolution'] = sc.sqrt(
@@ -96,6 +124,13 @@ def reduce_sample_over_zw(
     reference: Reference,
     wbins: WavelengthBins,
 ) -> ReflectivityOverZW:
+    """
+    Computes reflectivity as ratio of
+    sample intensity and intensity from a sample
+    with ideal reflectivity.
+
+    Returns reflectivity as a function of ``blade``, ``wire`` and :math:`\\wavelength`.
+    """
     R = sample.bins.concat(('stripe',)).bin(wavelength=wbins) / reference.data
     R.masks["too_few_events"] = reference.data < sc.scalar(1, unit="counts")
     return R
@@ -107,6 +142,12 @@ def evaluate_reference(
     qbins: QBins,
     detector_spatial_resolution: DetectorSpatialResolution[SampleRun],
 ) -> Reference:
+    """
+    Adds a :math:`Q` and :math:`Q`-resolution coordinate to each bin of the ideal
+    intensity distribution. The coordinates are computed as if the data came from
+    the sample measurement, that is, they use the ``sample_rotation``
+    and ``detector_rotation`` parameters from the sample measurement.
+    """
     ref = reference.copy()
     ref.coords["sample_rotation"] = sample.coords["sample_rotation"]
     ref.coords["detector_rotation"] = sample.coords["detector_rotation"]
