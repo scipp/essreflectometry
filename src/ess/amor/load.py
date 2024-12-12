@@ -48,8 +48,7 @@ def load_events(
         .group(detector_numbers.data.flatten(to='event_id'))
         .fold("event_id", sizes=detector_numbers.sizes)
     )
-    for name, coord in detector_numbers.coords.items():
-        data.coords[name] = coord
+    data.coords.update(detector_numbers.coords)
 
     data.coords['z_index'] = (
         Detector.nWires * data.coords['blade'] + data.coords['wire']
