@@ -79,15 +79,7 @@ def angle_of_divergence(theta, sample_rotation, angle_to_center_of_beam):
     On the Amor instrument this is always in the interval [-0.75 deg, 0.75 deg],
     but the divergence of the incident beam can be made lower.
     """
-    return (
-        theta
-        - sample_rotation
-        #
-        - angle_to_center_of_beam
-        # "kappa" the natural incidence angle
-        # is a fixed parameter of the instrument
-        - sc.scalar(0.245, unit='deg').to(unit='rad')
-    )
+    return theta - sample_rotation - angle_to_center_of_beam
 
 
 def wavelength(

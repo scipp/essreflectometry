@@ -50,10 +50,6 @@ def load_events(
     )
     data.coords.update(detector_numbers.coords)
 
-    data.coords['z_index'] = (
-        Detector.nWires * data.coords['blade'] + data.coords['wire']
-    )
-
     if data.bins.constituents["data"].data.variances is None:
         data.bins.constituents["data"].data.variances = data.bins.constituents[
             "data"
@@ -77,12 +73,12 @@ def amor_chopper(f: Filename[RunType]) -> RawChopper[RunType]:
 
 def load_amor_chopper_distance(ch: RawChopper[RunType]) -> ChopperDistance[RunType]:
     # We know the value has unit 'mm'
-    return sc.scalar(ch["distance"], unit="mm").to(unit="mm")
+    return sc.scalar(ch["distance"], unit="mm")
 
 
 def load_amor_chopper_separation(ch: RawChopper[RunType]) -> ChopperSeparation[RunType]:
     # We know the value has unit 'mm'
-    return sc.scalar(ch["pair_separation"], unit="mm").to(unit="mm")
+    return sc.scalar(ch["pair_separation"], unit="mm")
 
 
 def load_amor_ch_phase(ch: RawChopper[RunType]) -> ChopperPhase[RunType]:
@@ -119,7 +115,10 @@ def load_amor_angle_from_horizon_to_center_of_incident_beam(
     fp: Filename[RunType],
 ) -> AngleCenterOfIncomingToHorizon[RunType]:
     (kad,) = load_nx(fp, "NXentry/NXinstrument/master_parameters/kad")
-    return sc.scalar(kad['value'].data['dim_1', 0]['time', 0].value, unit='deg')
+    natural_incident_angle = sc.scalar(0.245, unit='deg')
+    return natural_incident_angle + sc.scalar(
+        kad['value'].data['dim_1', 0]['time', 0].value, unit='deg'
+    )
 
 
 providers = (

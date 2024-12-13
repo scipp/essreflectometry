@@ -66,4 +66,7 @@ def pixel_coordinates_in_detector_system() -> tuple[sc.Variable, sc.Variable]:
             / (Detector.distance + pixels.coords['wire'] * Detector.dX)
         )
     ).to(unit='rad')
+    pixels.coords['z_index'] = (
+        Detector.nWires * pixels.coords['blade'] + pixels.coords['wire']
+    )
     return pixels
