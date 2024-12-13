@@ -126,6 +126,7 @@ def add_coords(
         },
         rename_dims=False,
         keep_intermediate=False,
+        keep_aliases=False,
     )
 
 
