@@ -4,13 +4,8 @@ import numpy as np
 import scipp as sc
 
 from ..reflectometry.conversions import reflectometry_q
-from ..reflectometry.corrections import footprint_on_sample
 from ..reflectometry.types import (
     BeamDivergenceLimits,
-    BeamSize,
-    RawDetectorData,
-    ReducibleData,
-    RunType,
     WavelengthBins,
     YIndexLimits,
     ZIndexLimits,
@@ -116,16 +111,11 @@ def _not_between(v, a, b):
     return (v < a) | (v > b)
 
 
-def add_common_coords_and_masks(
-    da: RawDetectorData[RunType],
-    ylim: YIndexLimits,
-    zlims: ZIndexLimits,
-    bdlim: BeamDivergenceLimits,
-    wbins: WavelengthBins,
-    beam_size: BeamSize[RunType],
-) -> ReducibleData[RunType]:
-    "Adds coords and masks that are useful for both reference and sample measurements."
-    da = da.transform_coords(
+def add_coords(
+    da: sc.DataArray,
+) -> sc.DataArray:
+    "Adds coords to the raw detector data"
+    return da.transform_coords(
         ("wavelength", "theta", "angle_of_divergence", "Q"),
         {
             "divergence_angle": "pixel_divergence_angle",
@@ -137,6 +127,15 @@ def add_common_coords_and_masks(
         rename_dims=False,
         keep_intermediate=False,
     )
+
+
+def add_masks(
+    da: sc.DataArray,
+    ylim: YIndexLimits,
+    zlims: ZIndexLimits,
+    bdlim: BeamDivergenceLimits,
+    wbins: WavelengthBins,
+):
     da.masks["stripe_range"] = _not_between(da.coords["stripe"], *ylim)
     da.masks['z_range'] = _not_between(da.coords["z_index"], *zlims)
     da.bins.masks["divergence_too_large"] = _not_between(
@@ -149,12 +148,7 @@ def add_common_coords_and_masks(
         wbins[0],
         wbins[-1],
     )
-    da /= footprint_on_sample(
-        da.bins.coords['theta'],
-        beam_size,
-        da.coords['sample_size'],
-    )
     return da
 
 
-providers = (add_common_coords_and_masks,)
+providers = ()

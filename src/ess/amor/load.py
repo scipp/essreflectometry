@@ -4,6 +4,7 @@ import scipp as sc
 
 from ..reflectometry.load import load_nx
 from ..reflectometry.types import (
+    BeamSize,
     DetectorRotation,
     Filename,
     LoadedNeXusDetector,
@@ -39,6 +40,7 @@ def load_events(
     chopper_distance: ChopperDistance[RunType],
     chopper_separation: ChopperSeparation[RunType],
     sample_size: SampleSize[RunType],
+    beam_size: BeamSize[RunType],
     angle_to_center_of_beam: AngleCenterOfIncomingToHorizon[RunType],
 ) -> RawDetectorData[RunType]:
     detector_numbers = pixel_coordinates_in_detector_system()
@@ -63,6 +65,7 @@ def load_events(
     data.coords["L1"] = sc.abs(chopper_distance)
     data.coords["L2"] = data.coords['distance_in_detector'] + Detector.distance
     data.coords["sample_size"] = sample_size
+    data.coords["beam_size"] = beam_size
     data.coords["angle_to_center_of_beam"] = angle_to_center_of_beam.to(unit='rad')
     return RawDetectorData[RunType](data)
 

@@ -16,7 +16,16 @@ from ..reflectometry.types import (
     SamplePosition,
     BeamDivergenceLimits,
 )
-from . import conversions, load, orso, resolution, utils, figures, normalization
+from . import (
+    conversions,
+    load,
+    orso,
+    resolution,
+    utils,
+    figures,
+    normalization,
+    workflow,
+)
 from .instrument_view import instrument_view
 from .types import (
     AngularResolution,
@@ -44,6 +53,7 @@ providers = (
     *utils.providers,
     *figures.providers,
     *orso.providers,
+    *workflow.providers,
 )
 """
 List of providers for setting up a Sciline pipeline.
