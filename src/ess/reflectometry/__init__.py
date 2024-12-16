@@ -10,12 +10,13 @@ except importlib.metadata.PackageNotFoundError:
     __version__ = "0.0.0"
 
 
-from . import conversions, orso
+from . import conversions, orso, normalization
 from .load import load_reference, save_reference
 
 providers = (
     *conversions.providers,
     *orso.providers,
+    *normalization.providers,
 )
 """
 List of providers for setting up a Sciline pipeline.
