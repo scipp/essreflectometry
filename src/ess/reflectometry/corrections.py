@@ -28,3 +28,12 @@ def footprint_on_sample(
     """
     size_of_beam_on_sample = beam_size / sc.sin(theta)
     return sc.erf(fwhm_to_std(sample_size / size_of_beam_on_sample))
+
+
+def correct_by_footprint(da: sc.DataArray) -> None:
+    "Corrects the data by the size of the footprint on the sample."
+    da /= footprint_on_sample(
+        da.bins.coords['theta'],
+        da.coords['beam_size'],
+        da.coords['sample_size'],
+    )

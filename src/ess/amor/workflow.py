@@ -1,3 +1,4 @@
+from ..reflectometry.corrections import correct_by_footprint
 from ..reflectometry.types import (
     BeamDivergenceLimits,
     RawDetectorData,
@@ -8,7 +9,6 @@ from ..reflectometry.types import (
     ZIndexLimits,
 )
 from .conversions import add_coords, add_masks
-from .corrections import correct_by_footprint
 
 
 def add_coords_masks_and_apply_corrections(
@@ -18,6 +18,10 @@ def add_coords_masks_and_apply_corrections(
     bdlim: BeamDivergenceLimits,
     wbins: WavelengthBins,
 ) -> ReducibleData[RunType]:
+    """
+    Computes coordinates, masks and corrections that are
+    the same for the sample measurement and the reference measurement.
+    """
     da = add_coords(da)
     da = add_masks(da, ylim, zlims, bdlim, wbins)
     correct_by_footprint(da)

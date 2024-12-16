@@ -114,7 +114,7 @@ def _not_between(v, a, b):
 def add_coords(
     da: sc.DataArray,
 ) -> sc.DataArray:
-    "Adds coords to the raw detector data"
+    "Adds scattering coordinates to the raw detector data."
     return da.transform_coords(
         ("wavelength", "theta", "angle_of_divergence", "Q"),
         {
@@ -137,6 +137,11 @@ def add_masks(
     bdlim: BeamDivergenceLimits,
     wbins: WavelengthBins,
 ):
+    """
+    Masks the data by ranges in the detector
+    coordinates ``z`` and ``y``, and by the divergence of the beam,
+    and by wavelength.
+    """
     da.masks["stripe_range"] = _not_between(da.coords["stripe"], *ylim)
     da.masks['z_range'] = _not_between(da.coords["z_index"], *zlims)
     da.bins.masks["divergence_too_large"] = _not_between(
