@@ -1,149 +1,91 @@
-# SPDX-License-Identifier: BSD-3-Clause
-# Copyright (c) 2023 Scipp contributors (https://github.com/scipp)
-import warnings
-
 import scipp as sc
-from scipy.optimize import OptimizeWarning
 
+from .supermirror import (
+    Alpha,
+    CriticalEdge,
+    MValue,
+    supermirror_reflectivity,
+)
 from .types import (
-    FootprintCorrectedData,
-    IdealReferenceIntensity,
-    NormalizationFactor,
     QBins,
-    QResolution,
-    ReflectivityData,
+    ReducedReference,
+    ReducibleData,
+    Reference,
+    ReferenceRun,
     ReflectivityOverQ,
-    SampleRun,
+    ReflectivityOverZW,
+    Sample,
     WavelengthBins,
 )
 
 
-def normalization_factor(
-    da: FootprintCorrectedData[SampleRun],
-    corr: IdealReferenceIntensity,
-    wbins: WavelengthBins,
-) -> NormalizationFactor:
-    """The correction matrix gives us the expected intensity at each
-    (z_index, wavelength) bin assuming the reflectivity is one.
-    To normalize the sample measurement we need to integrate the total
-    expected intensity in every Q-bin.
-    Note that Q refers to the 'sample-Q', different from the 'reference-Q'.
-
-    The 'sample-Q' is computed taking the mean of the sample measurement Q
-    value in every (z_index, wavelength) bin.
-    One complication however is that some bins have zero intensity from the
-    sample measurement, so we are unable to assign a 'sample-Q' value to those bins.
-    Therefore we estimate the intensity in the missing bins by fitting the
-    'sample-q' as a function of z_index and wavelength.
-
-    Steps:
-        Approximate 'sample-q' in every (z_index, wavelength) bin
-        Fit 'sample-q'.
-        Compute 'sample-q' in all bins using the fit.
-        Return the reference intensity with the 'sample-q' as a coordinate.
-
+def reduce_reference(
+    reference: ReducibleData[ReferenceRun],
+    wavelength_bins: WavelengthBins,
+    critical_edge: CriticalEdge,
+    mvalue: MValue,
+    alpha: Alpha,
+) -> ReducedReference:
     """
-    sample_q = (
-        da.bin(wavelength=wbins, dim=set(da.dims) - set(da.coords["z_index"].dims))
-        .bins.coords["Q"]
-        .bins.mean()
+    Reduces the reference measurement to estimate the
+    intensity distribution in the detector for
+    an ideal sample with reflectivity :math:`R = 1`.
+    """
+    R = supermirror_reflectivity(
+        reference.bins.coords['Q'],
+        c=critical_edge,
+        m=mvalue,
+        alpha=alpha,
     )
-
-    wm = sc.midpoints(corr.coords["wavelength"])
-
-    def q_of_z_wavelength(wavelength, a, b):
-        return a + b / wavelength
-
-    with warnings.catch_warnings():
-        # `curve_fit` raises a warning if it fails to estimate variances.
-        # We don't care here because we only need the parameter values and anyway
-        # assume that the fit worked.
-        # The warning can be caused by there being too few points to estimate
-        # uncertainties because of masks.
-        warnings.filterwarnings(
-            "ignore",
-            message="Covariance of the parameters could not be estimated",
-            category=OptimizeWarning,
-        )
-        p, _ = sc.curve_fit(
-            ["wavelength"],
-            q_of_z_wavelength,
-            sc.DataArray(
-                data=sample_q,
-                coords={"wavelength": wm},
-                masks={
-                    **corr.masks,
-                    "_sample_q_isnan": sc.isnan(sample_q),
-                },
-            ),
-            p0={"a": sc.scalar(-1e-3, unit="1/angstrom")},
-        )
-    return sc.DataArray(
-        data=corr.data,
-        coords={
-            "Q": q_of_z_wavelength(
-                wm,
-                sc.values(p["a"]),
-                sc.values(p["b"]),
-            ).data,
-        },
-        masks=corr.masks,
-    )
+    reference.bins.masks['invalid'] = sc.isnan(R)
+    reference /= R
+    return reference.bins.concat(('stripe',)).hist(wavelength=wavelength_bins)
 
 
-def reflectivity_over_q(
-    da: FootprintCorrectedData[SampleRun],
-    n: NormalizationFactor,
+def reduce_sample_over_q(
+    sample: Sample,
+    reference: Reference,
     qbins: QBins,
-    qres: QResolution,
 ) -> ReflectivityOverQ:
     """
-    Normalize the sample measurement by the (ideally calibrated) supermirror.
+    Computes reflectivity as ratio of
+    sample intensity and intensity from a sample
+    with ideal reflectivity.
 
-    Parameters
-    ----------
-    sample:
-        Sample measurement with coord 'Q'
-    supermirror:
-        Supermirror measurement with coord of 'Q' representing the sample 'Q'
-
-    Returns
-    -------
-    :
-        Reflectivity as a function of Q
+    Returns reflectivity as a function of :math:`Q`.
     """
-    reflectivity = da.bin(Q=qbins, dim=da.dims) / sc.values(n.hist(Q=qbins, dim=n.dims))
-    reflectivity.coords['Q_resolution'] = qres.data
-    for coord, value in da.coords.items():
-        if (
-            not isinstance(value, sc.Variable)
-            or len(set(value.dims) - set(reflectivity.dims)) == 0
-        ):
-            reflectivity.coords[coord] = value
-    return ReflectivityOverQ(reflectivity)
+    h = reference.flatten(to='Q').hist(Q=qbins)
+    R = sample.bins.concat().bin(Q=qbins) / h.data
+    R.coords['Q_resolution'] = sc.sqrt(
+        (
+            (reference * reference.coords['Q_resolution'] ** 2)
+            .flatten(to='Q')
+            .hist(Q=qbins)
+        )
+        / h
+    ).data
+    return R
 
 
-def reflectivity_per_event(
-    da: FootprintCorrectedData[SampleRun],
-    n: IdealReferenceIntensity,
+def reduce_sample_over_zw(
+    sample: Sample,
+    reference: Reference,
     wbins: WavelengthBins,
-) -> ReflectivityData:
+) -> ReflectivityOverZW:
     """
-    Weight the sample measurement by the (ideally calibrated) supermirror.
+    Computes reflectivity as ratio of
+    sample intensity and intensity from a sample
+    with ideal reflectivity.
 
-    Returns:
-        reflectivity "per event"
+    Returns reflectivity as a function of ``blade``, ``wire`` and :math:`\\wavelength`.
     """
-    reflectivity = da.bin(wavelength=wbins, dim=set(da.dims) - set(n.dims)) / sc.values(
-        n
-    )
-    for coord, value in da.coords.items():
-        if (
-            not isinstance(value, sc.Variable)
-            or len(set(value.dims) - set(reflectivity.dims)) == 0
-        ):
-            reflectivity.coords[coord] = value
-    return ReflectivityData(reflectivity)
+    R = sample.bins.concat(('stripe',)).bin(wavelength=wbins) / reference.data
+    R.masks["too_few_events"] = reference.data < sc.scalar(1, unit="counts")
+    return R
 
 
-providers = (reflectivity_over_q, normalization_factor, reflectivity_per_event)
+providers = (
+    reduce_reference,
+    reduce_sample_over_q,
+    reduce_sample_over_zw,
+)
