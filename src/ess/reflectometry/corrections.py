@@ -37,3 +37,10 @@ def correct_by_footprint(da: sc.DataArray) -> None:
         da.coords['beam_size'],
         da.coords['sample_size'],
     )
+
+
+def correct_by_proton_current(da: sc.DataArray) -> None:
+    "Corrects the data by the proton current during the time of data collection"
+    da /= da.bins.coords['proton_current']
+    # Avoid changing the unit of the weights
+    da *= da.coords['median_proton_current']

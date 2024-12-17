@@ -4,6 +4,8 @@ import scipp as sc
 from scipp.constants import pi
 from scippneutron._utils import elem_dtype
 
+from .types import ProtonCurrent, RunType
+
 
 def reflectometry_q(wavelength: sc.Variable, theta: sc.Variable) -> sc.Variable:
     """
@@ -24,6 +26,22 @@ def reflectometry_q(wavelength: sc.Variable, theta: sc.Variable) -> sc.Variable:
     dtype = elem_dtype(wavelength)
     c = (4 * pi).astype(dtype)
     return c * sc.sin(theta.astype(dtype, copy=False)) / wavelength
+
+
+def add_proton_current_coord(
+    da,
+    pc: ProtonCurrent[RunType],
+):
+    pc_lookup = sc.lookup(
+        pc,
+        dim='time',
+        mode='previous',
+        fill_value=sc.scalar(float('nan'), unit=pc.unit),
+    )
+    # Useful for comparing the proton current to what is typical
+    da.coords['median_proton_current'] = sc.median(pc).data
+    da.coords.set_aligned('median_proton_current', False)
+    da.bins.coords['proton_current'] = pc_lookup(da.bins.coords['event_time_zero'])
 
 
 providers = ()

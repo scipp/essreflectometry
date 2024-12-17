@@ -3,9 +3,11 @@
 import numpy as np
 import scipp as sc
 
-from ..reflectometry.conversions import reflectometry_q
+from ..reflectometry.conversions import add_proton_current_coord, reflectometry_q
 from ..reflectometry.types import (
     BeamDivergenceLimits,
+    ProtonCurrent,
+    RunType,
     WavelengthBins,
     YIndexLimits,
     ZIndexLimits,
@@ -113,9 +115,10 @@ def _not_between(v, a, b):
 
 def add_coords(
     da: sc.DataArray,
+    proton_current: ProtonCurrent[RunType],
 ) -> sc.DataArray:
     "Adds scattering coordinates to the raw detector data."
-    return da.transform_coords(
+    da = da.transform_coords(
         ("wavelength", "theta", "angle_of_divergence", "Q"),
         {
             "divergence_angle": "pixel_divergence_angle",
@@ -128,6 +131,10 @@ def add_coords(
         keep_intermediate=False,
         keep_aliases=False,
     )
+    # For some older Amor files there are no entries in the proton current log
+    if len(proton_current) != 0:
+        add_proton_current_coord(da, proton_current)
+    return da
 
 
 def add_masks(
@@ -153,6 +160,10 @@ def add_masks(
         da.bins.coords['wavelength'],
         wbins[0],
         wbins[-1],
+    )
+    # Take inverse and use >= because we want to mask nan values
+    da.bins.masks['proton_current_too_low'] = ~(
+        da.bins.coords['proton_current'] >= da.coords['median_proton_current'] / 2
     )
     return da
 
