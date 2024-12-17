@@ -161,10 +161,11 @@ def add_masks(
         wbins[0],
         wbins[-1],
     )
-    # Take inverse and use >= because we want to mask nan values
-    da.bins.masks['proton_current_too_low'] = ~(
-        da.bins.coords['proton_current'] >= da.coords['median_proton_current'] / 2
-    )
+    if 'proton_current' in da.bins.coords:
+        # Take inverse and use >= because we want to mask nan values
+        da.bins.masks['proton_current_too_low'] = ~(
+            da.bins.coords['proton_current'] >= da.coords['median_proton_current'] / 2
+        )
     return da
 
 
