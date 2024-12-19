@@ -67,7 +67,7 @@ def mask_events_where_supermirror_does_not_cover(
     return sam
 
 
-def evaluate_reference(
+def evaluate_reference_at_sample_coords(
     reference: ReducedReference,
     sample: ReducibleData[SampleRun],
     qbins: QBins,
