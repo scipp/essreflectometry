@@ -10,6 +10,7 @@ from ..reflectometry.types import (
     YIndexLimits,
     ZIndexLimits,
 )
+from .geometry import Detector
 
 
 def theta(wavelength, divergence_angle, L2, sample_rotation, detector_rotation):
@@ -116,13 +117,15 @@ def add_coords(
 ) -> sc.DataArray:
     "Adds scattering coordinates to the raw detector data."
     return da.transform_coords(
-        ("wavelength", "theta", "angle_of_divergence", "Q"),
+        ("wavelength", "theta", "angle_of_divergence", "Q", "L1", "L2"),
         {
             "divergence_angle": "pixel_divergence_angle",
             "wavelength": wavelength,
             "theta": theta,
             "angle_of_divergence": angle_of_divergence,
             "Q": reflectometry_q,
+            "L1": lambda chopper_distance: sc.abs(chopper_distance),
+            "L2": lambda distance_in_detector: distance_in_detector + Detector.distance,
         },
         rename_dims=False,
         keep_intermediate=False,

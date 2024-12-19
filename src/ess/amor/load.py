@@ -14,7 +14,7 @@ from ..reflectometry.types import (
     SampleRotation,
     SampleSize,
 )
-from .geometry import Detector, pixel_coordinates_in_detector_system
+from .geometry import pixel_coordinates_in_detector_system
 from .types import (
     AngleCenterOfIncomingToHorizon,
     ChopperDistance,
@@ -61,9 +61,8 @@ def load_events(
     data.coords["detector_rotation"] = detector_rotation.to(unit='rad')
     data.coords["chopper_phase"] = chopper_phase
     data.coords["chopper_frequency"] = chopper_frequency
-    data.coords["chopper_separation"] = sc.abs(chopper_separation)
-    data.coords["L1"] = sc.abs(chopper_distance)
-    data.coords["L2"] = data.coords['distance_in_detector'] + Detector.distance
+    data.coords["chopper_separation"] = chopper_separation
+    data.coords["chopper_distance"] = chopper_distance
     data.coords["sample_size"] = sample_size
     data.coords["beam_size"] = beam_size
     data.coords["angle_to_center_of_beam"] = angle_to_center_of_beam.to(unit='rad')

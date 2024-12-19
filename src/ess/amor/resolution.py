@@ -29,7 +29,7 @@ def wavelength_resolution(
     :
         The wavelength resolution variable, as standard deviation.
     """
-    return fwhm_to_std(chopper_separation / (L1 + L2))
+    return fwhm_to_std(sc.abs(chopper_separation) / (L1 + L2))
 
 
 def sample_size_resolution(
