@@ -54,7 +54,7 @@ def mask_events_where_supermirror_does_not_cover(
             theta(
                 sam.bins.coords["wavelength"],
                 sam.coords["pixel_divergence_angle"],
-                ref.coords["L2"],
+                sam.coords["L2"],
                 ref.coords["sample_rotation"],
                 ref.coords["detector_rotation"],
             ),
