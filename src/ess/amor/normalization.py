@@ -108,6 +108,6 @@ def evaluate_reference_at_sample_coords(
 
 
 providers = (
-    evaluate_reference,
+    evaluate_reference_at_sample_coords,
     mask_events_where_supermirror_does_not_cover,
 )
