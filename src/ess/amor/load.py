@@ -119,7 +119,7 @@ def load_amor_angle_from_horizon_to_center_of_incident_beam(
     (kad,) = load_nx(fp, "NXentry/NXinstrument/master_parameters/kad")
     natural_incident_angle = sc.scalar(0.245, unit='deg')
     # This value should not change during the run.
-    # If it does we assume the change was to small to be relevant.
+    # If it does we assume the change was too small to be relevant.
     # Therefore only the first value is read from the log.
     return natural_incident_angle + sc.scalar(
         kad['value'].data['dim_1', 0]['time', 0].value, unit='deg'
