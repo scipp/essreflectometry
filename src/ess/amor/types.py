@@ -9,7 +9,7 @@ WavelengthResolution = NewType("WavelengthResolution", sc.Variable)
 AngularResolution = NewType("AngularResolution", sc.Variable)
 SampleSizeResolution = NewType("SampleSizeResolution", sc.Variable)
 
-AmorCoordTransformationGraph = NewType("AmorCoordTransformationGraph", dict)
+CoordTransformationGraph = NewType("CoordTransformationGraph", dict)
 
 
 class ChopperFrequency(sciline.Scope[RunType, sc.Variable], sc.Variable):
