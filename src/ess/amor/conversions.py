@@ -61,7 +61,7 @@ def theta(wavelength, divergence_angle, L2, sample_rotation, detector_rotation):
     '''
     c = sc.constants.g * sc.constants.m_n**2 / sc.constants.h**2
     out = (c * L2 * wavelength**2).to(unit='dimensionless') + sc.sin(
-        divergence_angle.to(unit='rad') + detector_rotation.to(unit='rad')
+        divergence_angle.to(unit='rad', copy=False) + detector_rotation.to(unit='rad')
     )
     out = sc.asin(out, out=out)
     out -= sample_rotation.to(unit='rad')
@@ -77,9 +77,9 @@ def angle_of_divergence(theta, sample_rotation, angle_to_center_of_beam):
     but the divergence of the incident beam can be made lower.
     """
     return (
-        theta.to(unit='rad')
+        theta.to(unit='rad', copy=False)
         - sample_rotation.to(unit='rad')
-        - angle_to_center_of_beam.to(unit='rad')
+        - angle_to_center_of_beam.to(unit='rad', copy=False)
     )
 
 
