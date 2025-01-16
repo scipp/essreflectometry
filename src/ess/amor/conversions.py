@@ -11,6 +11,7 @@ from ..reflectometry.types import (
     ZIndexLimits,
 )
 from .geometry import Detector
+from .types import AmorCoordinates
 
 
 def theta(wavelength, divergence_angle, L2, sample_rotation, detector_rotation):
@@ -112,25 +113,26 @@ def wavelength(
     return out.to(unit='angstrom', copy=False)
 
 
-def coordinate_transformation_graph():
-    return
+def coordinate_transformation_graph() -> AmorCoordinates:
+    return {
+        "divergence_angle": "pixel_divergence_angle",
+        "wavelength": wavelength,
+        "theta": theta,
+        "angle_of_divergence": angle_of_divergence,
+        "Q": reflectometry_q,
+        "L1": lambda chopper_distance: sc.abs(chopper_distance),
+        "L2": lambda distance_in_detector: distance_in_detector + Detector.distance,
+    }
 
 
 def add_coords(
     da: sc.DataArray,
+    graph: dict,
 ) -> sc.DataArray:
     "Adds scattering coordinates to the raw detector data."
     return da.transform_coords(
         ("wavelength", "theta", "angle_of_divergence", "Q", "L1", "L2"),
-        {
-            "divergence_angle": "pixel_divergence_angle",
-            "wavelength": wavelength,
-            "theta": theta,
-            "angle_of_divergence": angle_of_divergence,
-            "Q": reflectometry_q,
-            "L1": lambda chopper_distance: sc.abs(chopper_distance),
-            "L2": lambda distance_in_detector: distance_in_detector + Detector.distance,
-        },
+        graph,
         rename_dims=False,
         keep_intermediate=False,
         keep_aliases=False,
@@ -168,4 +170,4 @@ def add_masks(
     return da
 
 
-providers = ()
+providers = (coordinate_transformation_graph,)

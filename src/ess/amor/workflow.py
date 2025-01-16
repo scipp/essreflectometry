@@ -9,6 +9,7 @@ from ..reflectometry.types import (
     ZIndexLimits,
 )
 from .conversions import add_coords, add_masks
+from .types import AmorCoordinates
 
 
 def add_coords_masks_and_apply_corrections(
@@ -17,12 +18,13 @@ def add_coords_masks_and_apply_corrections(
     zlims: ZIndexLimits,
     bdlim: BeamDivergenceLimits,
     wbins: WavelengthBins,
+    graph: AmorCoordinates,
 ) -> ReducibleData[RunType]:
     """
     Computes coordinates, masks and corrections that are
     the same for the sample measurement and the reference measurement.
     """
-    da = add_coords(da)
+    da = add_coords(da, graph)
     da = add_masks(da, ylim, zlims, bdlim, wbins)
     correct_by_footprint(da)
     return da

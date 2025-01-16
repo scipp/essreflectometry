@@ -9,6 +9,8 @@ WavelengthResolution = NewType("WavelengthResolution", sc.Variable)
 AngularResolution = NewType("AngularResolution", sc.Variable)
 SampleSizeResolution = NewType("SampleSizeResolution", sc.Variable)
 
+AmorCoordinates = NewType("AmorCoordinates", dict)
+
 
 class ChopperFrequency(sciline.Scope[RunType, sc.Variable], sc.Variable):
     """Frequency of the choppers used in the run."""
