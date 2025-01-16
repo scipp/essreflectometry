@@ -60,10 +60,10 @@ def theta(wavelength, divergence_angle, L2, sample_rotation, detector_rotation):
     '''
     c = sc.constants.g * sc.constants.m_n**2 / sc.constants.h**2
     out = (c * L2 * wavelength**2).to(unit='dimensionless') + sc.sin(
-        divergence_angle + detector_rotation
+        divergence_angle.to(unit='rad') + detector_rotation.to(unit='rad')
     )
     out = sc.asin(out, out=out)
-    out -= sample_rotation
+    out -= sample_rotation.to(unit='rad')
     return out
 
 
@@ -75,7 +75,11 @@ def angle_of_divergence(theta, sample_rotation, angle_to_center_of_beam):
     On the Amor instrument this is always in the interval [-0.75 deg, 0.75 deg],
     but the divergence of the incident beam can be made lower.
     """
-    return theta - sample_rotation - angle_to_center_of_beam
+    return (
+        theta.to(unit='rad')
+        - sample_rotation.to(unit='rad')
+        - angle_to_center_of_beam.to(unit='rad')
+    )
 
 
 def wavelength(
@@ -84,8 +88,8 @@ def wavelength(
     "Converts event_time_offset to wavelength using the chopper settings."
     out = event_time_offset.to(unit="ns", dtype="float64", copy=True)
     unit = out.bins.unit
-    tau = (1 / (2 * chopper_frequency)).to(unit=unit)
-    tof_offset = tau * chopper_phase / (180.0 * sc.units.deg)
+    tau = (1 / (2 * chopper_frequency.to(unit='Hz'))).to(unit=unit)
+    tof_offset = tau * chopper_phase.to(unit='rad') / (np.pi * sc.units.rad)
 
     minimum = -tof_offset
     frame_bound = tau - tof_offset
@@ -103,13 +107,13 @@ def wavelength(
     )
     # Correction for path length through guides being different
     # depending on incident angle.
-    out -= (divergence_angle.to(unit="deg") / (180.0 * sc.units.deg)) * tau
+    out -= (divergence_angle.to(unit="rad") / (np.pi * sc.units.rad)) * tau
     out *= (sc.constants.h / sc.constants.m_n) / (L1 + L2)
     return out.to(unit='angstrom', copy=False)
 
 
-def _not_between(v, a, b):
-    return (v < a) | (v > b)
+def coordinate_transformation_graph():
+    return
 
 
 def add_coords(
@@ -131,6 +135,10 @@ def add_coords(
         keep_intermediate=False,
         keep_aliases=False,
     )
+
+
+def _not_between(v, a, b):
+    return (v < a) | (v > b)
 
 
 def add_masks(
