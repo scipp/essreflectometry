@@ -4,10 +4,12 @@
 import scipp as sc
 import numpy as np
 
-from .types import Alpha, CriticalEdge, MValue, SupermirrorReflectivityCorrection
+from .types import Alpha, CriticalEdge, MValue
 
 
-def supermirror_reflectivity(q: sc.Variable, c: CriticalEdge, m: MValue, alpha: Alpha):
+def supermirror_reflectivity(
+    q: sc.Variable, c: CriticalEdge, m: MValue, alpha: Alpha
+) -> sc.Variable:
     """
     Returns the reflectivity of the supermirror.
     For ``q`` outside of the region of known reflectivity
