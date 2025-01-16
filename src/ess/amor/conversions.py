@@ -11,7 +11,7 @@ from ..reflectometry.types import (
     ZIndexLimits,
 )
 from .geometry import Detector
-from .types import AmorCoordinates
+from .types import AmorCoordTransformationGraph
 
 
 def theta(wavelength, divergence_angle, L2, sample_rotation, detector_rotation):
@@ -113,7 +113,7 @@ def wavelength(
     return out.to(unit='angstrom', copy=False)
 
 
-def coordinate_transformation_graph() -> AmorCoordinates:
+def coordinate_transformation_graph() -> AmorCoordTransformationGraph:
     return {
         "divergence_angle": "pixel_divergence_angle",
         "wavelength": wavelength,

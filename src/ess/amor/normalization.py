@@ -23,7 +23,7 @@ from .resolution import (
     sample_size_resolution,
     wavelength_resolution,
 )
-from .types import AmorCoordinates
+from .types import AmorCoordTransformationGraph
 
 
 def mask_events_where_supermirror_does_not_cover(
@@ -73,7 +73,7 @@ def evaluate_reference_at_sample_coords(
     sample: ReducibleData[SampleRun],
     qbins: QBins,
     detector_spatial_resolution: DetectorSpatialResolution[SampleRun],
-    graph: AmorCoordinates,
+    graph: AmorCoordTransformationGraph,
 ) -> Reference:
     """
     Adds a :math:`Q` and :math:`Q`-resolution coordinate to each bin of the ideal

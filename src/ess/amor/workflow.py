@@ -9,7 +9,7 @@ from ..reflectometry.types import (
     ZIndexLimits,
 )
 from .conversions import add_coords, add_masks
-from .types import AmorCoordinates
+from .types import AmorCoordTransformationGraph
 
 
 def add_coords_masks_and_apply_corrections(
@@ -18,7 +18,7 @@ def add_coords_masks_and_apply_corrections(
     zlims: ZIndexLimits,
     bdlim: BeamDivergenceLimits,
     wbins: WavelengthBins,
-    graph: AmorCoordinates,
+    graph: AmorCoordTransformationGraph,
 ) -> ReducibleData[RunType]:
     """
     Computes coordinates, masks and corrections that are
