@@ -40,7 +40,7 @@ class ReducibleData(sciline.Scope[RunType, sc.DataArray], sc.DataArray):
 ReducedReference = NewType("ReducedReference", sc.DataArray)
 """Intensity distribution on the detector for a sample with :math`R(Q) = 1`"""
 
-Reference = NewType("NormalizationFactor", sc.DataArray)
+Reference = NewType("Reference", sc.DataArray)
 """:code`ReducedReference` histogrammed in sample ``Q``"""
 
 Sample = NewType("Sample", sc.DataArray)
