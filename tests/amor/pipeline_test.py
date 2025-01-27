@@ -134,16 +134,17 @@ def test_pipeline_merging_events_result_unchanged(amor_pipeline: sciline.Pipelin
 @pytest.mark.filterwarnings("ignore:Failed to convert .* into a transformation")
 @pytest.mark.filterwarnings("ignore:Invalid transformation, missing attribute")
 def test_proton_current(amor_pipeline: sciline.Pipeline):
-    # The sample rotation value in the file is slightly off, so we set it manually
-    amor_pipeline[SampleRotation[SampleRun]] = sc.scalar(0.85, unit="deg")
     amor_pipeline[Filename[SampleRun]] = amor.data.amor_sample_run(611)
     da_without_proton_current = amor_pipeline.compute(ReducibleData[SampleRun])
+
+    proton_current = [1, 2, 0.1]
+    timestamps = [1699883542349602112, 1699883542349602112, 1699886864071691036]
     amor_pipeline[ProtonCurrent[SampleRun]] = sc.DataArray(
-        sc.array(dims=['time'], values=[1, 2, 0.1]),
+        sc.array(dims=['time'], values=proton_current),
         coords={
             'time': sc.array(
                 dims=['time'],
-                values=[1699883542349602112, 1699883542349602112, 1699886864071691036],
+                values=timestamps,
                 dtype='datetime64',
                 unit='ns',
             )
@@ -158,3 +159,14 @@ def test_proton_current(amor_pipeline: sciline.Pipeline):
 
     assert "proton_current" not in da_without_proton_current.bins.coords
     assert "proton_current_too_low" not in da_without_proton_current.bins.masks
+
+    t = (
+        da_with_proton_current.bins.constituents['data']
+        .coords['event_time_zero'][0]
+        .value.astype('uint64')
+    )
+    w_with = da_with_proton_current.bins.constituents['data'].data[0].value
+    w_without = da_without_proton_current.bins.constituents['data'].data[0].value
+    np.testing.assert_allclose(
+        proton_current[np.searchsorted(timestamps, t) - 1], w_without / w_with
+    )
