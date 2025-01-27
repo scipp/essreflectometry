@@ -14,7 +14,9 @@ from ess.amor import data  # noqa: F401
 from ess.reflectometry import orso
 from ess.reflectometry.types import (
     Filename,
+    ProtonCurrent,
     QBins,
+    ReducibleData,
     ReferenceRun,
     ReflectivityOverQ,
     SampleRotation,
@@ -127,3 +129,32 @@ def test_pipeline_merging_events_result_unchanged(amor_pipeline: sciline.Pipelin
     assert_allclose(
         2 * sc.variances(result.data), sc.variances(result2.data), rtol=sc.scalar(1e-6)
     )
+
+
+@pytest.mark.filterwarnings("ignore:Failed to convert .* into a transformation")
+@pytest.mark.filterwarnings("ignore:Invalid transformation, missing attribute")
+def test_proton_current(amor_pipeline: sciline.Pipeline):
+    # The sample rotation value in the file is slightly off, so we set it manually
+    amor_pipeline[SampleRotation[SampleRun]] = sc.scalar(0.85, unit="deg")
+    amor_pipeline[Filename[SampleRun]] = amor.data.amor_sample_run(611)
+    da_without_proton_current = amor_pipeline.compute(ReducibleData[SampleRun])
+    amor_pipeline[ProtonCurrent[SampleRun]] = sc.DataArray(
+        sc.array(dims=['time'], values=[1, 2, 0.1]),
+        coords={
+            'time': sc.array(
+                dims=['time'],
+                values=[1699883542349602112, 1699883542349602112, 1699886864071691036],
+                dtype='datetime64',
+                unit='ns',
+            )
+        },
+    )
+    da_with_proton_current = amor_pipeline.compute(ReducibleData[SampleRun])
+
+    assert "proton_current" in da_with_proton_current.bins.coords
+    assert "proton_current_too_low" in da_with_proton_current.bins.masks
+    assert da_with_proton_current.bins.masks["proton_current_too_low"].any()
+    assert not da_with_proton_current.bins.masks["proton_current_too_low"].all()
+
+    assert "proton_current" not in da_without_proton_current.bins.coords
+    assert "proton_current_too_low" not in da_without_proton_current.bins.masks
