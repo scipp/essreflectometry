@@ -31,7 +31,7 @@ def add_coords_masks_and_apply_corrections(
     the same for the sample measurement and the reference measurement.
     """
     da = add_coords(da, graph)
-    da = add_masks(da, ylim, zlims, bdlim, wbins)
+    add_masks(da, ylim, zlims, bdlim, wbins)
     correct_by_footprint(da)
 
     # For some older Amor files there are no entries in the proton current log

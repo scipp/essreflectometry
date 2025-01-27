@@ -149,7 +149,7 @@ def add_masks(
     zlims: ZIndexLimits,
     bdlim: BeamDivergenceLimits,
     wbins: WavelengthBins,
-):
+) -> None:
     """
     Masks the data by ranges in the detector
     coordinates ``z`` and ``y``, and by the divergence of the beam,
@@ -167,7 +167,6 @@ def add_masks(
         wbins[0],
         wbins[-1],
     )
-    return da
 
 
 providers = (coordinate_transformation_graph,)

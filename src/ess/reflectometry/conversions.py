@@ -31,7 +31,7 @@ def reflectometry_q(wavelength: sc.Variable, theta: sc.Variable) -> sc.Variable:
 def add_proton_current_coord(
     da,
     pc: ProtonCurrent[RunType],
-):
+) -> None:
     """Find the proton current value for each event and
     adds it as a coord to the data array."""
     pc_lookup = sc.lookup(
@@ -46,14 +46,13 @@ def add_proton_current_coord(
     da.bins.coords['proton_current'] = pc_lookup(da.bins.coords['event_time_zero'])
 
 
-def add_proton_current_mask(da: sc.DataArray):
+def add_proton_current_mask(da: sc.DataArray) -> None:
     """Masks events where the proton current was too low or where
     the proton current is nan."""
     # Take inverse and use >= because we want to mask nan values
     da.bins.masks['proton_current_too_low'] = ~(
         da.bins.coords['proton_current'] >= da.coords['median_proton_current'] / 4
     )
-    return da
 
 
 providers = ()
