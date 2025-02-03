@@ -32,6 +32,9 @@ def add_coords_masks_and_apply_corrections(
     """
     da = add_coords(da, graph)
     add_masks(da, ylim, zlims, bdlim, wbins)
+
+    # Copy before applying corrections
+    da.data = da.data.copy()
     correct_by_footprint(da)
 
     # For some older Amor files there are no entries in the proton current log
