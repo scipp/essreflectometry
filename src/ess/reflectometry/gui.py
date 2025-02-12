@@ -30,13 +30,13 @@ class ReflectometryBatchReductionGUI:
     def read_meta_data(self, path):
         raise NotImplementedError()
 
-    def run_table_from_metadata(self, df):
+    def sync_runs_table(self, db):
         raise NotImplementedError()
 
-    def reduction_table_from_run_table(self, df):
+    def sync_reduction_table(self, db):
         raise NotImplementedError()
 
-    def reference_table_from_run_table(self, df):
+    def sync_reference_table(self, db):
         raise NotImplementedError()
 
     def display_results(self, results):
@@ -46,46 +46,59 @@ class ReflectometryBatchReductionGUI:
         raise NotImplementedError()
 
     def log(self, message):
-        with self.output:
+        out = widgets.Output()
+        with out:
             display(message)
+        self.logbox.children = (out, *self.logbox.children)
+
+    def sync(self, *_):
+        db = {}
+        # db["settings"] = self.load_settings()
+        db["meta"] = self.load_runs()
+        db["user_runs"] = self.runs_table.data
+        db["user_reduction"] = self.reduction_table.data
+        db["user_reference"] = self.reference_table.data
+
+        db["user_runs"] = self.sync_runs_table(db)
+        db["user_reduction"] = self.sync_reduction_table(db)
+        db["user_reference"] = self.sync_reference_table(db)
+
+        self.runs_table.data = db["user_runs"]
+        self.reduction_table.data = db["user_reduction"]
+        self.reference_table.data = db["user_reference"]
 
     @property
     def path(self):
-        p = self.proposal_number_box.value
-        if p.isdigit():
-            # Handling proposal numbers is not yet implemented
-            raise NotImplementedError()
-        return p
+        if self._path is None:
+            raise ValueError("Path is not set")
+        return self._path
 
     def __init__(self):
-        self.output = widgets.Output()
+        self.logbox = widgets.VBox([])
+        self._path = None
         self.log("init")
 
         self.runs_table = DataGrid(
             pd.DataFrame([]),
             editable=True,
             auto_fit_columns=True,
-            layout={"height": "300px"},
             column_visibility={"key": False},
         )
         self.reduction_table = DataGrid(
             pd.DataFrame([]),
             editable=True,
             auto_fit_columns=True,
-            layout={"height": "300px"},
             column_visibility={"key": False},
         )
         self.reference_table = DataGrid(
             pd.DataFrame([]),
             editable=True,
             auto_fit_columns=True,
-            layout={"height": "300px"},
             column_visibility={"key": False},
         )
-
-        header1 = widgets.Label("Runs")
-        header2 = widgets.Label("Reduction")
-        header3 = widgets.Label("Reference runs")
+        self.runs_table.on_cell_change(self.sync)
+        self.reduction_table.on_cell_change(self.sync)
+        self.reference_table.on_cell_change(self.sync)
 
         self.proposal_number_box = widgets.Text(
             value="",
@@ -95,34 +108,56 @@ class ReflectometryBatchReductionGUI:
             disabled=False,
         )
 
-        load_files_button = widgets.Button(description="Load runs")
-        transfer_button = widgets.Button(description="Transfer")
+        def set_proposal_number_state(state):
+            if state == "good":
+                self.proposal_number_box.layout.border = '2px solid green'
+            if state == "bad":
+                self.proposal_number_box.layout.border = '2px solid red'
+
+        def on_proposal_number_change(_):
+            p = self.proposal_number_box.value
+            if p.isdigit():
+                # Handling proposal numbers is not yet implemented
+                self._path = None
+                set_proposal_number_state("bad")
+            elif not os.path.isdir(p):
+                self._path = None
+                set_proposal_number_state("bad")
+            else:
+                self._path = p
+                set_proposal_number_state("good")
+                self.sync()
+
+        set_proposal_number_state("bad")
+        self.proposal_number_box.observe(on_proposal_number_change, names='value')
+
         reduce_button = widgets.Button(description="Reduce")
 
-        def load_files(b):
-            self.log("load files")
-            self.runs_table.data = self.run_table_from_metadata(
-                self.load_runs_from_path(self.path)
-            )
-
-        def transfer_runs(b):
-            self.log("transfer runs")
-            self.reference_table.data = self.reference_table_from_run_table(
-                self.runs_table.data
-            )
-            self.reduction_table.data = self.reduction_table_from_run_table(
-                self.runs_table.data
-            )
-
-        def reduce_data(b):
+        def reduce_data(_):
             self.log("reduce data")
             self.display_results(self.run_workflow())
 
-        load_files_button.on_click(load_files)
-        transfer_button.on_click(transfer_runs)
         reduce_button.on_click(reduce_data)
 
-        data_buttons = widgets.HBox([load_files_button, transfer_button, reduce_button])
+        add_row_button = widgets.Button(description="Add row")
+        delete_row_button = widgets.Button(description="Remove row")
+
+        def add_row(_):
+            self.log("add row")
+            row = self.runs_table.data.iloc[-1:].copy()
+            row[row.columns[1]] = row[row.columns[1]] + '_copy'
+            self.runs_table.data = pd.concat([self.runs_table.data, row])
+            self.sync()
+
+        def delete_row(_):
+            self.log("delete row")
+            self.runs_table.data = self.runs_table.data.iloc[:-1]
+            self.sync()
+
+        add_row_button.on_click(add_row)
+        delete_row_button.on_click(delete_row)
+
+        data_buttons = widgets.HBox([add_row_button, delete_row_button, reduce_button])
 
         tab_data = widgets.VBox(
             [
@@ -131,14 +166,14 @@ class ReflectometryBatchReductionGUI:
                     [
                         widgets.VBox(
                             [
-                                header1,
+                                widgets.Label("Runs"),
                                 self.runs_table,
                             ],
                             layout={"width": "100%"},
                         ),
                         widgets.VBox(
                             [
-                                header2,
+                                widgets.Label("Reduction"),
                                 self.reduction_table,
                             ],
                             layout={"width": "100%"},
@@ -148,7 +183,11 @@ class ReflectometryBatchReductionGUI:
             ],
         )
         tab_settings = widgets.VBox(
-            [widgets.Label("This is the settings tab"), header3, self.reference_table],
+            [
+                widgets.Label("This is the settings tab"),
+                widgets.Label("Reference runs"),
+                self.reference_table,
+            ],
             layout={"width": "100%"},
         )
 
@@ -161,15 +200,15 @@ class ReflectometryBatchReductionGUI:
             [
                 self.proposal_number_box,
                 self.tabs,
-                self.output,
+                self.logbox,
             ]
         )
 
-    def load_runs_from_path(self, path):
+    def load_runs(self):
         self.log("load runs from path")
         metadata = [
             self.read_meta_data(fpath)
-            for fpath in glob.glob(os.path.join(path, '*.hdf'))
+            for fpath in glob.glob(os.path.join(self.path, '*.hdf'))
         ]
         return pd.DataFrame(metadata)
 
@@ -187,29 +226,69 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
                 "Angle": f['entry1']['Amor']['master_parameters']['mu']['value'][0, 0],
             }
 
-    def run_table_from_metadata(self, df):
+    @staticmethod
+    def _merge_old_and_new_state(new, old, on):
+        old = old if on in old else old.assign(**{on: None})
+        new = new if on in new else new.assign(**{on: None})
+        df = new.merge(old, how='left', on=on)
+        for right in df.columns:
+            if right.endswith("_y"):
+                new = right.removesuffix("_y")
+                left = new + "_x"
+                df[new] = df[right].combine_first(df[left])
+                df = df.drop(columns=[left, right])
+        return df
+
+    @staticmethod
+    def _setdefault(df, col, value):
+        df[col] = value if col not in df.columns else df[col].fillna(value)
+
+    @staticmethod
+    def _ordercolumns(df, *cols):
+        columns = [*cols, *sorted(set(df.columns) - {*cols})]
+        return df[columns]
+
+    def sync_runs_table(self, db):
+        df = self._merge_old_and_new_state(db["meta"], db["user_runs"], on='Run')
+        self._setdefault(df, "Exclude", False)
+        df = self._ordercolumns(df, 'Run', 'Sample')
         return df.sort_values(by='Run')
 
-    def reduction_table_from_run_table(self, df):
-        return (
-            df[df["Sample"] != "sm5"]
+    def sync_reduction_table(self, db):
+        df = db["user_runs"]
+        df = (
+            df[df["Sample"] != "sm5"][~df["Exclude"]]
             .groupby(["Sample", "Angle"], as_index=False)
-            .agg(Runs=("Run", list))
-            .sort_values(by=["Sample", "Angle"])
+            .agg(Runs=("Run", tuple))
+            .sort_values(["Sample", "Angle"])
         )
+        user_reduction = db['user_reduction'].drop(
+            columns=["Sample", "Angle"], errors='ignore'
+        )
+        df = self._merge_old_and_new_state(df, user_reduction, on='Runs')
+        df = df.drop_duplicates(("Sample", "Angle", "Runs"))
+        self._setdefault(df, "QBins", 391)
+        self._setdefault(df, "QStart", 0.01)
+        self._setdefault(df, "QStop", 0.3)
+        df = self._ordercolumns(df, 'Sample', 'Angle', 'Runs')
+        return df.sort_values(["Sample", "Angle"])
 
-    def reference_table_from_run_table(self, df):
-        return (
-            df[df["Sample"] == "sm5"]
+    def sync_reference_table(self, db):
+        df = db["user_runs"]
+        df = (
+            df[df["Sample"] == "sm5"][~df["Exclude"]]
             .groupby(["Sample"], as_index=False)
-            .agg(Runs=("Run", list))
+            .agg(Runs=("Run", tuple))
             .sort_values(by="Sample")
         )
+        user_reference = db['user_reference'].drop(columns=["Sample"], errors='ignore')
+        df = self._merge_old_and_new_state(df, user_reference, on='Runs')
+        df = self._ordercolumns(df, 'Sample')
+        return df.sort_values(by="Sample")
 
     def display_results(self, results):
         df = self.reduction_table.data.copy()
         df["rownum"] = range(len(df))
-
         to_combine = df.groupby("Sample", as_index=False).agg({"rownum": list})
         tiled = pp.tiled(1, 2)
         tiled[0, 0] = pp.plot(
@@ -231,8 +310,7 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
             norm='log',
             figsize=(10, 7),
         )
-        with self.output:
-            display(tiled)
+        self.log(tiled)
 
     def get_filepath_from_run(self, run):
         return os.path.join(self.path, f'amor2024n{run:0>6}.hdf')
@@ -248,9 +326,6 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
         workflow[ChopperPhase[ReferenceRun]] = sc.scalar(7.5, unit='deg')
         workflow[ChopperPhase[SampleRun]] = sc.scalar(7.5, unit='deg')
 
-        workflow[QBins] = sc.geomspace(
-            dim='Q', start=0.005, stop=0.4, num=391, unit='1/angstrom'
-        )
         workflow[WavelengthBins] = sc.geomspace(
             'wavelength', 3, 12.5, 2001, unit='angstrom'
         )
@@ -259,9 +334,7 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
         workflow[ZIndexLimits] = sc.scalar(60), sc.scalar(380)
 
         progress = widgets.IntProgress(min=0, max=len(sample_df))
-
-        with self.output:
-            display(progress)
+        self.log(progress)
 
         runs = (
             reference_df.iloc[0]["Runs"]
@@ -282,6 +355,13 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
             )
             wf = with_filenames(
                 workflow, SampleRun, list(map(self.get_filepath_from_run, runs))
+            )
+            wf[QBins] = sc.geomspace(
+                dim='Q',
+                start=params['QStart'],
+                stop=params['QStop'],
+                num=params['QBins'],
+                unit='1/angstrom',
             )
             reflectivity_curves.append(wf.compute(ReflectivityOverQ).hist())
             progress.value += 1
