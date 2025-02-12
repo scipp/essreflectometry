@@ -360,7 +360,7 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
                 dim='Q',
                 start=params['QStart'],
                 stop=params['QStop'],
-                num=params['QBins'],
+                num=int(params['QBins']),
                 unit='1/angstrom',
             )
             reflectivity_curves.append(wf.compute(ReflectivityOverQ).hist())
