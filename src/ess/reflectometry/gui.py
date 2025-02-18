@@ -61,8 +61,8 @@ class ReflectometryBatchReductionGUI:
         template = 'row == {i} ? {reduced_color} : '
         expr = ''
         for i, (_, row) in enumerate(table.data.iterrows()):
-            for row_key, _ in self.results.keys():
-                if tuple(row) == row_key:
+            for row_key in self.results.keys():
+                if self.get_row_key(row) == row_key:
                     expr += template.format(i=i, reduced_color="'lightgreen'")
         expr += "default_value"
         table.default_renderer.background_color = VegaExpr(expr)
@@ -366,6 +366,7 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
         self._setdefault(df, "QBins", 391)
         self._setdefault(df, "QStart", 0.01)
         self._setdefault(df, "QStop", 0.3)
+        self._setdefault(df, "Scale", 1.0)
         df = self._ordercolumns(df, 'Sample', 'Angle', 'Runs')
         return df.sort_values(["Sample", "Angle"])
 
@@ -385,7 +386,7 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
         self._setdefault(df, "Ymax", 47)
         self._setdefault(df, "Zmin", 60)
         self._setdefault(df, "Zmax", 380)
-        self._setdefault(df, "Lmin", 3)
+        self._setdefault(df, "Lmin", 3.0)
         self._setdefault(df, "Lmax", 12.5)
         df = self._ordercolumns(df, 'Sample', 'Runs')
         return df.sort_values(by="Sample")
@@ -537,5 +538,7 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
                 num=int(params['QBins']),
                 unit='1/angstrom',
             )
-            self.set_result(params, wf.compute(ReflectivityOverQ).hist())
+            self.set_result(
+                params, params["Scale"] * wf.compute(ReflectivityOverQ).hist()
+            )
             progress.value += 1
