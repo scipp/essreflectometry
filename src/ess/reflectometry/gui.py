@@ -77,7 +77,7 @@ class ReflectometryBatchReductionGUI:
         out = widgets.Output()
         with out:
             display(message)
-        self.logbox.children = (out, *self.logbox.children)
+        self.text_log.children = (out, *self.text_log.children)
 
     @staticmethod
     def set_table_height(table, extra=0):
@@ -116,7 +116,9 @@ class ReflectometryBatchReductionGUI:
         return self._path
 
     def __init__(self):
-        self.logbox = widgets.VBox([])
+        self.text_log = widgets.VBox([])
+        self.progress_log = widgets.VBox([])
+        self.plot_log = widgets.VBox([])
         self._path = None
         self.log("init")
 
@@ -127,28 +129,28 @@ class ReflectometryBatchReductionGUI:
             editable=True,
             auto_fit_columns=True,
             column_visibility={"key": False},
-            selection_mode="row",
+            selection_mode="cell",
         )
         self.reduction_table = DataGrid(
             pd.DataFrame([]),
             editable=True,
             auto_fit_columns=True,
             column_visibility={"key": False},
-            selection_mode="row",
+            selection_mode="cell",
         )
         self.reference_table = DataGrid(
             pd.DataFrame([]),
             editable=True,
             auto_fit_columns=True,
             column_visibility={"key": False},
-            selection_mode="row",
+            selection_mode="cell",
         )
         self.custom_reduction_table = DataGrid(
             pd.DataFrame([]),
             editable=True,
             auto_fit_columns=True,
             column_visibility={"key": False},
-            selection_mode="row",
+            selection_mode="cell",
         )
 
         self.runs_table.on_cell_change(self.sync)
@@ -209,12 +211,28 @@ class ReflectometryBatchReductionGUI:
 
         def add_row(_):
             self.log("add row")
-            if len(self.custom_reduction_table.data) > 0:
-                row = self.custom_reduction_table.data.iloc[-1:]
-            elif len(self.reduction_table.data) > 0:
-                row = self.reduction_table.data.iloc[-1:]
+            # Check if there are any selections in the reduction table
+            if len(self.reduction_table.selections) > 0:
+                # Get the first selected row
+                selection = self.reduction_table.selections[0]
+                row = self.reduction_table.data.iloc[
+                    selection['r1'] : selection['r2'] + 1
+                ]
             else:
-                return
+                # Create an empty row with default values
+                row = pd.DataFrame(
+                    [
+                        {
+                            'Sample': '',
+                            'Angle': 0.0,
+                            'Runs': (),
+                            'QBins': 391,
+                            'QStart': 0.01,
+                            'QStop': 0.3,
+                            'Scale': 1.0,
+                        }
+                    ]
+                )
             # To avoid a flickering scrollbar
             self.set_table_height(self.custom_reduction_table, extra=25)
             self.custom_reduction_table.data = pd.concat(
@@ -232,9 +250,7 @@ class ReflectometryBatchReductionGUI:
 
         add_row_button.on_click(add_row)
         delete_row_button.on_click(delete_row)
-        data_buttons = widgets.HBox(
-            [add_row_button, delete_row_button, reduce_button, plot_button]
-        )
+        data_buttons = widgets.HBox([reduce_button, plot_button])
 
         self.run_number_min = widgets.IntText(
             value=0, description='', layout=widgets.Layout(width='5em')
@@ -255,7 +271,7 @@ class ReflectometryBatchReductionGUI:
                     [
                         widgets.VBox(
                             [
-                                widgets.Label("Runs"),
+                                widgets.Label("Runs Table"),
                                 run_number_filter,
                                 self.runs_table,
                             ],
@@ -263,17 +279,45 @@ class ReflectometryBatchReductionGUI:
                         ),
                         widgets.VBox(
                             [
-                                widgets.Label("Reduction"),
                                 data_buttons,
-                                self.reduction_table,
-                                self.custom_reduction_table,
+                                widgets.VBox(
+                                    [
+                                        widgets.Label("Auto Reduction Table"),
+                                        self.reduction_table,
+                                    ],
+                                    layout={'margin': '10px 0'},
+                                ),
+                                widgets.VBox(
+                                    [
+                                        widgets.Label("Manual Reduction Table"),
+                                        widgets.HBox(
+                                            [add_row_button, delete_row_button],
+                                            layout={'margin': '5px 0'},
+                                        ),
+                                        self.custom_reduction_table,
+                                    ],
+                                    layout={'margin': '10px 0'},
+                                ),
                             ],
                             layout={"width": "60%"},
                         ),
                     ]
                 ),
-            ],
+                widgets.VBox(
+                    [
+                        widgets.VBox(
+                            [widgets.Label("Progress"), self.progress_log],
+                            layout={'width': '100%', 'margin': '10px 0'},
+                        ),
+                        widgets.VBox(
+                            [widgets.Label("Plots"), self.plot_log],
+                            layout={'width': '100%', 'margin': '10px 0'},
+                        ),
+                    ]
+                ),
+            ]
         )
+
         tab_settings = widgets.VBox(
             [
                 widgets.Label("This is the settings tab"),
@@ -283,16 +327,21 @@ class ReflectometryBatchReductionGUI:
             layout={"width": "100%"},
         )
 
+        tab_log = widgets.VBox(
+            [widgets.Label("Messages"), self.text_log],
+            layout={"width": "100%"},
+        )
+
         self.tabs = widgets.Tab()
-        self.tabs.children = [tab_data, tab_settings]
+        self.tabs.children = [tab_data, tab_settings, tab_log]
         self.tabs.set_title(0, "Reduce")
         self.tabs.set_title(1, "Settings")
+        self.tabs.set_title(2, "Log")
 
         self.main = widgets.VBox(
             [
                 self.proposal_number_box,
                 self.tabs,
-                self.logbox,
             ]
         )
 
@@ -307,6 +356,21 @@ class ReflectometryBatchReductionGUI:
     @property
     def widget(self):
         return self.main
+
+    def log_text(self, message):
+        out = widgets.Output()
+        with out:
+            display(message)
+        self.text_log.children = (out, *self.text_log.children)
+
+    def log_progress(self, progress):
+        self.progress_log.children = (progress,)
+
+    def log_plot(self, plot):
+        out = widgets.Output()
+        with out:
+            display(plot)
+        self.plot_log.children = (out, *self.plot_log.children)
 
 
 class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
@@ -462,7 +526,7 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
             tiled = pp.tiled(1, 2)
             tiled[0, 0] = all_runs_plot
             tiled[0, 1] = stitched_plot
-            self.log(tiled)
+            self.log_plot(tiled)
 
     def get_filepath_from_run(self, run):
         return os.path.join(self.path, f'amor2024n{run:0>6}.hdf')
@@ -506,7 +570,7 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
         )
 
         progress = widgets.IntProgress(min=0, max=len(sample_df))
-        self.log(progress)
+        self.log_progress(progress)
 
         if (key := self.get_row_key(reference_df)) in self.results:
             reference_result = self.results[key]
