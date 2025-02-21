@@ -10,7 +10,7 @@ except importlib.metadata.PackageNotFoundError:
     __version__ = "0.0.0"
 
 
-from . import conversions, orso, normalization
+from . import conversions, normalization, orso
 from .load import load_reference, save_reference
 
 providers = (
