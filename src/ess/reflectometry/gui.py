@@ -13,7 +13,6 @@ from ipytree import Node, Tree
 
 from ess import amor
 from ess.amor.types import ChopperPhase
-from ess.reflectometry.tools import combine_curves
 from ess.reflectometry.types import (
     QBins,
     ReducedReference,
@@ -649,9 +648,6 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
             self.display_results()
             return
 
-        df["rownum"] = range(len(df))
-        to_combine = df.groupby("Sample", as_index=False).agg({"rownum": list})
-
         def get_unique_names(df):
             names = [','.join(params["Runs"]) for (_, params) in df.iterrows()]
             duplicated_name_counter = {}
@@ -671,31 +667,10 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
             vmin=max(1e-6, min(result.min().value for result in results)),
         )
 
-        def get_q_bin_edges(rows):
-            qmin = min(sc.min(results[i].coords['Q']) for i in rows)
-            qmax = max(sc.max(results[i].coords['Q']) for i in rows)
-            qnum = 2 * max(results[i].coords['Q'].size for i in rows)
-            return sc.linspace('Q', qmin, qmax, qnum)
-
-        stitched_plot = pp.plot(
-            {
-                params["Sample"]: combine_curves(
-                    [results[i] for i in params['rownum']],
-                    q_bin_edges=get_q_bin_edges(params['rownum']),
-                )
-                for _, params in to_combine.iterrows()
-            },
-            norm='log',
-            vmin=max(1e-6, min(result.min().value for result in results)),
-        )
         if matplotlib.get_backend().lower().startswith('qt'):
             all_runs_plot.show()
-            stitched_plot.show()
         else:
-            tiled = pp.tiled(1, 2)
-            tiled[0, 0] = all_runs_plot
-            tiled[0, 1] = stitched_plot
-            self.log_plot(tiled)
+            self.log_plot(all_runs_plot)
 
     def get_filepath_from_run(self, run):
         return os.path.join(self.path, f'amor2024n{run:0>6}.hdf')
