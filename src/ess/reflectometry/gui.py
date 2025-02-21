@@ -9,6 +9,7 @@ import plopp as pp
 import scipp as sc
 from ipydatagrid import DataGrid, VegaExpr
 from IPython.display import display
+from ipytree import Node, Tree
 
 from ess import amor
 from ess.amor.types import ChopperPhase
@@ -332,11 +333,83 @@ class ReflectometryBatchReductionGUI:
             layout={"width": "100%"},
         )
 
+        # Create tree widget for Nexus structure
+        self.nexus_tree = Tree(
+            layout=widgets.Layout(
+                width='100%',
+                height='100%',  # Fill the container height
+            )
+        )
+        self.nexus_tree.nodes = [Node("Select a run to view its structure")]
+
+        # Add selection handler to runs table
+        self.runs_table.observe(self.update_nexus_view, names='selections')
+
+        # Create content viewer widget
+        self.nexus_content = widgets.Textarea(
+            value='Select a node to view its content',
+            layout=widgets.Layout(width='100%', height='600px'),
+            disabled=True,  # Make it read-only
+        )
+
+        # Add selection handler to tree
+        self.nexus_tree.observe(self.on_tree_select, names='selected_nodes')
+
+        # Create the Nexus Explorer tab content
+        tab_nexus = widgets.VBox(
+            [
+                widgets.Label("Nexus Explorer"),
+                widgets.HBox(
+                    [
+                        widgets.VBox(
+                            [
+                                widgets.Label("Runs Table"),
+                                self.runs_table,
+                            ],
+                            layout={"width": "30%"},
+                        ),
+                        widgets.VBox(
+                            [
+                                widgets.Label("File Structure"),
+                                widgets.VBox(
+                                    [self.nexus_tree],
+                                    layout=widgets.Layout(
+                                        width='100%',
+                                        height='600px',
+                                        min_height='100px',  # Min resize height
+                                        max_height='1000px',  # Max resize height
+                                        overflow_y='scroll',
+                                        border='1px solid lightgray',
+                                        resize='vertical',  # Add resize handle
+                                    ),
+                                ),
+                            ],
+                            layout={"width": "35%"},
+                        ),
+                        widgets.VBox(
+                            [
+                                widgets.Label("Content"),
+                                self.nexus_content,
+                            ],
+                            layout={"width": "35%"},
+                        ),
+                    ]
+                ),
+            ],
+            layout={"width": "100%"},
+        )
+
         self.tabs = widgets.Tab()
-        self.tabs.children = [tab_data, tab_settings, tab_log]
+        self.tabs.children = [
+            tab_data,
+            tab_settings,
+            tab_log,
+            tab_nexus,
+        ]  # Add the new tab
         self.tabs.set_title(0, "Reduce")
         self.tabs.set_title(1, "Settings")
         self.tabs.set_title(2, "Log")
+        self.tabs.set_title(3, "Nexus Explorer")  # Set the title for the new tab
 
         self.main = widgets.VBox(
             [
@@ -371,6 +444,102 @@ class ReflectometryBatchReductionGUI:
         with out:
             display(plot)
         self.plot_log.children = (out, *self.plot_log.children)
+
+    def create_hdf5_tree(self, filepath):
+        """Create a tree representation of an HDF5 file structure."""
+
+        def create_node(name, obj, path=''):
+            full_path = f"{path}/{name}" if path else name
+            if isinstance(obj, h5py.Dataset):
+                # For datasets, show shape and dtype
+                display_name = f"{name} ({obj.shape}, {obj.dtype})"
+                node = Node(display_name, opened=False, icon='file')
+                node.nexus_path = full_path  # Store path as custom attribute
+                return node
+            else:
+                # For groups, create parent node and add children
+                parent = Node(name, opened=False, icon='folder')
+                parent.nexus_path = full_path  # Store path as custom attribute
+                # Just iterate over the keys directly
+                for child_name in obj.keys():
+                    parent.add_node(create_node(child_name, obj[child_name], full_path))
+                return parent
+
+        try:
+            with h5py.File(filepath, 'r') as f:
+                root_node = create_node('', f)
+                return Tree(nodes=[root_node])
+        except Exception as e:
+            # Use explicit conversion flag
+            return Tree(nodes=[Node(f"Error loading file: {e!s}")])
+
+    def update_nexus_view(self, *_):
+        """Update the Nexus file viewer based on selected run."""
+        selections = self.runs_table.selections
+        if not selections:
+            self.nexus_tree.nodes = [Node("Select a run to view its structure")]
+            return
+
+        # Get the first selected row
+        row_idx = selections[0]['r1']
+        run = self.runs_table.data.iloc[row_idx]['Run']
+        filepath = self.get_filepath_from_run(run)
+
+        # Create and display the tree for this file
+        new_tree = self.create_hdf5_tree(filepath)
+        self.nexus_tree.nodes = new_tree.nodes
+
+    def display_nexus_content(self, path, h5file):
+        """Display the content of a Nexus entry."""
+        try:
+            item = h5file[path] if path else h5file
+            content = []
+
+            # Show attributes if any
+            if len(item.attrs) > 0:
+                content.append("Attributes:")
+                for key, value in item.attrs.items():
+                    content.append(f"  {key}: {value}")
+
+            # Show dataset content if it's a dataset
+            if isinstance(item, h5py.Dataset):
+                content.append("\nDataset content:")
+                data = item[()]
+                if data.size > 100:  # Truncate large datasets
+                    content.append(f"  Shape: {data.shape}")
+                    content.append("  First few values:")
+                    content.append(f"  {data.flatten()[:100]}")
+                    content.append("  ...")
+                else:
+                    content.append(f"  {data}")
+
+            self.nexus_content.value = '\n'.join(content)
+        except Exception as e:
+            # Use explicit conversion flag
+            self.nexus_content.value = f"Error reading content: {e!s}"
+
+    def on_tree_select(self, event):
+        """Handle tree node selection."""
+        if not event['new']:  # No selection
+            self.nexus_content.value = "Select a node to view its content"
+            return
+
+        selected_node = event['new'][0]
+
+        # Get the path from the custom attribute
+        path = getattr(selected_node, 'nexus_path', selected_node.name)
+
+        # Get the currently selected run
+        selections = self.runs_table.selections
+        if not selections:
+            return
+
+        row_idx = selections[0]['r1']
+        run = self.runs_table.data.iloc[row_idx]['Run']
+        filepath = self.get_filepath_from_run(run)
+
+        with h5py.File(filepath, 'r') as f:
+            self.display_nexus_content(path, f)
 
 
 class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
