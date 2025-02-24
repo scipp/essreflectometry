@@ -4,6 +4,7 @@ import os
 import h5py
 import ipywidgets as widgets
 import matplotlib
+import numpy as np
 import pandas as pd
 import plopp as pp
 import scipp as sc
@@ -13,7 +14,6 @@ from ipytree import Node, Tree
 
 from ess import amor
 from ess.amor.types import ChopperPhase
-from ess.reflectometry.tools import combine_curves
 from ess.reflectometry.types import (
     QBins,
     ReducedReference,
@@ -29,6 +29,23 @@ from ess.reflectometry.workflow import with_filenames
 
 
 class ReflectometryBatchReductionGUI:
+    """GUI for batch reduction of reflectometry data.
+
+    Known limitations:
+    1. Remove plot button behavior is inconsistent:
+       - Removes the target plot with its controls
+       - Previous plots disappear but their control buttons remain
+       - Previous plots maintain interactivity despite attempted conversion to static
+    2. Dataset toggle does not affect error bars as they are separate matplotlib artists
+    3. Remove row button removes last row instead of selected row
+    4. LogY toggle doesn't work due to workarounds for plopp's axis behavior:
+       - Plopp's autoscale was flipping the y-axis orientation
+       - We override multiple plopp/matplotlib methods to maintain correct orientation
+       - This prevents the LogY toggle from working as it would interfere with our fixes
+
+    These limitations are documented with FIXME comments in the relevant code sections.
+    """
+
     def read_meta_data(self, path):
         raise NotImplementedError()
 
@@ -120,6 +137,7 @@ class ReflectometryBatchReductionGUI:
         self.text_log = widgets.VBox([])
         self.progress_log = widgets.VBox([])
         self.plot_log = widgets.VBox([])
+        self.plot_counter = 0  # Add a counter to create unique IDs for plots
         self._path = None
         self.log("init")
 
@@ -440,10 +458,297 @@ class ReflectometryBatchReductionGUI:
         self.progress_log.children = (progress,)
 
     def log_plot(self, plot):
-        out = widgets.Output()
-        with out:
+        """Log a plot with a remove button and comment box."""
+        # Create unique ID for this plot group - currently unused
+        self.plot_counter += 1
+
+        # Convert any existing interactive plots to static
+        # NOTE: This conversion is not working as intended - plots remain interactive
+        for child in self.plot_log.children:
+            if isinstance(child, widgets.VBox):
+                plot_output = child.children[1]  # Get the plot output widget
+                with plot_output:
+                    # Clear the output and redisplay as static
+                    plot_output.clear_output()
+                    if hasattr(plot_output, 'current_plot'):
+                        display(plot_output.current_plot)
+
+        # Create the plot output for the new plot
+        plot_output = widgets.Output()
+        plot_output.current_plot = plot
+
+        # Create legend checkboxes container
+        legend_container = widgets.HBox(
+            layout=widgets.Layout(flex_wrap='wrap', align_items='center', padding='5px')
+        )
+
+        # Store original data for x4 transform
+        original_data = {}
+
+        # Store original methods before defining custom ones
+        original_zoom = plot.view.canvas.zoom
+        original_panzoom = plot.view.canvas.panzoom
+        original_draw = plot.view.canvas.draw
+
+        # Define all helper functions first
+        def calculate_plot_limits(current_plot, is_transformed=False):
+            """Calculate proper limits from all artists' data"""
+            artists = current_plot.artists
+            all_y_values = []
+            all_y_errors = []
+            for artist in artists.values():
+                valid_mask = ~np.isnan(artist._data.values) & ~np.isinf(
+                    artist._data.values
+                )
+                all_y_values.extend(artist._data.values[valid_mask])
+                if artist._data.variances is not None:
+                    error_mask = valid_mask & ~np.isinf(np.sqrt(artist._data.variances))
+                    all_y_errors.extend(np.sqrt(artist._data.variances[error_mask]))
+
+            if all_y_values:
+                y_min = min(all_y_values)
+                y_max = max(all_y_values)
+                if all_y_errors:
+                    y_min = min(y_min, min(all_y_values - np.array(all_y_errors)))
+                    y_max = max(y_max, max(all_y_values + np.array(all_y_errors)))
+
+                # Handle negative values for log scale
+                if y_min <= 0:
+                    positive_values = [y for y in all_y_values if y > 0]
+                    if positive_values:
+                        y_min = min(positive_values)
+                        if all_y_errors:
+                            positive_indices = [
+                                i for i, y in enumerate(all_y_values) if y > 0
+                            ]
+                            error_values = [all_y_errors[i] for i in positive_indices]
+                            if (
+                                error_values
+                            ):  # Only process if we have valid error values
+                                y_min = min(
+                                    y_min, min(positive_values - np.array(error_values))
+                                )
+
+                # Add padding (5% on log scale)
+                log_range = np.log10(y_max) - np.log10(y_min)
+                padding = 0.05 * log_range
+                y_min = y_min * 10 ** (-padding)
+                y_max = y_max * 10**padding
+
+                # Use different minimum limits for transformed vs untransformed data
+                if is_transformed:
+                    # For y*x^4 data, use 3 orders of magnitude range
+                    y_min = max(y_min, y_max * 1e-3)
+                else:
+                    # For original data, use 6 orders of magnitude range
+                    y_min = max(y_min, y_max * 1e-6)
+
+                return min(y_min, y_max), max(y_min, y_max)
+            return None
+
+        def fix_axis_orientation(current_plot, is_transformed=False):
+            """Helper function to ensure correct axis orientation"""
+            canvas = current_plot.view.canvas
+            if hasattr(canvas, 'ax'):
+                ax = canvas.ax
+
+                # Calculate proper limits from data
+                limits = calculate_plot_limits(current_plot, is_transformed)
+                if limits is not None:
+                    plot_y_min, plot_y_max = limits
+                else:
+                    # If no valid limits, use current ones
+                    y_min, y_max = ax.get_ylim()
+                    plot_y_min = min(y_min, y_max)
+                    plot_y_max = max(y_min, y_max)
+
+                # Force log scale and correct orientation
+                ax.set_yscale('log')
+                ax.set_ylim(plot_y_min, plot_y_max)
+                if ax.yaxis.get_inverted():
+                    ax.invert_yaxis()
+
+                # Update canvas state to match
+                canvas.yscale = 'log'
+                canvas.yrange = (plot_y_min, plot_y_max)
+
+                # Force a redraw to ensure changes take effect
+                ax.figure.canvas.draw()
+
+        def custom_reset_mode():
+            """Custom reset mode that maintains correct orientation"""
+            fix_axis_orientation(plot)
+
+        def custom_zoom(event=None):
+            """Custom zoom that maintains correct orientation"""
+            if event is not None:
+                original_zoom(event)
+            else:
+                original_zoom()
+            fix_axis_orientation(plot)
+
+        def custom_panzoom(event=None):
+            """Custom panzoom that maintains correct orientation"""
+            if event is not None:
+                original_panzoom(event)
+            else:
+                original_panzoom()
+            fix_axis_orientation(plot)
+
+        def custom_draw(*args, **kwargs):
+            """Custom draw that maintains correct orientation"""
+            original_draw(*args, **kwargs)
+            fix_axis_orientation(plot)
+
+        def apply_x4_transform(change):
+            """Apply or revert x4 transformation."""
+            # Get the current plot
+            current_plot = plot_output.current_plot
+            # Get the figure's artists
+            artists = current_plot.artists
+
+            # Apply or revert transformation for each artist
+            for name, artist in artists.items():
+                if change['new']:  # Button is pressed - apply transformation
+                    # Store original data if not already stored
+                    if name not in original_data:
+                        original_data[name] = artist._data.copy()
+
+                    # Get x and y data from the artist
+                    x_data = artist._coord.values
+                    y_data = artist._data
+
+                    # Make sure x_data matches y_data shape
+                    if x_data.shape != y_data.values.shape:
+                        x_centers = (x_data[1:] + x_data[:-1]) / 2
+                        new_values = y_data.copy()
+                        valid_mask = ~np.isnan(y_data.values)
+                        transformed_values = y_data.values * x_centers**4
+                        new_values.values = np.where(
+                            valid_mask, transformed_values, y_data.values
+                        )
+                        if y_data.variances is not None:
+                            new_values.variances = np.where(
+                                valid_mask,
+                                y_data.variances * x_centers**8,
+                                y_data.variances,
+                            )
+                    else:
+                        new_values = y_data.copy()
+                        valid_mask = ~np.isnan(y_data.values)
+                        transformed_values = y_data.values * x_data**4
+                        new_values.values = np.where(
+                            valid_mask, transformed_values, y_data.values
+                        )
+                        if y_data.variances is not None:
+                            new_values.variances = np.where(
+                                valid_mask,
+                                y_data.variances * x_data**8,
+                                y_data.variances,
+                            )
+                else:  # Button is unpressed - revert to original
+                    new_values = original_data[name].copy()
+
+                # Update the line with new values
+                artist.update(new_values)
+
+            # Update view limits to show all data
+            fix_axis_orientation(current_plot, is_transformed=change['new'])
+
+            # Update without autoscaling
+            current_plot.update()
+
+        # Now override the methods
+        plot.view.canvas.reset_mode = custom_reset_mode
+        plot.view.canvas.zoom = custom_zoom
+        plot.view.canvas.panzoom = custom_panzoom
+        plot.view.canvas.draw = custom_draw
+
+        # Create and populate legend controls
+        def create_legend_controls():
+            legend_controls = []
+            if hasattr(plot.view.canvas, 'ax'):
+                ax = plot.view.canvas.ax
+                handles, labels = ax.get_legend_handles_labels()
+
+                # FIXME: Current limitation - Toggle does not affect error bars
+                # This is because the error bars are separate artists in matplotlib
+                # A fix would require finding and toggling associated error bar artists
+                for handle, label in zip(handles, labels, strict=True):
+                    checkbox = widgets.Checkbox(
+                        value=True,
+                        description=label,
+                        indent=False,
+                        layout=widgets.Layout(margin='0 10px 0 0'),
+                    )
+
+                    def make_toggle_callback(artist_handle):
+                        def toggle_visibility(change):
+                            artist_handle.set_visible(change['new'])
+                            plot.view.canvas.draw()
+
+                        return toggle_visibility
+
+                    checkbox.observe(make_toggle_callback(handle), names='value')
+                    legend_controls.append(checkbox)
+            return legend_controls
+
+        # Update legend container
+        def update_legend():
+            legend_container.children = create_legend_controls()
+
+        # Display plot and create initial legend controls
+        with plot_output:
             display(plot)
-        self.plot_log.children = (out, *self.plot_log.children)
+            update_legend()
+
+        # Create buttons and comment box
+        remove_button = widgets.Button(description='Remove plot')
+        x4_button = widgets.ToggleButton(description='R*Q⁴')
+        comment_box = widgets.Textarea(
+            placeholder='Add comments about this plot here...',
+            layout=widgets.Layout(width='75%', height='40px'),
+        )
+
+        # Connect the x4 transform button
+        x4_button.observe(apply_x4_transform, names='value')
+
+        # Create container for plot controls with legend
+        controls_container = widgets.VBox(
+            [  # Change to VBox for vertical stacking
+                widgets.HBox(
+                    [  # First row with buttons and comment
+                        widgets.VBox(
+                            [remove_button, x4_button]
+                        ),  # Stack these vertically
+                        comment_box,
+                    ],
+                    layout=widgets.Layout(width='100%'),
+                ),
+                widgets.VBox(
+                    [  # Second row with legend controls
+                        widgets.Label('Toggle Datasets:'),
+                        legend_container,
+                    ],
+                    layout=widgets.Layout(margin='10px 0'),
+                ),  # Add vertical margin
+            ],
+            layout=widgets.Layout(width='100%', align_items='flex-start'),
+        )
+
+        # Create vertical container for all elements
+        plot_container = widgets.VBox([controls_container, plot_output])
+
+        def remove_plot(_):
+            # Find and remove this plot container
+            self.plot_log.children = tuple(
+                child for child in self.plot_log.children if child is not plot_container
+            )
+
+        remove_button.on_click(remove_plot)
+
+        # Add the new plot container at the top
+        self.plot_log.children = (plot_container, *self.plot_log.children)
 
     def create_hdf5_tree(self, filepath):
         """Create a tree representation of an HDF5 file structure."""
@@ -579,7 +884,10 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
             db['run_number_max'] >= df['Run'].astype(int)
         ]
         self._setdefault(df, "Exclude", False)
-        df = self._ordercolumns(df, 'Run', 'Sample')
+        self._setdefault(df, "Comment", "")  # Add default empty comment
+        df = self._ordercolumns(
+            df, 'Run', 'Sample', 'Angle', 'Exclude', 'Comment'
+        )  # Reorder columns
         return df.sort_values(by='Run')
 
     def sync_reduction_table(self, db):
@@ -649,15 +957,16 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
             self.display_results()
             return
 
-        df["rownum"] = range(len(df))
-        to_combine = df.groupby("Sample", as_index=False).agg({"rownum": list})
-
         def get_unique_names(df):
-            names = [','.join(params["Runs"]) for (_, params) in df.iterrows()]
+            # Create labels with Sample name and runs
+            labels = [
+                f"{params['Sample']} ({','.join(params['Runs'])})"
+                for (_, params) in df.iterrows()
+            ]
             duplicated_name_counter = {}
             unique = []
-            for i, name in enumerate(names):
-                if name not in names[:i]:
+            for i, name in enumerate(labels):
+                if name not in labels[:i]:
                     unique.append(name)
                 else:
                     duplicated_name_counter.setdefault(name, 0)
@@ -669,33 +978,25 @@ class AmorBatchReductionGUI(ReflectometryBatchReductionGUI):
             dict(zip(get_unique_names(df), results, strict=True)),
             norm='log',
             vmin=max(1e-6, min(result.min().value for result in results)),
+            figsize=(12, 6),  # Make figure wider initially
         )
 
-        def get_q_bin_edges(rows):
-            qmin = min(sc.min(results[i].coords['Q']) for i in rows)
-            qmax = max(sc.max(results[i].coords['Q']) for i in rows)
-            qnum = 2 * max(results[i].coords['Q'].size for i in rows)
-            return sc.linspace('Q', qmin, qmax, qnum)
+        # Adjust the figure and legend
+        if hasattr(all_runs_plot.view.canvas, 'ax'):
+            ax = all_runs_plot.view.canvas.ax
+            # Move legend outside
+            ax.legend(bbox_to_anchor=(1.05, 0.5), loc='center left')
+            # Adjust layout to prevent legend cutoff
+            if hasattr(all_runs_plot.view.canvas, 'fig'):
+                fig = all_runs_plot.view.canvas.fig
+                fig.tight_layout()
+                # Adjust subplot parameters to make room for legend
+                fig.subplots_adjust(right=0.85)
 
-        stitched_plot = pp.plot(
-            {
-                params["Sample"]: combine_curves(
-                    [results[i] for i in params['rownum']],
-                    q_bin_edges=get_q_bin_edges(params['rownum']),
-                )
-                for _, params in to_combine.iterrows()
-            },
-            norm='log',
-            vmin=max(1e-6, min(result.min().value for result in results)),
-        )
         if matplotlib.get_backend().lower().startswith('qt'):
             all_runs_plot.show()
-            stitched_plot.show()
         else:
-            tiled = pp.tiled(1, 2)
-            tiled[0, 0] = all_runs_plot
-            tiled[0, 1] = stitched_plot
-            self.log_plot(tiled)
+            self.log_plot(all_runs_plot)
 
     def get_filepath_from_run(self, run):
         return os.path.join(self.path, f'amor2024n{run:0>6}.hdf')
