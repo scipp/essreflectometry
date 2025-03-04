@@ -1,3 +1,4 @@
+# Copyright (c) 2025 Scipp contributors (https://github.com/scipp)
 from typing import NewType, TypeVar
 
 import sciline
@@ -6,6 +7,8 @@ import scipp as sc
 ReferenceRun = NewType("ReferenceRun", str)
 SampleRun = NewType("SampleRun", str)
 RunType = TypeVar("RunType", ReferenceRun, SampleRun)
+
+CoordTransformationGraph = NewType("CoordTransformationGraph", dict)
 
 
 class NeXusDetectorName(sciline.Scope[RunType, str], str):

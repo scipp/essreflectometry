@@ -1,3 +1,4 @@
+# Copyright (c) 2025 Scipp contributors (https://github.com/scipp)
 from typing import Any, NewType
 
 import sciline
@@ -8,8 +9,6 @@ from ..reflectometry.types import RunType
 WavelengthResolution = NewType("WavelengthResolution", sc.Variable)
 AngularResolution = NewType("AngularResolution", sc.Variable)
 SampleSizeResolution = NewType("SampleSizeResolution", sc.Variable)
-
-CoordTransformationGraph = NewType("CoordTransformationGraph", dict)
 
 
 class ChopperFrequency(sciline.Scope[RunType, sc.Variable], sc.Variable):
