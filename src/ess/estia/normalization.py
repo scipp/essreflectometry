@@ -21,7 +21,6 @@ from .resolution import (
     angular_resolution,
     q_resolution,
     sample_size_resolution,
-    wavelength_resolution,
 )
 
 
@@ -52,11 +51,8 @@ def mask_events_where_supermirror_does_not_cover(
         reflectometry_q(
             sam.bins.coords["wavelength"],
             theta(
-                sam.bins.coords["wavelength"],
-                sam.coords["pixel_divergence_angle"],
-                sam.coords["L2"],
+                sam.coords["divergence_angle"],
                 ref.coords["sample_rotation"],
-                ref.coords["detector_rotation"],
             ),
         ),
         c=critical_edge,
@@ -66,11 +62,11 @@ def mask_events_where_supermirror_does_not_cover(
     return sam.bins.assign_masks(supermirror_does_not_cover=sc.isnan(R))
 
 
-def evaluate_reference_at_sample_coords(
+def evaluate_reference(
     reference: ReducedReference,
     sample: ReducibleData[SampleRun],
-    detector_spatial_resolution: DetectorSpatialResolution[SampleRun],
     graph: CoordTransformationGraph,
+    detector_spatial_resolution: DetectorSpatialResolution[SampleRun],
 ) -> Reference:
     """
     Adds a :math:`Q` and :math:`Q`-resolution coordinate to each bin of the ideal
@@ -79,14 +75,18 @@ def evaluate_reference_at_sample_coords(
     and ``detector_rotation`` parameters from the sample measurement.
     """
     ref = reference.copy()
-    ref.coords["sample_rotation"] = sample.coords["sample_rotation"]
-    ref.coords["detector_rotation"] = sample.coords["detector_rotation"]
+    ref.coords["sample_rotation"] = sample.coords['sample_rotation']
     ref.coords["sample_size"] = sample.coords["sample_size"]
     ref.coords["detector_spatial_resolution"] = detector_spatial_resolution
     ref.coords["wavelength"] = sc.midpoints(ref.coords["wavelength"])
+
+    if "theta" in ref.coords:
+        ref.coords.pop("theta")
+
     ref = ref.transform_coords(
         (
             "Q",
+            "theta",
             "wavelength_resolution",
             "sample_size_resolution",
             "angular_resolution",
@@ -94,7 +94,7 @@ def evaluate_reference_at_sample_coords(
         ),
         {
             **graph,
-            "wavelength_resolution": wavelength_resolution,
+            "wavelength_resolution": lambda: sc.scalar(1.0),
             "sample_size_resolution": sample_size_resolution,
             "angular_resolution": angular_resolution,
             "Q_resolution": q_resolution,
@@ -107,6 +107,6 @@ def evaluate_reference_at_sample_coords(
 
 
 providers = (
-    evaluate_reference_at_sample_coords,
+    evaluate_reference,
     mask_events_where_supermirror_does_not_cover,
 )
