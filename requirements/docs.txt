@@ -122,7 +122,7 @@ requests==2.32.3
     # via
     #   pooch
     #   sphinx
-rpds-py==0.23.0
+rpds-py==0.23.1
     # via
     #   jsonschema
     #   referencing
