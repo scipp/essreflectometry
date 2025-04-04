@@ -20,6 +20,19 @@ from .types import (
 )
 
 
+def reduce_to_q(da, qbins):
+    if da.bins:
+        return da.bins.concat().bin(Q=qbins)
+    return da.hist(Q=qbins)
+
+
+def reduce_from_events_to_lz(da, wbins):
+    out = da.bins.concat(('stripe',)).bin(wavelength=wbins)
+    if 'position' in da.coords:
+        out.coords['position'] = da.coords['position'].mean('stripe')
+    return out
+
+
 def reduce_reference(
     reference: ReducibleData[ReferenceRun],
     wavelength_bins: WavelengthBins,
@@ -40,10 +53,7 @@ def reduce_reference(
     )
     reference = reference.bins.assign_masks(invalid=sc.isnan(R))
     reference = reference / R
-    out = reference.bins.concat(('stripe',)).hist(wavelength=wavelength_bins)
-
-    if 'position' in reference.coords:
-        out.coords['position'] = reference.coords['position'].mean('stripe')
+    out = reduce_from_events_to_lz(reference, wavelength_bins).hist()
     return out
 
 
@@ -59,17 +69,23 @@ def reduce_sample_over_q(
 
     Returns reflectivity as a function of :math:`Q`.
     """
-    s = sample.bins.concat().bin(Q=qbins)
-    h = sc.values(reference.hist(Q=s.coords['Q']))
+    s = reduce_to_q(sample, qbins)
+    if len(reference.dims) > 1:
+        h = sc.values(reduce_to_q(reference, s.coords['Q']))
+    elif reference.bins:
+        h = sc.values(reference.hist())
+    else:
+        h = sc.values(reference)
     R = s / h.data
-    R.coords['Q_resolution'] = sc.sqrt(
-        (
-            (sc.values(reference) * reference.coords['Q_resolution'] ** 2)
-            .flatten(to='Q')
-            .hist(Q=s.coords['Q'])
-        )
-        / h
-    ).data
+    if 'Q_resolution' in reference.coords:
+        R.coords['Q_resolution'] = sc.sqrt(
+            (
+                (sc.values(reference) * reference.coords['Q_resolution'] ** 2)
+                .flatten(to='Q')
+                .hist(Q=s.coords['Q'])
+            )
+            / h
+        ).data
     return R
 
 
@@ -85,9 +101,7 @@ def reduce_sample_over_zw(
 
     Returns reflectivity as a function of ``blade``, ``wire`` and :math:`\\wavelength`.
     """
-    return sample.bins.concat(('stripe',)).bin(wavelength=wbins) / sc.values(
-        reference.data
-    )
+    return reduce_from_events_to_lz(sample, wbins) / sc.values(reference.data)
 
 
 providers = (
