@@ -20,6 +20,19 @@ from .types import (
 )
 
 
+def reduce_to_q(da, qbins):
+    if da.bins:
+        return da.bin(Q=qbins, dim=da.dims)
+    return da.hist(Q=qbins)
+
+
+def reduce_from_events_to_lz(da, wbins):
+    out = da.bin(wavelength=wbins, dim=('stripe',))
+    if 'position' in da.coords:
+        out.coords['position'] = da.coords['position'].mean('stripe')
+    return out
+
+
 def reduce_reference(
     reference: ReducibleData[ReferenceRun],
     wavelength_bins: WavelengthBins,
@@ -40,10 +53,7 @@ def reduce_reference(
     )
     reference = reference.bins.assign_masks(invalid=sc.isnan(R))
     reference = reference / R
-    out = reference.bins.concat(('stripe',)).hist(wavelength=wavelength_bins)
-
-    if 'position' in reference.coords:
-        out.coords['position'] = reference.coords['position'].mean('stripe')
+    out = reduce_from_events_to_lz(reference, wavelength_bins).hist()
     return out
 
 
@@ -59,12 +69,10 @@ def reduce_sample_over_q(
 
     Returns reflectivity as a function of :math:`Q`.
     """
-    s = sample.bins.concat().bin(Q=qbins)
-    h = sc.values(
-        (reference if reference.bins is None else reference.bins.concat()).hist(
-            Q=s.coords['Q']
-        )
-    )
+    s = reduce_to_q(sample, qbins)
+    h = sc.values(reduce_to_q(reference, s.coords['Q']))
+    if h.bins:
+        h = h.hist()
     R = s / h.data
     if 'Q_resolution' in reference.coords or 'Q_resolution' in reference.bins.coords:
         resolution = (
@@ -96,9 +104,7 @@ def reduce_sample_over_zw(
 
     Returns reflectivity as a function of ``blade``, ``wire`` and :math:`\\wavelength`.
     """
-    return sample.bins.concat(('stripe',)).bin(wavelength=wbins) / sc.values(
-        reference.data
-    )
+    return reduce_from_events_to_lz(sample, wbins) / sc.values(reference.data)
 
 
 providers = (
