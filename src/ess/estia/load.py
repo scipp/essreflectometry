@@ -1,10 +1,11 @@
+# SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2025 Scipp contributors (https://github.com/scipp)
 import h5py
 import scipp as sc
 
 from ..reflectometry.types import (
     Filename,
-    RawDetectorData,
+    DetectorData,
     RunType,
 )
 from .mcstas import parse_events_ascii, parse_events_h5
@@ -12,7 +13,7 @@ from .mcstas import parse_events_ascii, parse_events_h5
 
 def load_mcstas_events(
     filename: Filename[RunType],
-) -> RawDetectorData[RunType]:
+) -> DetectorData[RunType]:
     """
     Load event data from a McStas run and reshape it
     to look like what we would expect if
@@ -79,7 +80,7 @@ def load_mcstas_events(
     da = da.fold('x', sizes={'blade': 14, 'wire': 32})
     da.bins.coords.pop('L')
     da.bins.coords.pop('t')
-    return RawDetectorData[RunType](da)
+    return DetectorData[RunType](da)
 
 
 providers = ()
