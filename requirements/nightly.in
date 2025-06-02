@@ -6,6 +6,7 @@ python-dateutil
 graphviz
 orsopy
 essreduce
+esspolarization
 pandas
 pytest
 pooch
