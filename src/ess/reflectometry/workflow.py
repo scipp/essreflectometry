@@ -6,7 +6,6 @@ import pandas as pd
 import sciline
 import scipp as sc
 
-from ess.amor.types import RawChopper
 from ess.reflectometry.orso import (
     OrsoExperiment,
     OrsoOwner,
@@ -14,11 +13,13 @@ from ess.reflectometry.orso import (
     OrsoSampleFilenames,
 )
 from ess.reflectometry.types import (
+    DetectorRotation,
     Filename,
-    ReducibleData,
+    RawChopper,
     RunType,
     SampleRotation,
     SampleRun,
+    UnscaledReducibleData,
 )
 
 
@@ -62,15 +63,34 @@ def with_filenames(
 
     mapped = wf.map(df)
 
-    wf[ReducibleData[runtype]] = mapped[ReducibleData[runtype]].reduce(
-        index=axis_name, func=_concatenate_event_lists
-    )
-    wf[RawChopper[runtype]] = mapped[RawChopper[runtype]].reduce(
-        index=axis_name, func=_any_value
-    )
-    wf[SampleRotation[runtype]] = mapped[SampleRotation[runtype]].reduce(
-        index=axis_name, func=_any_value
-    )
+    try:
+        wf[UnscaledReducibleData[runtype]] = mapped[
+            UnscaledReducibleData[runtype]
+        ].reduce(index=axis_name, func=_concatenate_event_lists)
+    except ValueError:
+        # UnscaledReducibleData[runtype] is independent of Filename[runtype]
+        pass
+    try:
+        wf[RawChopper[runtype]] = mapped[RawChopper[runtype]].reduce(
+            index=axis_name, func=_any_value
+        )
+    except ValueError:
+        # RawChopper[runtype] is independent of Filename[runtype]
+        pass
+    try:
+        wf[SampleRotation[runtype]] = mapped[SampleRotation[runtype]].reduce(
+            index=axis_name, func=_any_value
+        )
+    except ValueError:
+        # SampleRotation[runtype] is independent of Filename[runtype]
+        pass
+    try:
+        wf[DetectorRotation[runtype]] = mapped[DetectorRotation[runtype]].reduce(
+            index=axis_name, func=_any_value
+        )
+    except ValueError:
+        # DetectorRotation[runtype] is independent of Filename[runtype]
+        pass
 
     if runtype is SampleRun:
         wf[OrsoSample] = mapped[OrsoSample].reduce(index=axis_name, func=_any_value)
