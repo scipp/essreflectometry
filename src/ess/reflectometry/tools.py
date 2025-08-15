@@ -1,17 +1,23 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2025 Scipp contributors (https://github.com/scipp)
+import uuid
 from collections.abc import Mapping, Sequence
 from itertools import chain
 from typing import Any
 
 import numpy as np
-import sciline
+import sciline as sl
 import scipp as sc
 import scipy.optimize as opt
-from orsopy.fileio.orso import OrsoDataset
 
-from ess.reflectometry import orso
-from ess.reflectometry.types import ReflectivityOverQ
+from ess.reflectometry.types import (
+    QBins,
+    ReferenceRun,
+    ReflectivityOverQ,
+    SampleRun,
+    ScalingFactorForOverlap,
+    UnscaledReducibleData,
+)
 
 _STD_TO_FWHM = sc.scalar(2.0) * sc.sqrt(sc.scalar(2.0) * sc.log(sc.scalar(2.0)))
 
@@ -100,6 +106,114 @@ def linlogspace(
     return sc.concat(grids, dim)
 
 
+class WorkflowCollection:
+    """
+    A collection of sciline workflows that can be used to compute multiple
+    targets from mapping a workflow over a parameter table.
+    It can also be used to set parameters for all mapped nodes in a single shot.
+    """
+
+    def __init__(self, workflow: sl.Pipeline, param_table):
+        self._original_workflow = workflow.copy()
+        self.param_table = param_table
+        self._mapped_workflow = self._original_workflow.map(self.param_table)
+
+    def __setitem__(self, key, value):
+        if key in self.param_table:
+            ind = list(self.param_table.keys()).index(key)
+            self.param_table.iloc[:, ind] = value
+            self._mapped_workflow = self._original_workflow.map(self.param_table)
+        else:
+            self.param_table.insert(len(self.param_table.columns), key, value)
+            self._original_workflow[key] = None
+            self._mapped_workflow = self._original_workflow.map(self.param_table)
+
+    def compute(self, keys: type | Sequence[type], **kwargs) -> Mapping[str, Any]:
+        from sciline.pipeline import _is_multiple_keys
+
+        out = {}
+        if _is_multiple_keys(keys):
+            for key in keys:
+                if sl.is_mapped_node(self._mapped_workflow, key):
+                    targets = [
+                        n
+                        for x in key
+                        for n in sl.get_mapped_node_names(self._mapped_workflow, x)
+                    ]
+                    results = self._mapped_workflow.compute(targets, **kwargs)
+                    for node, v in results.items():
+                        key = node.index.values[0]
+                        if key not in out:
+                            out[key] = {node.name: [v]}
+                        else:
+                            out[key][node.name] = v
+
+        # if sl.is_mapped_node(target):
+        #     from sciline.pipeline import _is_multiple_keys
+
+        #         targets = [
+        #             n
+        #             for x in target
+        #             for n in sl.get_mapped_node_names(self._mapped_workflow, x)
+        #         ]
+        #         results = self._mapped_workflow.compute(targets, **kwargs)
+        #         out = {}
+        #         for node, v in results.items():
+        #             key = node.index.values[0]
+        #             if key not in out:
+        #                 out[key] = {node.name: [v]}
+        #             else:
+        #                 out[key][node.name] = v
+        #         return out
+        #     else:
+        #         return dict(sl.compute_mapped(self._mapped_workflow, target, **kwargs))
+        # else:
+        #     return self._mapped_workflow.compute(target, **kwargs)
+
+    # def get(self, keys, **kwargs):
+    #     if _is_multiple_keys(target):
+
+    #     if sl.is_mapped_node(target):
+    #         from sciline.pipeline import _is_multiple_keys
+
+    #         if _is_multiple_keys(target):
+    #             targets = [
+    #                 n
+    #                 for x in target
+    #                 for n in sl.get_mapped_node_names(self._mapped_workflow, x)
+    #             ]
+
+    #             results = self._mapped_workflow.compute(targets, **kwargs)
+    #             out = {}
+    #             for node, v in results.items():
+    #                 key = node.index.values[0]
+    #                 if key not in out:
+    #                     out[key] = {node.name: [v]}
+    #                 else:
+    #                     out[key][node.name] = v
+    #             return out
+    #         else:
+    #             return dict(sl.compute_mapped(self._mapped_workflow, target, **kwargs))
+    #     else:
+    #         return self._mapped_workflow.compute(target, **kwargs)
+    #     # try:
+    #     #     targets = sl.get_mapped_node_names(self._mapped_workflow, targets)
+    #     #     return self._mapped_workflow.get(targets, **kwargs)
+    #     # except ValueError:
+    #     #     return self._mapped_workflow.get(targets, **kwargs)
+
+    # TODO: implement the group() method to group by params in the parameter table
+
+    def visualize(self, targets, **kwargs):
+        targets = sl.get_mapped_node_names(self._mapped_workflow, targets)
+        return self._mapped_workflow.visualize(targets, **kwargs)
+
+    def copy(self) -> 'WorkflowCollection':
+        return self.__class__(
+            workflow=self._original_workflow, param_table=self.param_table
+        )
+
+
 def _sort_by(a, by):
     return [x for x, _ in sorted(zip(a, by, strict=True), key=lambda x: x[1])]
 
@@ -160,53 +274,99 @@ def _interpolate_on_qgrid(curves, grid):
 
 
 def scale_reflectivity_curves_to_overlap(
-    curves: Sequence[sc.DataArray],
+    workflow: WorkflowCollection | sl.Pipeline,
     critical_edge_interval: tuple[sc.Variable, sc.Variable] | None = None,
+    cache_intermediate_results: bool = True,
 ) -> tuple[list[sc.DataArray], list[sc.Variable]]:
-    '''Make the curves overlap by scaling all except the first by a factor.
+    '''
+    Set the ``ScalingFactorForOverlap`` parameter on the provided workflows
+    in a way that would makes the 1D reflectivity curves overlap.
+    One can supply either a collection of workflows or a single workflow.
+
+    If :code:`critical_edge_interval` is not provided, all workflows are scaled except
+    the data with the lowest Q-range, which is considered to be the reference curve.
     The scaling factors are determined by a maximum likelihood estimate
     (assuming the errors are normal distributed).
 
-    If :code:`critical_edge_interval` is provided then all curves are scaled.
+    If :code:`critical_edge_interval` is provided then all data are scaled.
 
-    All curves must be have the same unit for data and the Q-coordinate.
+    All reflectivity curves must be have the same unit for data and the Q-coordinate.
 
     Parameters
     ---------
-    curves:
-        the reflectivity curves that should be scaled together
+    workflows:
+        The workflow or collection of workflows that can compute ``ReflectivityOverQ``.
     critical_edge_interval:
-        a tuple denoting an interval that is known to belong
+        A tuple denoting an interval that is known to belong
         to the critical edge, i.e. where the reflectivity is
         known to be 1.
+    cache_intermediate_results:
+        If ``True`` the intermediate results ``UnscaledReducibleData`` will be cached
+        (this is the base for all types that are downstream of the scaling factor).
 
     Returns
     ---------
     :
         A list of scaled reflectivity curves and a list of the scaling factors.
     '''
+    not_collection = isinstance(workflow, sl.Pipeline)
+
+    wfc = workflow.copy()
+    if cache_intermediate_results:
+        try:
+            wfc[UnscaledReducibleData[SampleRun]] = wfc.compute(
+                UnscaledReducibleData[SampleRun]
+            )
+        except sl.UnsatisfiedRequirement:
+            pass
+        try:
+            wfc[UnscaledReducibleData[ReferenceRun]] = wfc.compute(
+                UnscaledReducibleData[ReferenceRun]
+            )
+        except sl.UnsatisfiedRequirement:
+            pass
+
+    reflectivities = wfc.compute(ReflectivityOverQ)
+    if not_collection:
+        reflectivities = {"": reflectivities}
+
+    # First sort the dict of reflectivities by the Q min value
+    curves = {
+        k: v.hist() if v.bins is not None else v
+        for k, v in sorted(
+            reflectivities.items(), key=lambda item: item[1].coords['Q'].min().value
+        )
+    }
+
+    critical_edge_key = uuid.uuid4().hex
     if critical_edge_interval is not None:
-        q = next(iter(curves)).coords['Q']
-        N = (
-            ((q >= critical_edge_interval[0]) & (q < critical_edge_interval[1]))
-            .sum()
-            .value
-        )
+        q = wfc.compute(QBins)
+        if hasattr(q, "items"):
+            # If QBins is a mapping, find the one with the lowest Q start
+            # Note the conversion to a dict, because if pandas is used for the mapping,
+            # it will return a Series, whose `.values` attribute is not callable.
+            q = min(dict(q).values(), key=lambda q_: q_.min())
+
+        # TODO: This is slightly different from before: it extracts the bins from the
+        # QBins variable that cover the critical edge interval. This means that the
+        # resulting curve will not necessarily begin and end exactly at the values
+        # specified, but rather at the closest bin edges.
         edge = sc.DataArray(
-            data=sc.ones(dims=('Q',), shape=(N,), with_variances=True),
-            coords={'Q': sc.linspace('Q', *critical_edge_interval, N + 1)},
-        )
-        curves, factors = scale_reflectivity_curves_to_overlap([edge, *curves])
-        return curves[1:], factors[1:]
-    if len({c.data.unit for c in curves}) != 1:
+            data=sc.ones(sizes={q.dim: q.sizes[q.dim] - 1}, with_variances=True),
+            coords={q.dim: q},
+        )[q.dim, critical_edge_interval[0] : critical_edge_interval[1]]
+        # Now place the critical edge at the beginning
+        curves = {critical_edge_key: edge} | curves
+
+    if len({c.data.unit for c in curves.values()}) != 1:
         raise ValueError('The reflectivity curves must have the same unit')
-    if len({c.coords['Q'].unit for c in curves}) != 1:
+    if len({c.coords['Q'].unit for c in curves.values()}) != 1:
         raise ValueError('The Q-coordinates must have the same unit for each curve')
 
-    qgrid = _create_qgrid_where_overlapping([c.coords['Q'] for c in curves])
+    qgrid = _create_qgrid_where_overlapping([c.coords['Q'] for c in curves.values()])
 
-    r = _interpolate_on_qgrid(map(sc.values, curves), qgrid).values
-    v = _interpolate_on_qgrid(map(sc.variances, curves), qgrid).values
+    r = _interpolate_on_qgrid(map(sc.values, curves.values()), qgrid).values
+    v = _interpolate_on_qgrid(map(sc.variances, curves.values()), qgrid).values
 
     def cost(scaling_factors):
         scaling_factors = np.concatenate([[1.0], scaling_factors])[:, None]
@@ -221,10 +381,17 @@ def scale_reflectivity_curves_to_overlap(
 
     sol = opt.minimize(cost, [1.0] * (len(curves) - 1))
     scaling_factors = (1.0, *map(float, sol.x))
-    return [
-        scaling_factor * curve
-        for scaling_factor, curve in zip(scaling_factors, curves, strict=True)
-    ], scaling_factors
+
+    results = {
+        k: v
+        for k, v in zip(curves.keys(), scaling_factors, strict=True)
+        if k != critical_edge_key
+    }
+    if not_collection:
+        results = results[""]
+    wfc[ScalingFactorForOverlap[SampleRun]] = results
+
+    return wfc
 
 
 def combine_curves(
@@ -279,58 +446,64 @@ def combine_curves(
     )
 
 
-def orso_datasets_from_measurements(
-    workflow: sciline.Pipeline,
-    runs: Sequence[Mapping[type, Any]],
-    *,
-    scale_to_overlap: bool = True,
-) -> list[OrsoDataset]:
-    '''Produces a list of ORSO datasets containing one
-    reflectivity curve for each of the provided runs.
-    Each entry of :code:`runs` is a mapping of parameters and
-    values needed to produce the dataset.
+def batch_processor(
+    workflow: sl.Pipeline, params: Mapping[Any, Mapping[type, Any]]
+) -> WorkflowCollection:
+    """
+    Maps the provided workflow over the provided params.
 
-    Optionally, the reflectivity curves can be scaled to overlap in
-    the regions where they have the same Q-value.
+    Example:
+
+    ```
+    from ess.reflectometry import amor, tools
+
+    workflow = amor.AmorWorkflow()
+
+    runs = {
+        '608': {
+            SampleRotationOffset[SampleRun]: sc.scalar(0.05, unit='deg'),
+            Filename[SampleRun]: amor.data.amor_run(608),
+        },
+        '609': {
+            SampleRotationOffset[SampleRun]: sc.scalar(0.06, unit='deg'),
+            Filename[SampleRun]: amor.data.amor_run(609),
+        },
+        '610': {
+            SampleRotationOffset[SampleRun]: sc.scalar(0.05, unit='deg'),
+            Filename[SampleRun]: amor.data.amor_run(610),
+        },
+        '611': {
+            SampleRotationOffset[SampleRun]: sc.scalar(0.07, unit='deg'),
+            Filename[SampleRun]: amor.data.amor_run(611),
+        },
+    }
+
+    batch = tools.batch_processor(workflow, runs)
+
+    results = batch.compute(ReflectivityOverQ)
+    ```
 
     Parameters
-    -----------
+    ----------
     workflow:
-        The sciline workflow used to compute `ReflectivityOverQ` for each of the runs.
+        The sciline workflow used to compute the targets for each of the runs.
+    params:
+        The sciline parameters to be used for each run.
+        Should be a mapping where the keys are the names of the runs
+        and the values are mappings of type to value pairs.
+    """
+    import pandas as pd
 
-    runs:
-        The sciline parameters to be used for each run
+    all_types = {t for v in params.values() for t in v.keys()}
+    data = {t: [] for t in all_types}
+    for param in params.values():
+        for t in all_types:
+            if t in param:
+                data[t].append(param[t])
+            else:
+                # Set the default value
+                data[t].append(workflow.compute(t))
 
-    scale_to_overlap:
-        If True the curves will be scaled to overlap.
-        Note that the curve of the first run is unscaled and
-        the rest are scaled to match it.
+    param_table = pd.DataFrame(data, index=params.keys()).rename_axis(index='run_id')
 
-    Returns
-    ---------
-    list of the computed ORSO datasets, containing one reflectivity curve each
-    '''
-    reflectivity_curves = []
-    for parameters in runs:
-        wf = workflow.copy()
-        for name, value in parameters.items():
-            wf[name] = value
-        reflectivity_curves.append(wf.compute(ReflectivityOverQ))
-
-    scale_factors = (
-        scale_reflectivity_curves_to_overlap([r.hist() for r in reflectivity_curves])[1]
-        if scale_to_overlap
-        else (1,) * len(runs)
-    )
-
-    datasets = []
-    for parameters, curve, scale_factor in zip(
-        runs, reflectivity_curves, scale_factors, strict=True
-    ):
-        wf = workflow.copy()
-        for name, value in parameters.items():
-            wf[name] = value
-        wf[ReflectivityOverQ] = scale_factor * curve
-        dataset = wf.compute(orso.OrsoIofQDataset)
-        datasets.append(dataset)
-    return datasets
+    return WorkflowCollection(workflow, param_table)
