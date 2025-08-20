@@ -8,14 +8,18 @@ from numpy.testing import assert_allclose as np_assert_allclose
 from orsopy.fileio import Orso, OrsoDataset
 from scipp.testing import assert_allclose
 
-from ess.reflectometry.orso import OrsoIofQDataset
 from ess.reflectometry.tools import (
     combine_curves,
+    from_measurements,
     linlogspace,
-    orso_datasets_from_measurements,
     scale_reflectivity_curves_to_overlap,
 )
-from ess.reflectometry.types import Filename, ReflectivityOverQ, SampleRun
+from ess.reflectometry.types import (
+    Filename,
+    ReducibleData,
+    ReflectivityOverQ,
+    SampleRun,
+)
 
 
 def curve(d, qmin, qmax):
@@ -225,11 +229,11 @@ def test_linlogspace_bad_input():
 
 
 @pytest.mark.filterwarnings("ignore:No suitable")
-def test_orso_datasets_tool():
+def test_from_measurements_tool_uses_expected_parameters_from_each_run():
     def normalized_ioq(filename: Filename[SampleRun]) -> ReflectivityOverQ:
         return filename
 
-    def orso_dataset(filename: Filename[SampleRun]) -> OrsoIofQDataset:
+    def orso_dataset(filename: Filename[SampleRun]) -> OrsoDataset:
         class Reduction:
             corrections = []  # noqa: RUF012
 
@@ -240,10 +244,103 @@ def test_orso_datasets_tool():
     workflow = sl.Pipeline(
         [normalized_ioq, orso_dataset], params={Filename[SampleRun]: 'default'}
     )
-    datasets = orso_datasets_from_measurements(
+    datasets = from_measurements(
         workflow,
         [{}, {Filename[SampleRun]: 'special'}],
+        target=OrsoDataset,
         scale_to_overlap=False,
     )
     assert len(datasets) == 2
     assert tuple(d.info.name for d in datasets) == ('default.orso', 'special.orso')
+
+
+@pytest.mark.parametrize('targets', [(int,), (float, int)])
+@pytest.mark.parametrize(
+    'params', [[{str: '1'}, {str: '2'}], {'a': {str: '1'}, 'b': {str: '2'}}]
+)
+def test_from_measurements_tool_returns_mapping_if_passed_mapping(params, targets):
+    def A(x: str) -> float:
+        return float(x)
+
+    def B(x: str) -> int:
+        return int(x)
+
+    workflow = sl.Pipeline([A, B])
+    datasets = from_measurements(
+        workflow,
+        params,
+        target=targets,
+    )
+    assert len(datasets) == len(params)
+    assert type(datasets) is type(params)
+
+
+def test_from_measurements_tool_does_not_recompute_reflectivity():
+    R = sc.DataArray(
+        sc.ones(dims=['Q'], shape=(50,), with_variances=True),
+        coords={'Q': sc.linspace('Q', 0.1, 1, 50)},
+    ).bin(Q=10)
+
+    times_evaluated = 0
+
+    def reflectivity() -> ReflectivityOverQ:
+        nonlocal times_evaluated
+        times_evaluated += 1
+        return ReflectivityOverQ(R)
+
+    def reducible_data() -> ReducibleData[SampleRun]:
+        return 'Not important'
+
+    pl = sl.Pipeline([reflectivity, reducible_data])
+
+    from_measurements(
+        pl,
+        [{}, {}],
+        target=(ReflectivityOverQ,),
+        scale_to_overlap=True,
+    )
+    assert times_evaluated == 2
+
+
+def test_from_measurements_tool_applies_scaling_to_reflectivityoverq():
+    R1 = sc.DataArray(
+        sc.ones(dims=['Q'], shape=(50,), with_variances=True),
+        coords={'Q': sc.linspace('Q', 0.1, 1, 50)},
+    ).bin(Q=10)
+    R2 = 0.5 * R1
+
+    def reducible_data() -> ReducibleData[SampleRun]:
+        return 'Not important'
+
+    pl = sl.Pipeline([reducible_data])
+
+    results = from_measurements(
+        pl,
+        [{ReflectivityOverQ: R1}, {ReflectivityOverQ: R2}],
+        target=(ReflectivityOverQ,),
+        scale_to_overlap=(sc.scalar(0.0), sc.scalar(1.0)),
+    )
+    assert_allclose(results[0][ReflectivityOverQ], results[1][ReflectivityOverQ])
+
+
+def test_from_measurements_tool_applies_scaling_to_reducibledata():
+    R1 = sc.DataArray(
+        sc.ones(dims=['Q'], shape=(50,), with_variances=True),
+        coords={'Q': sc.linspace('Q', 0.1, 1, 50)},
+    ).bin(Q=10)
+    R2 = 0.5 * R1
+
+    def reducible_data() -> ReducibleData[SampleRun]:
+        return sc.scalar(1)
+
+    pl = sl.Pipeline([reducible_data])
+
+    results = from_measurements(
+        pl,
+        [{ReflectivityOverQ: R1}, {ReflectivityOverQ: R2}],
+        target=(ReducibleData[SampleRun],),
+        scale_to_overlap=(sc.scalar(0.0), sc.scalar(1.0)),
+    )
+    assert_allclose(
+        results[0][ReducibleData[SampleRun]], 0.5 * results[1][ReducibleData[SampleRun]]
+    )
