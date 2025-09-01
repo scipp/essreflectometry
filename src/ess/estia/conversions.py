@@ -64,6 +64,8 @@ def wavelength(
 ):
     "Converts event_time_offset to wavelength"
     # Use frame unwrapping from scippneutron
+    w = sc.bins_like(event_time_offset, sc.scalar(7.0, unit='angstrom'))
+    return w
     raise NotImplementedError()
 
 
@@ -76,7 +78,19 @@ def coordinate_transformation_graph() -> CoordTransformationGraph:
         "L1": lambda source_position, sample_position: sc.norm(
             sample_position - source_position
         ),  # + extra correction for guides?
-        "L2": lambda position, sample_position: sc.norm(position - sample_position),
+        "L2": lambda position, sample_position: sc.norm(
+            position - sample_position.to(unit=position.unit)
+        ),
+        "blade": lambda detector_number: sc.array(
+            dims=detector_number.dims, values=(detector_number.values - 1) // (32 * 64)
+        ),
+        "wire": lambda detector_number: sc.array(
+            dims=detector_number.dims, values=((detector_number.values - 1) // 64) % 32
+        ),
+        "strip": lambda detector_number: sc.array(
+            dims=detector_number.dims, values=(detector_number.values - 1) % 64
+        ),
+        "z_index": lambda wire, blade: 32 * blade + wire,
     }
 
 

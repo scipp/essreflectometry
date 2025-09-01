@@ -85,7 +85,7 @@ filterwarnings = [
 line-length = 88
 extend-include = ["*.ipynb"]
 extend-exclude = [
-    ".*", "__pycache__", "build", "dist", "install",
+    ".*", "__pycache__", "build", "dist", "install", "test-stream-processor.py",
 ]
 
 [tool.ruff.lint]

@@ -12,9 +12,11 @@ from ..reflectometry.types import (
     BeamDivergenceLimits,
     CoordTransformationGraph,
     DetectorData,
+    DetectorRotation,
     ProtonCurrent,
     ReducibleData,
     RunType,
+    SampleRotation,
     WavelengthBins,
     YIndexLimits,
     ZIndexLimits,
@@ -29,13 +31,19 @@ def add_coords_masks_and_apply_corrections(
     bdlim: BeamDivergenceLimits,
     wbins: WavelengthBins,
     proton_current: ProtonCurrent[RunType],
+    sample_rotation: SampleRotation[RunType],
+    detector_rotation: DetectorRotation[RunType],
     graph: CoordTransformationGraph,
 ) -> ReducibleData[RunType]:
     """
     Computes coordinates, masks and corrections that are
     the same for the sample measurement and the reference measurement.
     """
+    da = da.assign_coords(
+        sample_rotation=sample_rotation, detector_rotation=detector_rotation
+    )
     da = add_coords(da, graph)
+    da = da.transform_coords(('blade', 'wire', 'strip', 'z_index'), graph)
     da = add_masks(da, ylim, zlims, bdlim, wbins)
     da = correct_by_footprint(da)
 
