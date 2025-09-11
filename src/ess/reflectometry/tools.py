@@ -1,14 +1,16 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2025 Scipp contributors (https://github.com/scipp)
 import uuid
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from itertools import chain
 from typing import Any
 
 import numpy as np
+import pandas as pd
 import sciline as sl
 import scipp as sc
 import scipy.optimize as opt
+from sciline.pipeline import _is_multiple_keys
 
 from ess.reflectometry.types import (
     QBins,
@@ -113,12 +115,23 @@ class WorkflowCollection:
     It can also be used to set parameters for all mapped nodes in a single shot.
     """
 
-    def __init__(self, workflow: sl.Pipeline, param_table):
+    def __init__(self, workflow: sl.Pipeline, param_table: pd.DataFrame | None):
         self._original_workflow = workflow.copy()
         self.param_table = param_table
-        self._mapped_workflow = self._original_workflow.map(self.param_table)
+        if self.param_table is not None:
+            self._mapped_workflow = self._original_workflow.map(self.param_table)
+        else:
+            self._mapped_workflow = self._original_workflow.copy()
+        # self._mapped_workflow = workflow.map(param_table)
+
+    # @classmethod
+    # def _from_mapped(cls, mapped_workflow) -> 'WorkflowCollection':
+    #     out = cls(sl.Pipeline(), {})
+    #     out._mapped_workflow = mapped_workflow.copy()
+    #     return out
 
     def __setitem__(self, key, value):
+        # TODO: the setitem is currently broken if the workflow has been grouped
         if key in self.param_table:
             ind = list(self.param_table.keys()).index(key)
             self.param_table.iloc[:, ind] = value
@@ -127,9 +140,20 @@ class WorkflowCollection:
             self.param_table.insert(len(self.param_table.columns), key, value)
             self._original_workflow[key] = None
             self._mapped_workflow = self._original_workflow.map(self.param_table)
+        # if sl.is_mapped_node(self._mapped_workflow, key):
+        #     targets = sl.get_mapped_node_names(self._mapped_workflow, key)
+        #     for k, v in value.items():
+        #         self._mapped_workflow[targets[k]] = v
+        # else:
+        #     self._mapped_workflow[key] = value
+
+    def __getitem__(self, key):
+        return WorkflowCollection(
+            workflow=self._original_workflow[key], param_table=self.param_table
+        )
 
     def compute(self, keys: type | Sequence[type], **kwargs) -> Mapping[str, Any]:
-        from sciline.pipeline import _is_multiple_keys
+        # from sciline.pipeline import _is_multiple_keys
 
         out = {}
         if not _is_multiple_keys(keys):
@@ -147,14 +171,56 @@ class WorkflowCollection:
 
     # TODO: implement get()
 
-    # TODO: implement the group() method to group by params in the parameter table
+    def groupby(
+        self, *, at: str | type, key: str | type, reduce: Callable
+    ) -> 'WorkflowCollection':
+        grouping_node_name = uuid.uuid4().hex
+        # grouped = (
+        #     self._original_workflow[at]
+        #     .map(self.param_table)
+        #     .groupby(key)
+        #     .reduce(key=at, func=reduce, name=grouping_node_name)
+        # )
+        # T = UnscaledReducibleData[SampleRun]
+
+        grouped = (
+            self._original_workflow.map(self.param_table)
+            .groupby(key)
+            .reduce(key=at, func=reduce, name=grouping_node_name)
+        )
+
+        new = self._original_workflow.copy()
+        new[at] = None
+        unique_groups = sl.get_mapped_node_names(grouped, grouping_node_name).index
+
+        # Note that we convert the key to a string, because pandas DataFrame does not
+        # support using types as index name.
+        str_key = str(key)
+        mapped = new.map(
+            pd.DataFrame(
+                {at: [None] * len(unique_groups), str_key: unique_groups}
+            ).set_index(str_key)
+        )
+
+        mapped[at] = grouped[grouping_node_name]
+        return WorkflowCollection(workflow=mapped, param_table=None)
 
     def visualize(self, targets, **kwargs):
-        targets = sl.get_mapped_node_names(self._mapped_workflow, targets)
-        return self._mapped_workflow.visualize(targets, **kwargs)
+        if not _is_multiple_keys(targets):
+            targets = [targets]
+        types = []
+        for t in targets:
+            if sl.is_mapped_node(self._mapped_workflow, t):
+                types.extend(sl.get_mapped_node_names(self._mapped_workflow, t))
+            else:
+                types.append(t)
+        key = types[0] if len(types) == 1 else types
+        # if sl.is_mapped_node(self._mapped_workflow, key):
+        # targets = sl.get_mapped_node_names(self._mapped_workflow, targets)
+        return self._mapped_workflow.visualize(key, **kwargs)
 
     def copy(self) -> 'WorkflowCollection':
-        return self.__class__(
+        return WorkflowCollection(
             workflow=self._original_workflow, param_table=self.param_table
         )
 
