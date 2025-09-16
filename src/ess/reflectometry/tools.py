@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2025 Scipp contributors (https://github.com/scipp)
+from __future__ import annotations
+
 import uuid
 from collections.abc import Callable, Mapping, Sequence
 from itertools import chain
@@ -16,6 +18,7 @@ from ess.reflectometry.types import (
     QBins,
     ReferenceRun,
     ReflectivityOverQ,
+    SampleRotation,
     SampleRun,
     ScalingFactorForOverlap,
     UnscaledReducibleData,
@@ -108,56 +111,64 @@ def linlogspace(
     return sc.concat(grids, dim)
 
 
-class WorkflowCollection:
-    """
-    A collection of sciline workflows that can be used to compute multiple
-    targets from mapping a workflow over a parameter table.
-    It can also be used to set parameters for all mapped nodes in a single shot.
-    """
+class BatchWorkflow:
+    """ """
 
     def __init__(
         self,
         workflow: sl.Pipeline,
-        param_table: pd.DataFrame,
-        groupings: list[dict] | None = None,
+        param_table: pd.DataFrame | None = None,
+        # groupings: list[dict] | None = None,
     ):
-        self._original_workflow = workflow.copy()
-        self.param_table = param_table.copy()
-        self._groupings = groupings.copy() if groupings is not None else []
-        # if self.param_table is not None:
-        #     self._mapped_workflow = self._original_workflow.map(self.param_table)
+        self.workflow = workflow.copy()
+        if param_table is not None:
+            self.workflow = self.workflow.map(param_table)
+
+    #     # self._original_workflow = workflow.copy()
+    #     # self.param_table = param_table.copy()
+    #     # self._groupings = groupings.copy() if groupings is not None else []
+    #     if self.param_table is not None:
+    #         self.workflow = self._original_workflow.map(self.param_table)
+    #     else:
+    #         self._mapped_workflow = self._original_workflow.copy()
+    #     # self._mapped_workflow = workflow.map(param_table)
+
+    # # @classmethod
+    # # def _from_mapped(cls, mapped_workflow) -> 'WorkflowCollection':
+    # #     out = cls(sl.Pipeline(), {})
+    # #     out._mapped_workflow = mapped_workflow.copy()
+    # #     return out
+
+    def __setitem__(self, key, value) -> None:
+        # # TODO: the setitem is currently broken if the workflow has been grouped
+        # if key in self.param_table:
+        #     ind = list(self.param_table.keys()).index(key)
+        #     self.param_table.iloc[:, ind] = value
+        #     # self._mapped_workflow = self._original_workflow.map(self.param_table)
         # else:
-        #     self._mapped_workflow = self._original_workflow.copy()
-        # self._mapped_workflow = workflow.map(param_table)
+        #     self._original_workflow[key] = value
+        #     # self.param_table.insert(len(self.param_table.columns), key, value)
+        #     # # self._original_workflow[key] = None
+        #     # self._mapped_workflow = self._original_workflow.map(self.param_table)
 
-    # @classmethod
-    # def _from_mapped(cls, mapped_workflow) -> 'WorkflowCollection':
-    #     out = cls(sl.Pipeline(), {})
-    #     out._mapped_workflow = mapped_workflow.copy()
-    #     return out
-
-    def __setitem__(self, key, value):
-        # TODO: the setitem is currently broken if the workflow has been grouped
-        if key in self.param_table:
-            ind = list(self.param_table.keys()).index(key)
-            self.param_table.iloc[:, ind] = value
-            # self._mapped_workflow = self._original_workflow.map(self.param_table)
+        # Setting a value that is in the original parameter table of the mapped workflow
+        # does not currently work (see https://github.com/scipp/sciline/issues/224)
+        # So we have to go and modify the underlying parameter table directly
+        if key in self.workflow._cbgraph._node_values._values:
+            self.workflow._cbgraph._node_values._values[key]._series.update(value)
         else:
-            self.param_table.insert(len(self.param_table.columns), key, value)
-            # self._original_workflow[key] = None
-            # self._mapped_workflow = self._original_workflow.map(self.param_table)
-        # if sl.is_mapped_node(self._mapped_workflow, key):
-        #     targets = sl.get_mapped_node_names(self._mapped_workflow, key)
-        #     for k, v in value.items():
-        #         self._mapped_workflow[targets[k]] = v
-        # else:
-        #     self._mapped_workflow[key] = value
+            if sl.is_mapped_node(self.workflow, key):
+                targets = sl.get_mapped_node_names(self.workflow, key)
+                for k, v in value.items():
+                    self.workflow[targets[k]] = v
+            else:
+                self.workflow[key] = value
 
-    def __getitem__(self, key):
-        return WorkflowCollection(
-            workflow=self._original_workflow[key],
-            param_table=self.param_table,
-            groupings=self._groupings,
+    def __getitem__(self, key) -> BatchWorkflow:
+        return BatchWorkflow(
+            workflow=self.workflow[key],
+            # param_table=self.param_table,
+            # groupings=self._groupings,
         )
 
     def compute(
@@ -168,125 +179,128 @@ class WorkflowCollection:
     ) -> Mapping[str, Any]:
         # from sciline.pipeline import _is_multiple_keys
 
-        mapped_workflow = self._build_workflow()
+        # mapped_workflow = self._build_workflow()
 
         out = {}
         if not _is_multiple_keys(keys):
             keys = [keys]
         for key in keys:
             out[key] = {}
-            if sl.is_mapped_node(mapped_workflow, key):
+            if sl.is_mapped_node(self.workflow, key):
                 targets = sl.get_mapped_node_names(
-                    mapped_workflow, key, index_names=index_names
+                    self.workflow, key, index_names=index_names
                 )
-                results = mapped_workflow.compute(targets, **kwargs)
+                results = self.workflow.compute(targets, **kwargs)
                 for node, v in results.items():
                     out[key][node.index.values[0]] = v
             else:
-                out[key] = mapped_workflow.compute(key, **kwargs)
+                out[key] = self.workflow.compute(key, **kwargs)
         return next(iter(out.values())) if len(out) == 1 else out
 
     # TODO: implement get()
 
-    def groupby(
-        self, *, at: str | type, key: str | type, reduce: Callable
-    ) -> 'WorkflowCollection':
-        return WorkflowCollection(
-            workflow=self._original_workflow,
-            param_table=self.param_table,
-            groupings=[*self._groupings, {'at': at, 'key': key, 'reduce': reduce}],
-        )
+    # TODO: adding groupby lead to too many headaches: having to keep the original
+    # workflow around so we could map over unique groups to re-attach the bottom part
+    # of the graph after grouping, having to then keep track of successive groupings
+    # because the workflow was being built from scratch each time, etc.
 
-    def _apply_groupings(self) -> sl.Pipeline:
-        # original_workflow = self._original_workflow.copy()
+    # # def groupby(
+    # #     self, *, at: str | type, key: str | type, reduce: Callable
+    # # ) -> 'WorkflowCollection':
+    # #     return WorkflowCollection(
+    # #         workflow=self._original_workflow,
+    # #         param_table=self.param_table,
+    # #         groupings=[*self._groupings, {'at': at, 'key': key, 'reduce': reduce}],
+    # #     )
 
-        # # Split the param table into the keys that are used for grouping and the rest
-        # grouping_table = self.param_table[
-        #     list({g['key'] for g in self._groupings})
-        # ].copy()
-        # mapping_table = self.param_table.drop(columns=grouping_table.columns)
+    # def _apply_groupings(self) -> sl.Pipeline:
+    #     # original_workflow = self._original_workflow.copy()
 
-        # TODO: should this only map the grouping table?
-        # grouped = self._original_workflow.map(self.param_table)
-        grouped = self._original_workflow.map(self.param_table)
-        node_names = []
-        for grouping in self._groupings:
-            at = grouping['at']
-            key = grouping['key']
-            reduce = grouping['reduce']
-            node_names.append(uuid.uuid4().hex)
-            grouped = (
-                # grouped.map(self.param_table)  # [at]
-                grouped.groupby(key).reduce(key=at, func=reduce, name=node_names[-1])
-            )
+    #     # # Split the param table into the keys that are used for grouping and the rest
+    #     # grouping_table = self.param_table[
+    #     #     list({g['key'] for g in self._groupings})
+    #     # ].copy()
+    #     # mapping_table = self.param_table.drop(columns=grouping_table.columns)
 
-        # new = self._original_workflow.map(mapping_table)
-        new = self._original_workflow.copy()
-        for name, grouping in zip(node_names, self._groupings, strict=True):
-            # new = self._original_workflow.copy()
-            at = grouping['at']
-            key = grouping['key']
-            reduce = grouping['reduce']
-            new[at] = None
-            unique_groups = sl.get_mapped_node_names(grouped, name).index
+    #     # TODO: should this only map the grouping table?
+    #     # grouped = self._original_workflow.map(self.param_table)
+    #     grouped = self._original_workflow.map(self.param_table)
+    #     node_names = []
+    #     for grouping in self._groupings:
+    #         at = grouping['at']
+    #         key = grouping['key']
+    #         reduce = grouping['reduce']
+    #         node_names.append(uuid.uuid4().hex)
+    #         grouped = (
+    #             # grouped.map(self.param_table)  # [at]
+    #             grouped.groupby(key).reduce(key=at, func=reduce, name=node_names[-1])
+    #         )
 
-            # Note that we convert the key to a string, because pandas DataFrame does
-            # not support using types as index name.
-            str_key = str(key)
-            new = new.map(
-                pd.DataFrame(
-                    {at: [None] * len(unique_groups), str_key: unique_groups}
-                ).set_index(str_key)
-            )
+    #     # new = self._original_workflow.map(mapping_table)
+    #     new = self._original_workflow.copy()
+    #     for name, grouping in zip(node_names, self._groupings, strict=True):
+    #         # new = self._original_workflow.copy()
+    #         at = grouping['at']
+    #         key = grouping['key']
+    #         reduce = grouping['reduce']
+    #         new[at] = None
+    #         unique_groups = sl.get_mapped_node_names(grouped, name).index
 
-        for name, grouping in zip(node_names, self._groupings, strict=True):
-            # at = grouping['at']
-            new[grouping['at']] = grouped[name]
+    #         # Note that we convert the key to a string, because pandas DataFrame does
+    #         # not support using types as index name.
+    #         str_key = str(key)
+    #         new = new.map(
+    #             pd.DataFrame(
+    #                 {at: [None] * len(unique_groups), str_key: unique_groups}
+    #             ).set_index(str_key)
+    #         )
 
-        # # Build param table from the entries in the mapping table that are not yet
-        # # mapped
-        # missing_keys = [
-        #     k for k in mapping_table.columns if not sl.is_mapped_node(new, k)
-        # ]
-        # print(f'Mapping missing keys: {missing_keys}')
-        # if missing_keys:
-        #     print("Mapping table", mapping_table[missing_keys])
-        #     new = new.map(mapping_table[missing_keys])
-        return new
-        # return WorkflowCollection(workflow=mapped, param_table=None)
+    #     for name, grouping in zip(node_names, self._groupings, strict=True):
+    #         # at = grouping['at']
+    #         new[grouping['at']] = grouped[name]
 
-    def _build_workflow(self) -> sl.Pipeline:
-        if not self._groupings:
-            return self._original_workflow.map(self.param_table)
-        else:
-            return self._apply_groupings()
+    #     # # Build param table from the entries in the mapping table that are not yet
+    #     # # mapped
+    #     # missing_keys = [
+    #     #     k for k in mapping_table.columns if not sl.is_mapped_node(new, k)
+    #     # ]
+    #     # print(f'Mapping missing keys: {missing_keys}')
+    #     # if missing_keys:
+    #     #     print("Mapping table", mapping_table[missing_keys])
+    #     #     new = new.map(mapping_table[missing_keys])
+    #     return new
+    #     # return WorkflowCollection(workflow=mapped, param_table=None)
+
+    # def _build_workflow(self) -> sl.Pipeline:
+    #     if not self._groupings:
+    #         return self._original_workflow.map(self.param_table)
+    #     else:
+    #         return self._apply_groupings()
 
     def visualize(
         self, targets, index_names: Sequence[Hashable] | None = None, **kwargs
     ):
-        mapped_workflow = self._build_workflow()
+        # mapped_workflow = self._build_workflow()
         if not _is_multiple_keys(targets):
             targets = [targets]
         types = []
         for t in targets:
-            if sl.is_mapped_node(mapped_workflow, t):
+            if sl.is_mapped_node(self.workflow, t):
                 types.extend(
-                    sl.get_mapped_node_names(
-                        mapped_workflow, t, index_names=index_names
-                    )
+                    sl.get_mapped_node_names(self.workflow, t, index_names=index_names)
                 )
             else:
                 types.append(t)
         key = types[0] if len(types) == 1 else types
         # if sl.is_mapped_node(self._mapped_workflow, key):
         # targets = sl.get_mapped_node_names(self._mapped_workflow, targets)
-        return mapped_workflow.visualize(key, **kwargs)
+        return self.workflow.visualize(key, **kwargs)
 
-    def copy(self) -> 'WorkflowCollection':
-        return WorkflowCollection(
-            workflow=self._original_workflow,
-            param_table=self.param_table,
-            groupings=None if not self._groupings else self._groupings,
+    def copy(self) -> BatchWorkflow:
+        return BatchWorkflow(
+            workflow=self.workflow,
+            # param_table=self.param_table,
+            # groupings=None if not self._groupings else self._groupings,
         )
 
 
@@ -350,7 +364,7 @@ def _interpolate_on_qgrid(curves, grid):
 
 
 def scale_reflectivity_curves_to_overlap(
-    workflow: WorkflowCollection | sl.Pipeline,
+    workflow: BatchWorkflow | sl.Pipeline,
     critical_edge_interval: tuple[sc.Variable, sc.Variable] | None = None,
     cache_intermediate_results: bool = True,
 ) -> tuple[list[sc.DataArray], list[sc.Variable]]:
@@ -385,25 +399,25 @@ def scale_reflectivity_curves_to_overlap(
     :
         A list of scaled reflectivity curves and a list of the scaling factors.
     '''
-    not_collection = isinstance(workflow, sl.Pipeline)
+    not_batch = isinstance(workflow, sl.Pipeline)
 
-    wfc = workflow.copy()
+    batch = workflow.copy()
     if cache_intermediate_results:
         try:
-            wfc[UnscaledReducibleData[SampleRun]] = wfc.compute(
+            batch[UnscaledReducibleData[SampleRun]] = batch.compute(
                 UnscaledReducibleData[SampleRun]
             )
         except sl.UnsatisfiedRequirement:
             pass
         try:
-            wfc[UnscaledReducibleData[ReferenceRun]] = wfc.compute(
+            batch[UnscaledReducibleData[ReferenceRun]] = batch.compute(
                 UnscaledReducibleData[ReferenceRun]
             )
         except sl.UnsatisfiedRequirement:
             pass
 
-    reflectivities = wfc.compute(ReflectivityOverQ)
-    if not_collection:
+    reflectivities = batch.compute(ReflectivityOverQ)
+    if not_batch:
         reflectivities = {"": reflectivities}
 
     # First sort the dict of reflectivities by the Q min value
@@ -416,7 +430,7 @@ def scale_reflectivity_curves_to_overlap(
 
     critical_edge_key = uuid.uuid4().hex
     if critical_edge_interval is not None:
-        q = wfc.compute(QBins)
+        q = batch.compute(QBins)
         if hasattr(q, "items"):
             # If QBins is a mapping, find the one with the lowest Q start
             # Note the conversion to a dict, because if pandas is used for the mapping,
@@ -463,11 +477,12 @@ def scale_reflectivity_curves_to_overlap(
         for k, v in zip(curves.keys(), scaling_factors, strict=True)
         if k != critical_edge_key
     }
-    if not_collection:
+    if not_batch:
         results = results[""]
-    wfc[ScalingFactorForOverlap[SampleRun]] = results
+    batch[ScalingFactorForOverlap[SampleRun]] = results
+    # return results
 
-    return wfc
+    return batch
 
 
 def combine_curves(
@@ -522,9 +537,73 @@ def combine_curves(
     )
 
 
+class NoParameter:
+    def __repr__(self):
+        return "<NOPARAM>"
+
+
+NO_PARAMETER = NoParameter()
+
+
+def parameter_table(params: Mapping[Any, Mapping[type, Any]]) -> pd.DataFrame:
+    """
+    Create a parameter table from the provided params.
+
+    Example:
+
+    ```
+    runs = {
+        '608': {
+            SampleRotationOffset[SampleRun]: sc.scalar(0.05, unit='deg'),
+            Filename[SampleRun]: amor.data.amor_run(608),
+        },
+        '609': {
+            SampleRotationOffset[SampleRun]: sc.scalar(0.06, unit='deg'),
+            Filename[SampleRun]: amor.data.amor_run(609),
+        },
+        '610': {
+            SampleRotationOffset[SampleRun]: sc.scalar(0.05, unit='deg'),
+            Filename[SampleRun]: amor.data.amor_run(610),
+        },
+        '611': {
+            SampleRotationOffset[SampleRun]: sc.scalar(0.07, unit='deg'),
+            Filename[SampleRun]: amor.data.amor_run(611),
+        },
+    }
+
+    param_table = parameter_table(runs)
+    ```
+
+    Parameters
+    ----------
+    params:
+        The sciline parameters to be used for each run.
+        Should be a mapping where the keys are the names of the runs
+        and the values are mappings of type to value pairs.
+    """
+    all_types = {t for v in params.values() for t in v.keys()}
+    data = {t: [] for t in all_types}
+    for param in params.values():
+        for t in all_types:
+            if t in param:
+                data[t].append(param[t])
+            else:
+                data[t].append(NO_PARAMETER)
+
+    return pd.DataFrame(data, index=params.keys()).rename_axis(index='run_id')
+
+
+def merge(*das):
+    da = sc.reduce(das).bins.concat()
+    missing_coords = set(das[0].coords) - set(da.coords)
+    return da.assign_coords({coord: das[0].coords[coord] for coord in missing_coords})
+
+
 def batch_processor(
-    workflow: sl.Pipeline, params: Mapping[Any, Mapping[type, Any]]
-) -> WorkflowCollection:
+    workflow: sl.Pipeline,
+    param_table: pd.DataFrame,
+    group_by_sample_rotation: bool = False,
+) -> BatchWorkflow:
     """
     Maps the provided workflow over the provided params.
 
@@ -554,7 +633,7 @@ def batch_processor(
         },
     }
 
-    batch = tools.batch_processor(workflow, runs)
+    batch = tools.batch_processor(workflow, parameter_table(runs))
 
     results = batch.compute(ReflectivityOverQ)
     ```
@@ -568,18 +647,142 @@ def batch_processor(
         Should be a mapping where the keys are the names of the runs
         and the values are mappings of type to value pairs.
     """
-    import pandas as pd
+    # import pandas as pd
 
-    all_types = {t for v in params.values() for t in v.keys()}
-    data = {t: [] for t in all_types}
-    for param in params.values():
-        for t in all_types:
-            if t in param:
-                data[t].append(param[t])
-            else:
-                # Set the default value
-                data[t].append(workflow.compute(t))
+    # all_types = {t for v in params.values() for t in v.keys()}
+    # data = {t: [] for t in all_types}
+    # for param in params.values():
+    #     for t in all_types:
+    #         if t in param:
+    #             data[t].append(param[t])
+    #         else:
+    #             # Set the default value
+    #             data[t].append(workflow.compute(t))
 
-    param_table = pd.DataFrame(data, index=params.keys()).rename_axis(index='run_id')
+    # param_table = parameter_table(params)
 
-    return WorkflowCollection(workflow, param_table)
+    param_table = param_table.copy()
+
+    # If ScaleingFactorForOverlap is not in the param table, add it
+    if ScalingFactorForOverlap[SampleRun] not in param_table:
+        param_table = param_table.join(
+            pd.DataFrame(
+                {ScalingFactorForOverlap[SampleRun]: [NO_PARAMETER] * len(param_table)},
+                index=param_table.index,
+            )
+        )
+
+    # Replace NO_PARAMETER entries by the default value
+    for icol, tp in enumerate(param_table.columns):
+        column = param_table.iloc[:, icol]
+        if NO_PARAMETER in column.values:
+            default = workflow.compute(tp)
+            column[column.values == NO_PARAMETER] = default
+
+    # TODO: If non-source nodes are in the param table, we need to remove them from the
+    # mapping and override them in the workflow afterwards
+
+    wf = BatchWorkflow(workflow, param_table)
+
+    if not group_by_sample_rotation:
+        return wf
+
+    # key = SampleRotation[SampleRun]
+
+    # Make a unique string key for the sample rotation. We don't use the
+    # SampleRotation from the graph because it is not a source node
+
+    at = UnscaledReducibleData[SampleRun]
+    key = SampleRotation[SampleRun]  # uuid.uuid4().hex
+    # Make a string key for the sample rotation. We don't use the
+    # SampleRotation from the graph because it is not a source node
+    str_key = str(key)
+
+    if key in param_table:
+        # If the sample rotation is already in the param table, we need to drop it
+        # from the param table because it is not a source node. Instead we copy the
+        # values from the param table to a new column with a unique name
+        pass
+
+    else:
+        # grouped = self._original_workflow.map(self.param_table)
+        # at = UnscaledReducibleData[SampleRun]
+        rotations = wf.compute(SampleRotation[SampleRun])
+        # scalings = wf.compute(ScalingFactorForOverlap[SampleRun])
+
+        # Groupby does not like Scipp variables, so we convert to floats for grouping
+        rotation_unit = next(iter(rotations.values())).unit
+        # TODO: make sure that the order of rotations is the same as in the param table
+        param_table = param_table.join(
+            pd.DataFrame(
+                {key: [r.to(unit=rotation_unit).value for r in rotations.values()]},
+                index=param_table.index,
+            )
+        )
+
+    # # Map again to add the sample rotation column
+    # wf = BatchWorkflow(workflow, param_table)
+
+    grouping_node_name = uuid.uuid4().hex
+
+    grouped = (
+        workflow.map(param_table)
+        .groupby(key)
+        .reduce(key=at, func=merge, name=grouping_node_name)
+    )
+
+    new = workflow.copy()
+    new[at] = None
+
+    unique_groups = sl.get_mapped_node_names(grouped, grouping_node_name).index
+
+    # Note that we convert the key to a string, because pandas DataFrame does
+    # not support using types as index name.
+    str_key = str(key)
+    scale = workflow.compute(ScalingFactorForOverlap[SampleRun])
+    new = new.map(
+        pd.DataFrame(
+            {
+                at: [None] * len(unique_groups),
+                str_key: unique_groups,
+                ScalingFactorForOverlap[SampleRun]: [scale] * len(unique_groups),
+            }
+        ).set_index(str_key)
+    )
+    new[at] = grouped[grouping_node_name]
+
+    # new = self._original_workflow.copy()
+    # for name, grouping in zip(node_names, self._groupings, strict=True):
+    #     # new = self._original_workflow.copy()
+    #     at = grouping['at']
+    #     key = grouping['key']
+    #     reduce = grouping['reduce']
+    #     new[at] = None
+    #     unique_groups = sl.get_mapped_node_names(grouped, name).index
+
+    #     # Note that we convert the key to a string, because pandas DataFrame does
+    #     # not support using types as index name.
+    #     str_key = str(key)
+    #     new = new.map(
+    #         pd.DataFrame(
+    #             {at: [None] * len(unique_groups), str_key: unique_groups}
+    #         ).set_index(str_key)
+    #     )
+
+    # for name, grouping in zip(node_names, self._groupings, strict=True):
+    #     # at = grouping['at']
+    #     new[grouping['at']] = grouped[name]
+
+    # # # Build param table from the entries in the mapping table that are not yet
+    # # # mapped
+    # # missing_keys = [
+    # #     k for k in mapping_table.columns if not sl.is_mapped_node(new, k)
+    # # ]
+    # # print(f'Mapping missing keys: {missing_keys}')
+    # # if missing_keys:
+    # #     print("Mapping table", mapping_table[missing_keys])
+    # #     new = new.map(mapping_table[missing_keys])
+    # return new
+    wf = BatchWorkflow(new)
+
+    return wf

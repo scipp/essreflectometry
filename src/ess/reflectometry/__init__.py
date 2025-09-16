@@ -12,7 +12,7 @@ except importlib.metadata.PackageNotFoundError:
 
 from . import conversions, corrections, figures, normalization, orso
 from .load import load_reference, save_reference
-from .tools import batch_processor
+from .tools import batch_processor, parameter_table
 
 providers = (
     *corrections.providers,
@@ -41,6 +41,7 @@ __all__ = [
     "load_reference",
     "normalization",
     "orso",
+    "parameter_table",
     "providers",
     "save_reference",
 ]
