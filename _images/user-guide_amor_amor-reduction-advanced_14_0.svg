@@ -1,0 +1,1966 @@
+
+        <svg xmlns="http://www.w3.org/2000/svg"
+            width="1681.5pt" height="1093.5pt">
+        <g transform="translate(0,0)">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 353)">
+<title>%3</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-353 2238,-353 2238,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_608</title>
+<path fill="none" stroke="black" d="M20,-8C20,-8 2214,-8 2214,-8 2220,-8 2226,-14 2226,-20 2226,-20 2226,-329 2226,-329 2226,-335 2220,-341 2214,-341 2214,-341 20,-341 20,-341 14,-341 8,-335 8,-329 8,-329 8,-20 8,-20 8,-14 14,-8 20,-8"/>
+<text text-anchor="middle" x="1117" y="-325.8" font-family="Times,serif" font-size="14.00">608</text>
+</g>
+<!-- Alpha -->
+<g id="node1" class="node">
+<title>Alpha</title>
+<polygon fill="none" stroke="black" points="1476,-120.5 1419,-120.5 1419,-97.5 1476,-97.5 1476,-120.5"/>
+<text text-anchor="middle" x="1447.5" y="-105.3" font-family="Times,serif" font-size="14.00">Alpha</text>
+</g>
+<!-- Sample -->
+<g id="node30" class="node">
+<title>Sample</title>
+<polygon fill="none" stroke="black" points="1982,-179.5 1668,-179.5 1668,-146.5 1982,-146.5 1982,-179.5"/>
+<text text-anchor="start" x="1798" y="-165.3" font-family="Times,serif" font-size="14.00">Sample</text>
+<text text-anchor="start" x="1676" y="-153.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1697" y="-153.7" font-family="Times,serif" font-style="italic" font-size="11.00">mask_events_where_supermirror_does_not_cover</text>
+</g>
+<!-- Alpha&#45;&gt;Sample -->
+<g id="edge41" class="edge">
+<title>Alpha:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1477.5,-109C1530.64,-109 1545.39,-108.79 1596,-125 1626.96,-134.91 1631.2,-157.69 1657.98,-162.21"/>
+<polygon fill="black" stroke="black" points="1657.76,-165.7 1668,-163 1658.31,-158.73 1657.76,-165.7"/>
+</g>
+<!-- BeamDivergenceLimits -->
+<g id="node2" class="node">
+<title>BeamDivergenceLimits</title>
+<polygon fill="none" stroke="black" points="1206.5,-125.5 1023.5,-125.5 1023.5,-102.5 1206.5,-102.5 1206.5,-125.5"/>
+<text text-anchor="middle" x="1115" y="-110.3" font-family="Times,serif" font-size="14.00">BeamDivergenceLimits</text>
+</g>
+<!-- QBins -->
+<g id="node22" class="node">
+<title>QBins</title>
+<polygon fill="none" stroke="black" points="1481,-93.5 1414,-93.5 1414,-60.5 1481,-60.5 1481,-93.5"/>
+<text text-anchor="start" x="1426" y="-79.3" font-family="Times,serif" font-size="14.00">QBins</text>
+<text text-anchor="start" x="1422" y="-67.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1443" y="-67.7" font-family="Times,serif" font-style="italic" font-size="11.00">qgrid</text>
+</g>
+<!-- BeamDivergenceLimits&#45;&gt;QBins -->
+<g id="edge20" class="edge">
+<title>BeamDivergenceLimits:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M1208,-114C1228.88,-114 1360.34,-83.74 1402.39,-77.95"/>
+<polygon fill="black" stroke="black" points="1402.87,-81.42 1412.5,-77 1402.22,-74.45 1402.87,-81.42"/>
+</g>
+<!-- ReducibleData[SampleRun] -->
+<g id="node26" class="node">
+<title>ReducibleData[SampleRun]</title>
+<polygon fill="none" stroke="black" points="1583.5,-211.5 1311.5,-211.5 1311.5,-178.5 1583.5,-178.5 1583.5,-211.5"/>
+<text text-anchor="start" x="1349" y="-197.3" font-family="Times,serif" font-size="14.00">ReducibleData[SampleRun]</text>
+<text text-anchor="start" x="1319.5" y="-185.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1340.5" y="-185.7" font-family="Times,serif" font-style="italic" font-size="11.00">add_coords_masks_and_apply_corrections</text>
+</g>
+<!-- BeamDivergenceLimits&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge26" class="edge">
+<title>BeamDivergenceLimits:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1208,-114C1262.43,-114 1253.86,-185.19 1300.42,-194.09"/>
+<polygon fill="black" stroke="black" points="1300.23,-197.59 1310.5,-195 1300.86,-190.62 1300.23,-197.59"/>
+</g>
+<!-- BeamSize[SampleRun] -->
+<g id="node3" class="node">
+<title>BeamSize[SampleRun]</title>
+<polygon fill="none" stroke="black" points="896.5,-140.5 717.5,-140.5 717.5,-117.5 896.5,-117.5 896.5,-140.5"/>
+<text text-anchor="middle" x="807" y="-125.3" font-family="Times,serif" font-size="14.00">BeamSize[SampleRun]</text>
+</g>
+<!-- DetectorData[SampleRun] -->
+<g id="node13" class="node">
+<title>DetectorData[SampleRun]</title>
+<polygon fill="none" stroke="black" points="1217.5,-189.5 1012.5,-189.5 1012.5,-156.5 1217.5,-156.5 1217.5,-189.5"/>
+<text text-anchor="start" x="1020.5" y="-175.3" font-family="Times,serif" font-size="14.00">DetectorData[SampleRun]</text>
+<text text-anchor="start" x="1071" y="-163.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1092" y="-163.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_events</text>
+</g>
+<!-- BeamSize[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge12" class="edge">
+<title>BeamSize[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M898,-129C948.7,-129 956.76,-167.35 1001.8,-172.44"/>
+<polygon fill="black" stroke="black" points="1001.82,-175.95 1012,-173 1002.21,-168.96 1001.82,-175.95"/>
+</g>
+<!-- RawChopper[SampleRun] -->
+<g id="node4" class="node">
+<title>RawChopper[SampleRun]</title>
+<polygon fill="none" stroke="black" points="548,-193.5 348,-193.5 348,-160.5 548,-160.5 548,-193.5"/>
+<text text-anchor="start" x="356" y="-179.3" font-family="Times,serif" font-size="14.00">RawChopper[SampleRun]</text>
+<text text-anchor="start" x="397.5" y="-167.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="418.5" y="-167.7" font-family="Times,serif" font-style="italic" font-size="11.00">amor_chopper</text>
+</g>
+<!-- ChopperDistance[SampleRun] -->
+<g id="node5" class="node">
+<title>ChopperDistance[SampleRun]</title>
+<polygon fill="none" stroke="black" points="923,-184.5 691,-184.5 691,-151.5 923,-151.5 923,-184.5"/>
+<text text-anchor="start" x="699" y="-170.3" font-family="Times,serif" font-size="14.00">ChopperDistance[SampleRun]</text>
+<text text-anchor="start" x="715.5" y="-158.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="736.5" y="-158.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_chopper_distance</text>
+</g>
+<!-- RawChopper[SampleRun]&#45;&gt;ChopperDistance[SampleRun] -->
+<g id="edge1" class="edge">
+<title>RawChopper[SampleRun]:e&#45;&gt;ChopperDistance[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M549,-177C608.24,-177 625.31,-168.99 679.77,-168.08"/>
+<polygon fill="black" stroke="black" points="680.03,-171.58 690,-168 679.97,-164.58 680.03,-171.58"/>
+</g>
+<!-- ChopperSeparation[SampleRun] -->
+<g id="node8" class="node">
+<title>ChopperSeparation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="931,-221.5 683,-221.5 683,-188.5 931,-188.5 931,-221.5"/>
+<text text-anchor="start" x="691" y="-207.3" font-family="Times,serif" font-size="14.00">ChopperSeparation[SampleRun]</text>
+<text text-anchor="start" x="709" y="-195.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="730" y="-195.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_chopper_separation</text>
+</g>
+<!-- RawChopper[SampleRun]&#45;&gt;ChopperSeparation[SampleRun] -->
+<g id="edge2" class="edge">
+<title>RawChopper[SampleRun]:e&#45;&gt;ChopperSeparation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M549,-177C606.28,-177 620.55,-201.81 672.79,-204.72"/>
+<polygon fill="black" stroke="black" points="672.91,-208.23 683,-205 673.1,-201.23 672.91,-208.23"/>
+</g>
+<!-- ChopperDistance[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge9" class="edge">
+<title>ChopperDistance[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M924,-168C959.5,-168 970.76,-172.11 1001.71,-172.88"/>
+<polygon fill="black" stroke="black" points="1001.96,-176.38 1012,-173 1002.04,-169.38 1001.96,-176.38"/>
+</g>
+<!-- ChopperFrequency[SampleRun] -->
+<g id="node6" class="node">
+<title>ChopperFrequency[SampleRun]</title>
+<polygon fill="none" stroke="black" points="929.5,-113.5 684.5,-113.5 684.5,-90.5 929.5,-90.5 929.5,-113.5"/>
+<text text-anchor="middle" x="807" y="-98.3" font-family="Times,serif" font-size="14.00">ChopperFrequency[SampleRun]</text>
+</g>
+<!-- ChopperFrequency[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge8" class="edge">
+<title>ChopperFrequency[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M931,-102C975.13,-102 966.05,-162.34 1001.87,-171.77"/>
+<polygon fill="black" stroke="black" points="1001.65,-175.27 1012,-173 1002.5,-168.32 1001.65,-175.27"/>
+</g>
+<!-- ChopperPhase[SampleRun] -->
+<g id="node7" class="node">
+<title>ChopperPhase[SampleRun]</title>
+<polygon fill="none" stroke="black" points="913,-275.5 701,-275.5 701,-252.5 913,-252.5 913,-275.5"/>
+<text text-anchor="middle" x="807" y="-260.3" font-family="Times,serif" font-size="14.00">ChopperPhase[SampleRun]</text>
+</g>
+<!-- ChopperPhase[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge7" class="edge">
+<title>ChopperPhase[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M914,-264C969.72,-264 954.86,-184.02 1001.76,-174.02"/>
+<polygon fill="black" stroke="black" points="1002.4,-177.48 1012,-173 1001.7,-170.51 1002.4,-177.48"/>
+</g>
+<!-- ChopperSeparation[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge10" class="edge">
+<title>ChopperSeparation[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M931,-205C966.08,-205 972.31,-178.72 1001.98,-173.79"/>
+<polygon fill="black" stroke="black" points="1002.31,-177.28 1012,-173 1001.76,-170.3 1002.31,-177.28"/>
+</g>
+<!-- GravityToggle -->
+<g id="node9" class="node">
+<title>GravityToggle</title>
+<polygon fill="none" stroke="black" points="865.5,-309.5 748.5,-309.5 748.5,-286.5 865.5,-286.5 865.5,-309.5"/>
+<text text-anchor="middle" x="807" y="-294.3" font-family="Times,serif" font-size="14.00">GravityToggle</text>
+</g>
+<!-- CoordTransformationGraph -->
+<g id="node10" class="node">
+<title>CoordTransformationGraph</title>
+<polygon fill="none" stroke="black" points="1227,-309.5 1003,-309.5 1003,-276.5 1227,-276.5 1227,-309.5"/>
+<text text-anchor="start" x="1016" y="-295.3" font-family="Times,serif" font-size="14.00">CoordTransformationGraph</text>
+<text text-anchor="start" x="1011" y="-283.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1032" y="-283.7" font-family="Times,serif" font-style="italic" font-size="11.00">coordinate_transformation_graph</text>
+</g>
+<!-- GravityToggle&#45;&gt;CoordTransformationGraph -->
+<g id="edge3" class="edge">
+<title>GravityToggle:e&#45;&gt;CoordTransformationGraph:w</title>
+<path fill="none" stroke="black" d="M867,-298C923.94,-298 940.6,-293.57 992.82,-293.05"/>
+<polygon fill="black" stroke="black" points="993.02,-296.55 1003,-293 992.98,-289.55 993.02,-296.55"/>
+</g>
+<!-- CoordTransformationGraph&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge29" class="edge">
+<title>CoordTransformationGraph:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1227,-293C1280.53,-293 1256.9,-207.23 1300.49,-196.17"/>
+<polygon fill="black" stroke="black" points="1300.97,-199.64 1310.5,-195 1300.16,-192.68 1300.97,-199.64"/>
+</g>
+<!-- Reference -->
+<g id="node29" class="node">
+<title>Reference</title>
+<polygon fill="none" stroke="black" points="1950,-243.5 1700,-243.5 1700,-210.5 1950,-210.5 1950,-243.5"/>
+<text text-anchor="start" x="1788.5" y="-229.3" font-family="Times,serif" font-size="14.00">Reference</text>
+<text text-anchor="start" x="1708" y="-217.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1729" y="-217.7" font-family="Times,serif" font-style="italic" font-size="11.00">evaluate_reference_at_sample_coords</text>
+</g>
+<!-- CoordTransformationGraph&#45;&gt;Reference -->
+<g id="edge33" class="edge">
+<title>CoordTransformationGraph:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1227,-293C1391.38,-293 1435.7,-304.39 1596,-268 1640.58,-257.88 1648.69,-231.25 1688.97,-227.45"/>
+<polygon fill="black" stroke="black" points="1689.17,-230.95 1699,-227 1688.85,-223.95 1689.17,-230.95"/>
+</g>
+<!-- CriticalEdge -->
+<g id="node11" class="node">
+<title>CriticalEdge</title>
+<polygon fill="none" stroke="black" points="1500.5,-174.5 1394.5,-174.5 1394.5,-151.5 1500.5,-151.5 1500.5,-174.5"/>
+<text text-anchor="middle" x="1447.5" y="-159.3" font-family="Times,serif" font-size="14.00">CriticalEdge</text>
+</g>
+<!-- CriticalEdge&#45;&gt;Sample -->
+<g id="edge39" class="edge">
+<title>CriticalEdge:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1501.5,-163C1572.03,-163 1592.14,-163 1657.95,-163"/>
+<polygon fill="black" stroke="black" points="1658,-166.5 1668,-163 1658,-159.5 1658,-166.5"/>
+</g>
+<!-- NeXusComponent[NXdetector, SampleRun] -->
+<g id="node12" class="node">
+<title>NeXusComponent[NXdetector, SampleRun]</title>
+<polygon fill="none" stroke="black" points="611,-156.5 285,-156.5 285,-123.5 611,-123.5 611,-156.5"/>
+<text text-anchor="start" x="293" y="-142.3" font-family="Times,serif" font-size="14.00">NeXusComponent[NXdetector, SampleRun]</text>
+<text text-anchor="start" x="399" y="-130.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="420" y="-130.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_detector</text>
+</g>
+<!-- NeXusComponent[NXdetector, SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge4" class="edge">
+<title>NeXusComponent[NXdetector, SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M611,-140C646.58,-140 895.82,-145.69 931,-151 964.28,-156.02 973.08,-169.89 1001.89,-172.56"/>
+<polygon fill="black" stroke="black" points="1001.86,-176.06 1012,-173 1002.16,-169.06 1001.86,-176.06"/>
+</g>
+<!-- DetectorData[SampleRun]&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge23" class="edge">
+<title>DetectorData[SampleRun]:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1218,-173C1256.63,-173 1266.62,-191.38 1300.32,-194.54"/>
+<polygon fill="black" stroke="black" points="1300.35,-198.05 1310.5,-195 1300.67,-191.05 1300.35,-198.05"/>
+</g>
+<!-- DetectorRotation[SampleRun] -->
+<g id="node14" class="node">
+<title>DetectorRotation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="923,-49.5 691,-49.5 691,-16.5 923,-16.5 923,-49.5"/>
+<text text-anchor="start" x="699" y="-35.3" font-family="Times,serif" font-size="14.00">DetectorRotation[SampleRun]</text>
+<text text-anchor="start" x="715.5" y="-23.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="736.5" y="-23.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_detector_rotation</text>
+</g>
+<!-- DetectorRotation[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge5" class="edge">
+<title>DetectorRotation[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M924,-33C993.76,-33 944.16,-159.14 1001.79,-171.95"/>
+<polygon fill="black" stroke="black" points="1001.7,-175.46 1012,-173 1002.41,-168.5 1001.7,-175.46"/>
+</g>
+<!-- DetectorRotation[SampleRun]&#45;&gt;QBins -->
+<g id="edge17" class="edge">
+<title>DetectorRotation[SampleRun]:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M924,-33C1138.58,-33 1192.83,-75.64 1402.4,-76.97"/>
+<polygon fill="black" stroke="black" points="1402.49,-80.47 1412.5,-77 1402.51,-73.47 1402.49,-80.47"/>
+</g>
+<!-- SampleRotation[SampleRun] -->
+<g id="node15" class="node">
+<title>SampleRotation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="918.5,-86.5 695.5,-86.5 695.5,-53.5 918.5,-53.5 918.5,-86.5"/>
+<text text-anchor="start" x="703.5" y="-72.3" font-family="Times,serif" font-size="14.00">SampleRotation[SampleRun]</text>
+<text text-anchor="start" x="728" y="-60.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="749" y="-60.7" font-family="Times,serif" font-style="italic" font-size="11.00">correct_sample_rotation</text>
+</g>
+<!-- SampleRotation[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge6" class="edge">
+<title>SampleRotation[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M919,-70C976.94,-70 953.66,-160.9 1001.77,-171.91"/>
+<polygon fill="black" stroke="black" points="1001.69,-175.42 1012,-173 1002.43,-168.46 1001.69,-175.42"/>
+</g>
+<!-- SampleRotation[SampleRun]&#45;&gt;QBins -->
+<g id="edge18" class="edge">
+<title>SampleRotation[SampleRun]:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M919,-70C1134.93,-70 1191.39,-76.78 1402.34,-76.99"/>
+<polygon fill="black" stroke="black" points="1402.5,-80.49 1412.5,-77 1402.5,-73.49 1402.5,-80.49"/>
+</g>
+<!-- SampleSize[SampleRun] -->
+<g id="node16" class="node">
+<title>SampleSize[SampleRun]</title>
+<polygon fill="none" stroke="black" points="903,-248.5 711,-248.5 711,-225.5 903,-225.5 903,-248.5"/>
+<text text-anchor="middle" x="807" y="-233.3" font-family="Times,serif" font-size="14.00">SampleSize[SampleRun]</text>
+</g>
+<!-- SampleSize[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge11" class="edge">
+<title>SampleSize[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M904,-237C956.2,-237 956.42,-180.98 1001.92,-173.76"/>
+<polygon fill="black" stroke="black" points="1002.29,-177.25 1012,-173 1001.76,-170.27 1002.29,-177.25"/>
+</g>
+<!-- Filename[SampleRun] -->
+<g id="node17" class="node">
+<title>Filename[SampleRun]</title>
+<polygon fill="none" stroke="black" points="202,-164.5 27,-164.5 27,-141.5 202,-141.5 202,-164.5"/>
+<text text-anchor="middle" x="114.5" y="-149.3" font-family="Times,serif" font-size="14.00">Filename[SampleRun]</text>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;RawChopper[SampleRun] -->
+<g id="edge21" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;RawChopper[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C264.63,-153 280.64,-174.45 336.83,-176.79"/>
+<polygon fill="black" stroke="black" points="336.93,-180.3 347,-177 337.07,-173.3 336.93,-180.3"/>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;NeXusComponent[NXdetector, SampleRun] -->
+<g id="edge14" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;NeXusComponent[NXdetector, SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C236.45,-153 246.37,-142.51 274.65,-140.38"/>
+<polygon fill="black" stroke="black" points="275.13,-143.86 285,-140 274.88,-136.86 275.13,-143.86"/>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;DetectorRotation[SampleRun] -->
+<g id="edge13" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;DetectorRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C261.18,-153 233.56,-78.09 285,-52 442.65,27.95 507.33,-30.67 679.83,-32.93"/>
+<polygon fill="black" stroke="black" points="679.98,-36.43 690,-33 680.02,-29.43 679.98,-36.43"/>
+</g>
+<!-- ProtonCurrent[SampleRun] -->
+<g id="node21" class="node">
+<title>ProtonCurrent[SampleRun]</title>
+<polygon fill="none" stroke="black" points="554.5,-263.5 341.5,-263.5 341.5,-230.5 554.5,-230.5 554.5,-263.5"/>
+<text text-anchor="start" x="349.5" y="-249.3" font-family="Times,serif" font-size="14.00">ProtonCurrent[SampleRun]</text>
+<text text-anchor="start" x="363.5" y="-237.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="384.5" y="-237.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_proton_current</text>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;ProtonCurrent[SampleRun] -->
+<g id="edge16" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;ProtonCurrent[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C273.91,-153 267.8,-238.04 330.74,-246.35"/>
+<polygon fill="black" stroke="black" points="330.8,-249.86 341,-247 331.24,-242.87 330.8,-249.86"/>
+</g>
+<!-- RawSampleRotation[SampleRun] -->
+<g id="node24" class="node">
+<title>RawSampleRotation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="575,-86.5 321,-86.5 321,-53.5 575,-53.5 575,-86.5"/>
+<text text-anchor="start" x="329" y="-72.3" font-family="Times,serif" font-size="14.00">RawSampleRotation[SampleRun]</text>
+<text text-anchor="start" x="360" y="-60.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="381" y="-60.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_sample_rotation</text>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;RawSampleRotation[SampleRun] -->
+<g id="edge22" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;RawSampleRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C263.47,-153 257.39,-79.14 309.88,-70.77"/>
+<polygon fill="black" stroke="black" points="310.29,-74.25 320,-70 309.76,-67.27 310.29,-74.25"/>
+</g>
+<!-- DetectorSpatialResolution[SampleRun] -->
+<g id="node18" class="node">
+<title>DetectorSpatialResolution[SampleRun]</title>
+<polygon fill="none" stroke="black" points="1596,-265.5 1299,-265.5 1299,-242.5 1596,-242.5 1596,-265.5"/>
+<text text-anchor="middle" x="1447.5" y="-250.3" font-family="Times,serif" font-size="14.00">DetectorSpatialResolution[SampleRun]</text>
+</g>
+<!-- DetectorSpatialResolution[SampleRun]&#45;&gt;Reference -->
+<g id="edge32" class="edge">
+<title>DetectorSpatialResolution[SampleRun]:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1596,-254C1639.63,-254 1650.13,-231.05 1688.58,-227.47"/>
+<polygon fill="black" stroke="black" points="1689.17,-230.95 1699,-227 1688.85,-223.95 1689.17,-230.95"/>
+</g>
+<!-- MValue -->
+<g id="node19" class="node">
+<title>MValue</title>
+<polygon fill="none" stroke="black" points="1482.5,-147.5 1412.5,-147.5 1412.5,-124.5 1482.5,-124.5 1482.5,-147.5"/>
+<text text-anchor="middle" x="1447.5" y="-132.3" font-family="Times,serif" font-size="14.00">MValue</text>
+</g>
+<!-- MValue&#45;&gt;Sample -->
+<g id="edge40" class="edge">
+<title>MValue:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1483.5,-136C1534,-136 1546.04,-144.63 1596,-152 1624.4,-156.19 1633.59,-161.6 1657.88,-162.77"/>
+<polygon fill="black" stroke="black" points="1657.92,-166.27 1668,-163 1658.08,-159.27 1657.92,-166.27"/>
+</g>
+<!-- NeXusName[NXdetector] -->
+<g id="node20" class="node">
+<title>NeXusName[NXdetector]</title>
+<polygon fill="none" stroke="black" points="213,-137.5 16,-137.5 16,-114.5 213,-114.5 213,-137.5"/>
+<text text-anchor="middle" x="114.5" y="-122.3" font-family="Times,serif" font-size="14.00">NeXusName[NXdetector]</text>
+</g>
+<!-- NeXusName[NXdetector]&#45;&gt;NeXusComponent[NXdetector, SampleRun] -->
+<g id="edge15" class="edge">
+<title>NeXusName[NXdetector]:e&#45;&gt;NeXusComponent[NXdetector, SampleRun]:w</title>
+<path fill="none" stroke="black" d="M213,-126C241.91,-126 250.53,-137.01 274.84,-139.5"/>
+<polygon fill="black" stroke="black" points="274.84,-143.01 285,-140 275.18,-136.01 274.84,-143.01"/>
+</g>
+<!-- ProtonCurrent[SampleRun]&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge28" class="edge">
+<title>ProtonCurrent[SampleRun]:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M555,-247C613.33,-247 625.03,-269.52 683,-276 737.77,-282.13 876.77,-285.83 931,-276 964.63,-269.9 970.03,-257.99 1003,-249 1133.47,-213.41 1169.91,-195.9 1300.13,-195.03"/>
+<polygon fill="black" stroke="black" points="1300.51,-198.53 1310.5,-195 1300.49,-191.53 1300.51,-198.53"/>
+</g>
+<!-- ReflectivityOverQ -->
+<g id="node31" class="node">
+<title>ReflectivityOverQ</title>
+<polygon fill="none" stroke="black" points="2218,-179.5 2054,-179.5 2054,-146.5 2218,-146.5 2218,-179.5"/>
+<text text-anchor="start" x="2072.5" y="-165.3" font-family="Times,serif" font-size="14.00">ReflectivityOverQ</text>
+<text text-anchor="start" x="2062" y="-153.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="2083" y="-153.7" font-family="Times,serif" font-style="italic" font-size="11.00">reduce_sample_over_q</text>
+</g>
+<!-- QBins&#45;&gt;ReflectivityOverQ -->
+<g id="edge36" class="edge">
+<title>QBins:e&#45;&gt;ReflectivityOverQ:w</title>
+<path fill="none" stroke="black" d="M1482.5,-77C1706.55,-77 1761.99,-102.66 1982,-145 2010.72,-150.53 2019.18,-160.41 2043.73,-162.57"/>
+<polygon fill="black" stroke="black" points="2043.86,-166.08 2054,-163 2044.15,-159.09 2043.86,-166.08"/>
+</g>
+<!-- WavelengthBins -->
+<g id="node23" class="node">
+<title>WavelengthBins</title>
+<polygon fill="none" stroke="black" points="1181,-98.5 1049,-98.5 1049,-75.5 1181,-75.5 1181,-98.5"/>
+<text text-anchor="middle" x="1115" y="-83.3" font-family="Times,serif" font-size="14.00">WavelengthBins</text>
+</g>
+<!-- WavelengthBins&#45;&gt;QBins -->
+<g id="edge19" class="edge">
+<title>WavelengthBins:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M1182,-87C1281.04,-87 1308.13,-77.67 1402.25,-77.03"/>
+<polygon fill="black" stroke="black" points="1402.51,-80.53 1412.5,-77 1402.49,-73.53 1402.51,-80.53"/>
+</g>
+<!-- WavelengthBins&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge27" class="edge">
+<title>WavelengthBins:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1182,-87C1203.23,-87 1209.33,-91.23 1227,-103 1269.9,-131.58 1257.35,-186.98 1300.42,-194.21"/>
+<polygon fill="black" stroke="black" points="1300.26,-197.71 1310.5,-195 1300.8,-190.73 1300.26,-197.71"/>
+</g>
+<!-- RawSampleRotation[SampleRun]&#45;&gt;SampleRotation[SampleRun] -->
+<g id="edge42" class="edge">
+<title>RawSampleRotation[SampleRun]:e&#45;&gt;SampleRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M576,-70C625.38,-70 640.18,-70 684.97,-70"/>
+<polygon fill="black" stroke="black" points="685,-73.5 695,-70 685,-66.5 685,-73.5"/>
+</g>
+<!-- ReducedReference -->
+<g id="node25" class="node">
+<title>ReducedReference</title>
+<polygon fill="none" stroke="black" points="1522.5,-238.5 1372.5,-238.5 1372.5,-215.5 1522.5,-215.5 1522.5,-238.5"/>
+<text text-anchor="middle" x="1447.5" y="-223.3" font-family="Times,serif" font-size="14.00">ReducedReference</text>
+</g>
+<!-- ReducedReference&#45;&gt;Reference -->
+<g id="edge30" class="edge">
+<title>ReducedReference:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1523.5,-227C1598,-227 1619.13,-227 1688.83,-227"/>
+<polygon fill="black" stroke="black" points="1689,-230.5 1699,-227 1689,-223.5 1689,-230.5"/>
+</g>
+<!-- ReducedReference&#45;&gt;Sample -->
+<g id="edge38" class="edge">
+<title>ReducedReference:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1523.5,-227C1556.4,-227 1565.7,-224.84 1596,-212 1628.16,-198.37 1629.39,-169.44 1657.76,-163.92"/>
+<polygon fill="black" stroke="black" points="1658.35,-167.38 1668,-163 1657.73,-160.41 1658.35,-167.38"/>
+</g>
+<!-- ReducibleData[SampleRun]&#45;&gt;Reference -->
+<g id="edge31" class="edge">
+<title>ReducibleData[SampleRun]:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1584.5,-195C1633.73,-195 1644.75,-222.77 1688.75,-226.57"/>
+<polygon fill="black" stroke="black" points="1688.86,-230.08 1699,-227 1689.15,-223.09 1688.86,-230.08"/>
+</g>
+<!-- ReducibleData[SampleRun]&#45;&gt;Sample -->
+<g id="edge37" class="edge">
+<title>ReducibleData[SampleRun]:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1584.5,-195C1620.52,-195 1627.19,-168.72 1657.71,-163.79"/>
+<polygon fill="black" stroke="black" points="1658.3,-167.26 1668,-163 1657.76,-160.28 1658.3,-167.26"/>
+</g>
+<!-- YIndexLimits -->
+<g id="node27" class="node">
+<title>YIndexLimits</title>
+<polygon fill="none" stroke="black" points="1170,-152.5 1060,-152.5 1060,-129.5 1170,-129.5 1170,-152.5"/>
+<text text-anchor="middle" x="1115" y="-137.3" font-family="Times,serif" font-size="14.00">YIndexLimits</text>
+</g>
+<!-- YIndexLimits&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge24" class="edge">
+<title>YIndexLimits:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1171,-141C1196.88,-141 1202.71,-148.06 1227,-157 1261.83,-169.82 1268.65,-190.78 1300.34,-194.45"/>
+<polygon fill="black" stroke="black" points="1300.32,-197.95 1310.5,-195 1300.71,-190.96 1300.32,-197.95"/>
+</g>
+<!-- ZIndexLimits -->
+<g id="node28" class="node">
+<title>ZIndexLimits</title>
+<polygon fill="none" stroke="black" points="1170.5,-272.5 1059.5,-272.5 1059.5,-249.5 1170.5,-249.5 1170.5,-272.5"/>
+<text text-anchor="middle" x="1115" y="-257.3" font-family="Times,serif" font-size="14.00">ZIndexLimits</text>
+</g>
+<!-- ZIndexLimits&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge25" class="edge">
+<title>ZIndexLimits:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1171,-261C1196.77,-261 1203.32,-256.15 1227,-246 1263.53,-230.34 1266.71,-200.7 1300.2,-195.72"/>
+<polygon fill="black" stroke="black" points="1300.77,-199.19 1310.5,-195 1300.28,-192.2 1300.77,-199.19"/>
+</g>
+<!-- Reference&#45;&gt;ReflectivityOverQ -->
+<g id="edge35" class="edge">
+<title>Reference:e&#45;&gt;ReflectivityOverQ:w</title>
+<path fill="none" stroke="black" d="M1951,-227C2001.32,-227 2000.48,-171.22 2044.01,-163.81"/>
+<polygon fill="black" stroke="black" points="2044.32,-167.3 2054,-163 2043.75,-160.32 2044.32,-167.3"/>
+</g>
+<!-- Sample&#45;&gt;ReflectivityOverQ -->
+<g id="edge34" class="edge">
+<title>Sample:e&#45;&gt;ReflectivityOverQ:w</title>
+<path fill="none" stroke="black" d="M1982,-163C2010.38,-163 2019.88,-163 2043.98,-163"/>
+<polygon fill="black" stroke="black" points="2044,-166.5 2054,-163 2044,-159.5 2044,-166.5"/>
+</g>
+<!-- SampleRotationOffset[SampleRun] -->
+<g id="node32" class="node">
+<title>SampleRotationOffset[SampleRun]</title>
+<polygon fill="none" stroke="black" points="581,-113.5 315,-113.5 315,-90.5 581,-90.5 581,-113.5"/>
+<text text-anchor="middle" x="448" y="-98.3" font-family="Times,serif" font-size="14.00">SampleRotationOffset[SampleRun]</text>
+</g>
+<!-- SampleRotationOffset[SampleRun]&#45;&gt;SampleRotation[SampleRun] -->
+<g id="edge43" class="edge">
+<title>SampleRotationOffset[SampleRun]:e&#45;&gt;SampleRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M582,-102C630.63,-102 641.42,-74.23 684.88,-70.43"/>
+<polygon fill="black" stroke="black" points="685.16,-73.92 695,-70 684.86,-66.93 685.16,-73.92"/>
+</g>
+</g>
+</g><g transform="translate(0,367.0)">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 353)">
+<title>%3</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-353 2238,-353 2238,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_609</title>
+<path fill="none" stroke="black" d="M20,-8C20,-8 2214,-8 2214,-8 2220,-8 2226,-14 2226,-20 2226,-20 2226,-329 2226,-329 2226,-335 2220,-341 2214,-341 2214,-341 20,-341 20,-341 14,-341 8,-335 8,-329 8,-329 8,-20 8,-20 8,-14 14,-8 20,-8"/>
+<text text-anchor="middle" x="1117" y="-325.8" font-family="Times,serif" font-size="14.00">609</text>
+</g>
+<!-- Alpha -->
+<g id="node1" class="node">
+<title>Alpha</title>
+<polygon fill="none" stroke="black" points="1476,-120.5 1419,-120.5 1419,-97.5 1476,-97.5 1476,-120.5"/>
+<text text-anchor="middle" x="1447.5" y="-105.3" font-family="Times,serif" font-size="14.00">Alpha</text>
+</g>
+<!-- Sample -->
+<g id="node30" class="node">
+<title>Sample</title>
+<polygon fill="none" stroke="black" points="1982,-179.5 1668,-179.5 1668,-146.5 1982,-146.5 1982,-179.5"/>
+<text text-anchor="start" x="1798" y="-165.3" font-family="Times,serif" font-size="14.00">Sample</text>
+<text text-anchor="start" x="1676" y="-153.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1697" y="-153.7" font-family="Times,serif" font-style="italic" font-size="11.00">mask_events_where_supermirror_does_not_cover</text>
+</g>
+<!-- Alpha&#45;&gt;Sample -->
+<g id="edge41" class="edge">
+<title>Alpha:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1477.5,-109C1530.64,-109 1545.39,-108.79 1596,-125 1626.96,-134.91 1631.2,-157.69 1657.98,-162.21"/>
+<polygon fill="black" stroke="black" points="1657.76,-165.7 1668,-163 1658.31,-158.73 1657.76,-165.7"/>
+</g>
+<!-- BeamDivergenceLimits -->
+<g id="node2" class="node">
+<title>BeamDivergenceLimits</title>
+<polygon fill="none" stroke="black" points="1206.5,-125.5 1023.5,-125.5 1023.5,-102.5 1206.5,-102.5 1206.5,-125.5"/>
+<text text-anchor="middle" x="1115" y="-110.3" font-family="Times,serif" font-size="14.00">BeamDivergenceLimits</text>
+</g>
+<!-- QBins -->
+<g id="node22" class="node">
+<title>QBins</title>
+<polygon fill="none" stroke="black" points="1481,-93.5 1414,-93.5 1414,-60.5 1481,-60.5 1481,-93.5"/>
+<text text-anchor="start" x="1426" y="-79.3" font-family="Times,serif" font-size="14.00">QBins</text>
+<text text-anchor="start" x="1422" y="-67.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1443" y="-67.7" font-family="Times,serif" font-style="italic" font-size="11.00">qgrid</text>
+</g>
+<!-- BeamDivergenceLimits&#45;&gt;QBins -->
+<g id="edge20" class="edge">
+<title>BeamDivergenceLimits:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M1208,-114C1228.88,-114 1360.34,-83.74 1402.39,-77.95"/>
+<polygon fill="black" stroke="black" points="1402.87,-81.42 1412.5,-77 1402.22,-74.45 1402.87,-81.42"/>
+</g>
+<!-- ReducibleData[SampleRun] -->
+<g id="node26" class="node">
+<title>ReducibleData[SampleRun]</title>
+<polygon fill="none" stroke="black" points="1583.5,-211.5 1311.5,-211.5 1311.5,-178.5 1583.5,-178.5 1583.5,-211.5"/>
+<text text-anchor="start" x="1349" y="-197.3" font-family="Times,serif" font-size="14.00">ReducibleData[SampleRun]</text>
+<text text-anchor="start" x="1319.5" y="-185.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1340.5" y="-185.7" font-family="Times,serif" font-style="italic" font-size="11.00">add_coords_masks_and_apply_corrections</text>
+</g>
+<!-- BeamDivergenceLimits&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge26" class="edge">
+<title>BeamDivergenceLimits:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1208,-114C1262.43,-114 1253.86,-185.19 1300.42,-194.09"/>
+<polygon fill="black" stroke="black" points="1300.23,-197.59 1310.5,-195 1300.86,-190.62 1300.23,-197.59"/>
+</g>
+<!-- BeamSize[SampleRun] -->
+<g id="node3" class="node">
+<title>BeamSize[SampleRun]</title>
+<polygon fill="none" stroke="black" points="896.5,-140.5 717.5,-140.5 717.5,-117.5 896.5,-117.5 896.5,-140.5"/>
+<text text-anchor="middle" x="807" y="-125.3" font-family="Times,serif" font-size="14.00">BeamSize[SampleRun]</text>
+</g>
+<!-- DetectorData[SampleRun] -->
+<g id="node13" class="node">
+<title>DetectorData[SampleRun]</title>
+<polygon fill="none" stroke="black" points="1217.5,-189.5 1012.5,-189.5 1012.5,-156.5 1217.5,-156.5 1217.5,-189.5"/>
+<text text-anchor="start" x="1020.5" y="-175.3" font-family="Times,serif" font-size="14.00">DetectorData[SampleRun]</text>
+<text text-anchor="start" x="1071" y="-163.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1092" y="-163.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_events</text>
+</g>
+<!-- BeamSize[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge12" class="edge">
+<title>BeamSize[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M898,-129C948.7,-129 956.76,-167.35 1001.8,-172.44"/>
+<polygon fill="black" stroke="black" points="1001.82,-175.95 1012,-173 1002.21,-168.96 1001.82,-175.95"/>
+</g>
+<!-- RawChopper[SampleRun] -->
+<g id="node4" class="node">
+<title>RawChopper[SampleRun]</title>
+<polygon fill="none" stroke="black" points="548,-193.5 348,-193.5 348,-160.5 548,-160.5 548,-193.5"/>
+<text text-anchor="start" x="356" y="-179.3" font-family="Times,serif" font-size="14.00">RawChopper[SampleRun]</text>
+<text text-anchor="start" x="397.5" y="-167.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="418.5" y="-167.7" font-family="Times,serif" font-style="italic" font-size="11.00">amor_chopper</text>
+</g>
+<!-- ChopperDistance[SampleRun] -->
+<g id="node5" class="node">
+<title>ChopperDistance[SampleRun]</title>
+<polygon fill="none" stroke="black" points="923,-184.5 691,-184.5 691,-151.5 923,-151.5 923,-184.5"/>
+<text text-anchor="start" x="699" y="-170.3" font-family="Times,serif" font-size="14.00">ChopperDistance[SampleRun]</text>
+<text text-anchor="start" x="715.5" y="-158.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="736.5" y="-158.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_chopper_distance</text>
+</g>
+<!-- RawChopper[SampleRun]&#45;&gt;ChopperDistance[SampleRun] -->
+<g id="edge1" class="edge">
+<title>RawChopper[SampleRun]:e&#45;&gt;ChopperDistance[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M549,-177C608.24,-177 625.31,-168.99 679.77,-168.08"/>
+<polygon fill="black" stroke="black" points="680.03,-171.58 690,-168 679.97,-164.58 680.03,-171.58"/>
+</g>
+<!-- ChopperSeparation[SampleRun] -->
+<g id="node8" class="node">
+<title>ChopperSeparation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="931,-221.5 683,-221.5 683,-188.5 931,-188.5 931,-221.5"/>
+<text text-anchor="start" x="691" y="-207.3" font-family="Times,serif" font-size="14.00">ChopperSeparation[SampleRun]</text>
+<text text-anchor="start" x="709" y="-195.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="730" y="-195.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_chopper_separation</text>
+</g>
+<!-- RawChopper[SampleRun]&#45;&gt;ChopperSeparation[SampleRun] -->
+<g id="edge2" class="edge">
+<title>RawChopper[SampleRun]:e&#45;&gt;ChopperSeparation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M549,-177C606.28,-177 620.55,-201.81 672.79,-204.72"/>
+<polygon fill="black" stroke="black" points="672.91,-208.23 683,-205 673.1,-201.23 672.91,-208.23"/>
+</g>
+<!-- ChopperDistance[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge9" class="edge">
+<title>ChopperDistance[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M924,-168C959.5,-168 970.76,-172.11 1001.71,-172.88"/>
+<polygon fill="black" stroke="black" points="1001.96,-176.38 1012,-173 1002.04,-169.38 1001.96,-176.38"/>
+</g>
+<!-- ChopperFrequency[SampleRun] -->
+<g id="node6" class="node">
+<title>ChopperFrequency[SampleRun]</title>
+<polygon fill="none" stroke="black" points="929.5,-113.5 684.5,-113.5 684.5,-90.5 929.5,-90.5 929.5,-113.5"/>
+<text text-anchor="middle" x="807" y="-98.3" font-family="Times,serif" font-size="14.00">ChopperFrequency[SampleRun]</text>
+</g>
+<!-- ChopperFrequency[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge8" class="edge">
+<title>ChopperFrequency[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M931,-102C975.13,-102 966.05,-162.34 1001.87,-171.77"/>
+<polygon fill="black" stroke="black" points="1001.65,-175.27 1012,-173 1002.5,-168.32 1001.65,-175.27"/>
+</g>
+<!-- ChopperPhase[SampleRun] -->
+<g id="node7" class="node">
+<title>ChopperPhase[SampleRun]</title>
+<polygon fill="none" stroke="black" points="913,-275.5 701,-275.5 701,-252.5 913,-252.5 913,-275.5"/>
+<text text-anchor="middle" x="807" y="-260.3" font-family="Times,serif" font-size="14.00">ChopperPhase[SampleRun]</text>
+</g>
+<!-- ChopperPhase[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge7" class="edge">
+<title>ChopperPhase[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M914,-264C969.72,-264 954.86,-184.02 1001.76,-174.02"/>
+<polygon fill="black" stroke="black" points="1002.4,-177.48 1012,-173 1001.7,-170.51 1002.4,-177.48"/>
+</g>
+<!-- ChopperSeparation[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge10" class="edge">
+<title>ChopperSeparation[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M931,-205C966.08,-205 972.31,-178.72 1001.98,-173.79"/>
+<polygon fill="black" stroke="black" points="1002.31,-177.28 1012,-173 1001.76,-170.3 1002.31,-177.28"/>
+</g>
+<!-- GravityToggle -->
+<g id="node9" class="node">
+<title>GravityToggle</title>
+<polygon fill="none" stroke="black" points="865.5,-309.5 748.5,-309.5 748.5,-286.5 865.5,-286.5 865.5,-309.5"/>
+<text text-anchor="middle" x="807" y="-294.3" font-family="Times,serif" font-size="14.00">GravityToggle</text>
+</g>
+<!-- CoordTransformationGraph -->
+<g id="node10" class="node">
+<title>CoordTransformationGraph</title>
+<polygon fill="none" stroke="black" points="1227,-309.5 1003,-309.5 1003,-276.5 1227,-276.5 1227,-309.5"/>
+<text text-anchor="start" x="1016" y="-295.3" font-family="Times,serif" font-size="14.00">CoordTransformationGraph</text>
+<text text-anchor="start" x="1011" y="-283.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1032" y="-283.7" font-family="Times,serif" font-style="italic" font-size="11.00">coordinate_transformation_graph</text>
+</g>
+<!-- GravityToggle&#45;&gt;CoordTransformationGraph -->
+<g id="edge3" class="edge">
+<title>GravityToggle:e&#45;&gt;CoordTransformationGraph:w</title>
+<path fill="none" stroke="black" d="M867,-298C923.94,-298 940.6,-293.57 992.82,-293.05"/>
+<polygon fill="black" stroke="black" points="993.02,-296.55 1003,-293 992.98,-289.55 993.02,-296.55"/>
+</g>
+<!-- CoordTransformationGraph&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge29" class="edge">
+<title>CoordTransformationGraph:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1227,-293C1280.53,-293 1256.9,-207.23 1300.49,-196.17"/>
+<polygon fill="black" stroke="black" points="1300.97,-199.64 1310.5,-195 1300.16,-192.68 1300.97,-199.64"/>
+</g>
+<!-- Reference -->
+<g id="node29" class="node">
+<title>Reference</title>
+<polygon fill="none" stroke="black" points="1950,-243.5 1700,-243.5 1700,-210.5 1950,-210.5 1950,-243.5"/>
+<text text-anchor="start" x="1788.5" y="-229.3" font-family="Times,serif" font-size="14.00">Reference</text>
+<text text-anchor="start" x="1708" y="-217.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1729" y="-217.7" font-family="Times,serif" font-style="italic" font-size="11.00">evaluate_reference_at_sample_coords</text>
+</g>
+<!-- CoordTransformationGraph&#45;&gt;Reference -->
+<g id="edge33" class="edge">
+<title>CoordTransformationGraph:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1227,-293C1391.38,-293 1435.7,-304.39 1596,-268 1640.58,-257.88 1648.69,-231.25 1688.97,-227.45"/>
+<polygon fill="black" stroke="black" points="1689.17,-230.95 1699,-227 1688.85,-223.95 1689.17,-230.95"/>
+</g>
+<!-- CriticalEdge -->
+<g id="node11" class="node">
+<title>CriticalEdge</title>
+<polygon fill="none" stroke="black" points="1500.5,-174.5 1394.5,-174.5 1394.5,-151.5 1500.5,-151.5 1500.5,-174.5"/>
+<text text-anchor="middle" x="1447.5" y="-159.3" font-family="Times,serif" font-size="14.00">CriticalEdge</text>
+</g>
+<!-- CriticalEdge&#45;&gt;Sample -->
+<g id="edge39" class="edge">
+<title>CriticalEdge:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1501.5,-163C1572.03,-163 1592.14,-163 1657.95,-163"/>
+<polygon fill="black" stroke="black" points="1658,-166.5 1668,-163 1658,-159.5 1658,-166.5"/>
+</g>
+<!-- NeXusComponent[NXdetector, SampleRun] -->
+<g id="node12" class="node">
+<title>NeXusComponent[NXdetector, SampleRun]</title>
+<polygon fill="none" stroke="black" points="611,-156.5 285,-156.5 285,-123.5 611,-123.5 611,-156.5"/>
+<text text-anchor="start" x="293" y="-142.3" font-family="Times,serif" font-size="14.00">NeXusComponent[NXdetector, SampleRun]</text>
+<text text-anchor="start" x="399" y="-130.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="420" y="-130.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_detector</text>
+</g>
+<!-- NeXusComponent[NXdetector, SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge4" class="edge">
+<title>NeXusComponent[NXdetector, SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M611,-140C646.58,-140 895.82,-145.69 931,-151 964.28,-156.02 973.08,-169.89 1001.89,-172.56"/>
+<polygon fill="black" stroke="black" points="1001.86,-176.06 1012,-173 1002.16,-169.06 1001.86,-176.06"/>
+</g>
+<!-- DetectorData[SampleRun]&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge23" class="edge">
+<title>DetectorData[SampleRun]:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1218,-173C1256.63,-173 1266.62,-191.38 1300.32,-194.54"/>
+<polygon fill="black" stroke="black" points="1300.35,-198.05 1310.5,-195 1300.67,-191.05 1300.35,-198.05"/>
+</g>
+<!-- DetectorRotation[SampleRun] -->
+<g id="node14" class="node">
+<title>DetectorRotation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="923,-49.5 691,-49.5 691,-16.5 923,-16.5 923,-49.5"/>
+<text text-anchor="start" x="699" y="-35.3" font-family="Times,serif" font-size="14.00">DetectorRotation[SampleRun]</text>
+<text text-anchor="start" x="715.5" y="-23.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="736.5" y="-23.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_detector_rotation</text>
+</g>
+<!-- DetectorRotation[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge5" class="edge">
+<title>DetectorRotation[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M924,-33C993.76,-33 944.16,-159.14 1001.79,-171.95"/>
+<polygon fill="black" stroke="black" points="1001.7,-175.46 1012,-173 1002.41,-168.5 1001.7,-175.46"/>
+</g>
+<!-- DetectorRotation[SampleRun]&#45;&gt;QBins -->
+<g id="edge17" class="edge">
+<title>DetectorRotation[SampleRun]:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M924,-33C1138.58,-33 1192.83,-75.64 1402.4,-76.97"/>
+<polygon fill="black" stroke="black" points="1402.49,-80.47 1412.5,-77 1402.51,-73.47 1402.49,-80.47"/>
+</g>
+<!-- SampleRotation[SampleRun] -->
+<g id="node15" class="node">
+<title>SampleRotation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="918.5,-86.5 695.5,-86.5 695.5,-53.5 918.5,-53.5 918.5,-86.5"/>
+<text text-anchor="start" x="703.5" y="-72.3" font-family="Times,serif" font-size="14.00">SampleRotation[SampleRun]</text>
+<text text-anchor="start" x="728" y="-60.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="749" y="-60.7" font-family="Times,serif" font-style="italic" font-size="11.00">correct_sample_rotation</text>
+</g>
+<!-- SampleRotation[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge6" class="edge">
+<title>SampleRotation[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M919,-70C976.94,-70 953.66,-160.9 1001.77,-171.91"/>
+<polygon fill="black" stroke="black" points="1001.69,-175.42 1012,-173 1002.43,-168.46 1001.69,-175.42"/>
+</g>
+<!-- SampleRotation[SampleRun]&#45;&gt;QBins -->
+<g id="edge18" class="edge">
+<title>SampleRotation[SampleRun]:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M919,-70C1134.93,-70 1191.39,-76.78 1402.34,-76.99"/>
+<polygon fill="black" stroke="black" points="1402.5,-80.49 1412.5,-77 1402.5,-73.49 1402.5,-80.49"/>
+</g>
+<!-- SampleSize[SampleRun] -->
+<g id="node16" class="node">
+<title>SampleSize[SampleRun]</title>
+<polygon fill="none" stroke="black" points="903,-248.5 711,-248.5 711,-225.5 903,-225.5 903,-248.5"/>
+<text text-anchor="middle" x="807" y="-233.3" font-family="Times,serif" font-size="14.00">SampleSize[SampleRun]</text>
+</g>
+<!-- SampleSize[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge11" class="edge">
+<title>SampleSize[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M904,-237C956.2,-237 956.42,-180.98 1001.92,-173.76"/>
+<polygon fill="black" stroke="black" points="1002.29,-177.25 1012,-173 1001.76,-170.27 1002.29,-177.25"/>
+</g>
+<!-- Filename[SampleRun] -->
+<g id="node17" class="node">
+<title>Filename[SampleRun]</title>
+<polygon fill="none" stroke="black" points="202,-164.5 27,-164.5 27,-141.5 202,-141.5 202,-164.5"/>
+<text text-anchor="middle" x="114.5" y="-149.3" font-family="Times,serif" font-size="14.00">Filename[SampleRun]</text>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;RawChopper[SampleRun] -->
+<g id="edge21" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;RawChopper[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C264.63,-153 280.64,-174.45 336.83,-176.79"/>
+<polygon fill="black" stroke="black" points="336.93,-180.3 347,-177 337.07,-173.3 336.93,-180.3"/>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;NeXusComponent[NXdetector, SampleRun] -->
+<g id="edge14" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;NeXusComponent[NXdetector, SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C236.45,-153 246.37,-142.51 274.65,-140.38"/>
+<polygon fill="black" stroke="black" points="275.13,-143.86 285,-140 274.88,-136.86 275.13,-143.86"/>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;DetectorRotation[SampleRun] -->
+<g id="edge13" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;DetectorRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C261.18,-153 233.56,-78.09 285,-52 442.65,27.95 507.33,-30.67 679.83,-32.93"/>
+<polygon fill="black" stroke="black" points="679.98,-36.43 690,-33 680.02,-29.43 679.98,-36.43"/>
+</g>
+<!-- ProtonCurrent[SampleRun] -->
+<g id="node21" class="node">
+<title>ProtonCurrent[SampleRun]</title>
+<polygon fill="none" stroke="black" points="554.5,-263.5 341.5,-263.5 341.5,-230.5 554.5,-230.5 554.5,-263.5"/>
+<text text-anchor="start" x="349.5" y="-249.3" font-family="Times,serif" font-size="14.00">ProtonCurrent[SampleRun]</text>
+<text text-anchor="start" x="363.5" y="-237.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="384.5" y="-237.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_proton_current</text>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;ProtonCurrent[SampleRun] -->
+<g id="edge16" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;ProtonCurrent[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C273.91,-153 267.8,-238.04 330.74,-246.35"/>
+<polygon fill="black" stroke="black" points="330.8,-249.86 341,-247 331.24,-242.87 330.8,-249.86"/>
+</g>
+<!-- RawSampleRotation[SampleRun] -->
+<g id="node24" class="node">
+<title>RawSampleRotation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="575,-86.5 321,-86.5 321,-53.5 575,-53.5 575,-86.5"/>
+<text text-anchor="start" x="329" y="-72.3" font-family="Times,serif" font-size="14.00">RawSampleRotation[SampleRun]</text>
+<text text-anchor="start" x="360" y="-60.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="381" y="-60.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_sample_rotation</text>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;RawSampleRotation[SampleRun] -->
+<g id="edge22" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;RawSampleRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C263.47,-153 257.39,-79.14 309.88,-70.77"/>
+<polygon fill="black" stroke="black" points="310.29,-74.25 320,-70 309.76,-67.27 310.29,-74.25"/>
+</g>
+<!-- DetectorSpatialResolution[SampleRun] -->
+<g id="node18" class="node">
+<title>DetectorSpatialResolution[SampleRun]</title>
+<polygon fill="none" stroke="black" points="1596,-265.5 1299,-265.5 1299,-242.5 1596,-242.5 1596,-265.5"/>
+<text text-anchor="middle" x="1447.5" y="-250.3" font-family="Times,serif" font-size="14.00">DetectorSpatialResolution[SampleRun]</text>
+</g>
+<!-- DetectorSpatialResolution[SampleRun]&#45;&gt;Reference -->
+<g id="edge32" class="edge">
+<title>DetectorSpatialResolution[SampleRun]:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1596,-254C1639.63,-254 1650.13,-231.05 1688.58,-227.47"/>
+<polygon fill="black" stroke="black" points="1689.17,-230.95 1699,-227 1688.85,-223.95 1689.17,-230.95"/>
+</g>
+<!-- MValue -->
+<g id="node19" class="node">
+<title>MValue</title>
+<polygon fill="none" stroke="black" points="1482.5,-147.5 1412.5,-147.5 1412.5,-124.5 1482.5,-124.5 1482.5,-147.5"/>
+<text text-anchor="middle" x="1447.5" y="-132.3" font-family="Times,serif" font-size="14.00">MValue</text>
+</g>
+<!-- MValue&#45;&gt;Sample -->
+<g id="edge40" class="edge">
+<title>MValue:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1483.5,-136C1534,-136 1546.04,-144.63 1596,-152 1624.4,-156.19 1633.59,-161.6 1657.88,-162.77"/>
+<polygon fill="black" stroke="black" points="1657.92,-166.27 1668,-163 1658.08,-159.27 1657.92,-166.27"/>
+</g>
+<!-- NeXusName[NXdetector] -->
+<g id="node20" class="node">
+<title>NeXusName[NXdetector]</title>
+<polygon fill="none" stroke="black" points="213,-137.5 16,-137.5 16,-114.5 213,-114.5 213,-137.5"/>
+<text text-anchor="middle" x="114.5" y="-122.3" font-family="Times,serif" font-size="14.00">NeXusName[NXdetector]</text>
+</g>
+<!-- NeXusName[NXdetector]&#45;&gt;NeXusComponent[NXdetector, SampleRun] -->
+<g id="edge15" class="edge">
+<title>NeXusName[NXdetector]:e&#45;&gt;NeXusComponent[NXdetector, SampleRun]:w</title>
+<path fill="none" stroke="black" d="M213,-126C241.91,-126 250.53,-137.01 274.84,-139.5"/>
+<polygon fill="black" stroke="black" points="274.84,-143.01 285,-140 275.18,-136.01 274.84,-143.01"/>
+</g>
+<!-- ProtonCurrent[SampleRun]&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge28" class="edge">
+<title>ProtonCurrent[SampleRun]:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M555,-247C613.33,-247 625.03,-269.52 683,-276 737.77,-282.13 876.77,-285.83 931,-276 964.63,-269.9 970.03,-257.99 1003,-249 1133.47,-213.41 1169.91,-195.9 1300.13,-195.03"/>
+<polygon fill="black" stroke="black" points="1300.51,-198.53 1310.5,-195 1300.49,-191.53 1300.51,-198.53"/>
+</g>
+<!-- ReflectivityOverQ -->
+<g id="node31" class="node">
+<title>ReflectivityOverQ</title>
+<polygon fill="none" stroke="black" points="2218,-179.5 2054,-179.5 2054,-146.5 2218,-146.5 2218,-179.5"/>
+<text text-anchor="start" x="2072.5" y="-165.3" font-family="Times,serif" font-size="14.00">ReflectivityOverQ</text>
+<text text-anchor="start" x="2062" y="-153.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="2083" y="-153.7" font-family="Times,serif" font-style="italic" font-size="11.00">reduce_sample_over_q</text>
+</g>
+<!-- QBins&#45;&gt;ReflectivityOverQ -->
+<g id="edge36" class="edge">
+<title>QBins:e&#45;&gt;ReflectivityOverQ:w</title>
+<path fill="none" stroke="black" d="M1482.5,-77C1706.55,-77 1761.99,-102.66 1982,-145 2010.72,-150.53 2019.18,-160.41 2043.73,-162.57"/>
+<polygon fill="black" stroke="black" points="2043.86,-166.08 2054,-163 2044.15,-159.09 2043.86,-166.08"/>
+</g>
+<!-- WavelengthBins -->
+<g id="node23" class="node">
+<title>WavelengthBins</title>
+<polygon fill="none" stroke="black" points="1181,-98.5 1049,-98.5 1049,-75.5 1181,-75.5 1181,-98.5"/>
+<text text-anchor="middle" x="1115" y="-83.3" font-family="Times,serif" font-size="14.00">WavelengthBins</text>
+</g>
+<!-- WavelengthBins&#45;&gt;QBins -->
+<g id="edge19" class="edge">
+<title>WavelengthBins:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M1182,-87C1281.04,-87 1308.13,-77.67 1402.25,-77.03"/>
+<polygon fill="black" stroke="black" points="1402.51,-80.53 1412.5,-77 1402.49,-73.53 1402.51,-80.53"/>
+</g>
+<!-- WavelengthBins&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge27" class="edge">
+<title>WavelengthBins:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1182,-87C1203.23,-87 1209.33,-91.23 1227,-103 1269.9,-131.58 1257.35,-186.98 1300.42,-194.21"/>
+<polygon fill="black" stroke="black" points="1300.26,-197.71 1310.5,-195 1300.8,-190.73 1300.26,-197.71"/>
+</g>
+<!-- RawSampleRotation[SampleRun]&#45;&gt;SampleRotation[SampleRun] -->
+<g id="edge42" class="edge">
+<title>RawSampleRotation[SampleRun]:e&#45;&gt;SampleRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M576,-70C625.38,-70 640.18,-70 684.97,-70"/>
+<polygon fill="black" stroke="black" points="685,-73.5 695,-70 685,-66.5 685,-73.5"/>
+</g>
+<!-- ReducedReference -->
+<g id="node25" class="node">
+<title>ReducedReference</title>
+<polygon fill="none" stroke="black" points="1522.5,-238.5 1372.5,-238.5 1372.5,-215.5 1522.5,-215.5 1522.5,-238.5"/>
+<text text-anchor="middle" x="1447.5" y="-223.3" font-family="Times,serif" font-size="14.00">ReducedReference</text>
+</g>
+<!-- ReducedReference&#45;&gt;Reference -->
+<g id="edge30" class="edge">
+<title>ReducedReference:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1523.5,-227C1598,-227 1619.13,-227 1688.83,-227"/>
+<polygon fill="black" stroke="black" points="1689,-230.5 1699,-227 1689,-223.5 1689,-230.5"/>
+</g>
+<!-- ReducedReference&#45;&gt;Sample -->
+<g id="edge38" class="edge">
+<title>ReducedReference:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1523.5,-227C1556.4,-227 1565.7,-224.84 1596,-212 1628.16,-198.37 1629.39,-169.44 1657.76,-163.92"/>
+<polygon fill="black" stroke="black" points="1658.35,-167.38 1668,-163 1657.73,-160.41 1658.35,-167.38"/>
+</g>
+<!-- ReducibleData[SampleRun]&#45;&gt;Reference -->
+<g id="edge31" class="edge">
+<title>ReducibleData[SampleRun]:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1584.5,-195C1633.73,-195 1644.75,-222.77 1688.75,-226.57"/>
+<polygon fill="black" stroke="black" points="1688.86,-230.08 1699,-227 1689.15,-223.09 1688.86,-230.08"/>
+</g>
+<!-- ReducibleData[SampleRun]&#45;&gt;Sample -->
+<g id="edge37" class="edge">
+<title>ReducibleData[SampleRun]:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1584.5,-195C1620.52,-195 1627.19,-168.72 1657.71,-163.79"/>
+<polygon fill="black" stroke="black" points="1658.3,-167.26 1668,-163 1657.76,-160.28 1658.3,-167.26"/>
+</g>
+<!-- YIndexLimits -->
+<g id="node27" class="node">
+<title>YIndexLimits</title>
+<polygon fill="none" stroke="black" points="1170,-152.5 1060,-152.5 1060,-129.5 1170,-129.5 1170,-152.5"/>
+<text text-anchor="middle" x="1115" y="-137.3" font-family="Times,serif" font-size="14.00">YIndexLimits</text>
+</g>
+<!-- YIndexLimits&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge24" class="edge">
+<title>YIndexLimits:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1171,-141C1196.88,-141 1202.71,-148.06 1227,-157 1261.83,-169.82 1268.65,-190.78 1300.34,-194.45"/>
+<polygon fill="black" stroke="black" points="1300.32,-197.95 1310.5,-195 1300.71,-190.96 1300.32,-197.95"/>
+</g>
+<!-- ZIndexLimits -->
+<g id="node28" class="node">
+<title>ZIndexLimits</title>
+<polygon fill="none" stroke="black" points="1170.5,-272.5 1059.5,-272.5 1059.5,-249.5 1170.5,-249.5 1170.5,-272.5"/>
+<text text-anchor="middle" x="1115" y="-257.3" font-family="Times,serif" font-size="14.00">ZIndexLimits</text>
+</g>
+<!-- ZIndexLimits&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge25" class="edge">
+<title>ZIndexLimits:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1171,-261C1196.77,-261 1203.32,-256.15 1227,-246 1263.53,-230.34 1266.71,-200.7 1300.2,-195.72"/>
+<polygon fill="black" stroke="black" points="1300.77,-199.19 1310.5,-195 1300.28,-192.2 1300.77,-199.19"/>
+</g>
+<!-- Reference&#45;&gt;ReflectivityOverQ -->
+<g id="edge35" class="edge">
+<title>Reference:e&#45;&gt;ReflectivityOverQ:w</title>
+<path fill="none" stroke="black" d="M1951,-227C2001.32,-227 2000.48,-171.22 2044.01,-163.81"/>
+<polygon fill="black" stroke="black" points="2044.32,-167.3 2054,-163 2043.75,-160.32 2044.32,-167.3"/>
+</g>
+<!-- Sample&#45;&gt;ReflectivityOverQ -->
+<g id="edge34" class="edge">
+<title>Sample:e&#45;&gt;ReflectivityOverQ:w</title>
+<path fill="none" stroke="black" d="M1982,-163C2010.38,-163 2019.88,-163 2043.98,-163"/>
+<polygon fill="black" stroke="black" points="2044,-166.5 2054,-163 2044,-159.5 2044,-166.5"/>
+</g>
+<!-- SampleRotationOffset[SampleRun] -->
+<g id="node32" class="node">
+<title>SampleRotationOffset[SampleRun]</title>
+<polygon fill="none" stroke="black" points="581,-113.5 315,-113.5 315,-90.5 581,-90.5 581,-113.5"/>
+<text text-anchor="middle" x="448" y="-98.3" font-family="Times,serif" font-size="14.00">SampleRotationOffset[SampleRun]</text>
+</g>
+<!-- SampleRotationOffset[SampleRun]&#45;&gt;SampleRotation[SampleRun] -->
+<g id="edge43" class="edge">
+<title>SampleRotationOffset[SampleRun]:e&#45;&gt;SampleRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M582,-102C630.63,-102 641.42,-74.23 684.88,-70.43"/>
+<polygon fill="black" stroke="black" points="685.16,-73.92 695,-70 684.86,-66.93 685.16,-73.92"/>
+</g>
+</g>
+</g><g transform="translate(0,734.0)">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 353)">
+<title>%3</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-353 2238,-353 2238,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_610</title>
+<path fill="none" stroke="black" d="M20,-8C20,-8 2214,-8 2214,-8 2220,-8 2226,-14 2226,-20 2226,-20 2226,-329 2226,-329 2226,-335 2220,-341 2214,-341 2214,-341 20,-341 20,-341 14,-341 8,-335 8,-329 8,-329 8,-20 8,-20 8,-14 14,-8 20,-8"/>
+<text text-anchor="middle" x="1117" y="-325.8" font-family="Times,serif" font-size="14.00">610</text>
+</g>
+<!-- Alpha -->
+<g id="node1" class="node">
+<title>Alpha</title>
+<polygon fill="none" stroke="black" points="1476,-120.5 1419,-120.5 1419,-97.5 1476,-97.5 1476,-120.5"/>
+<text text-anchor="middle" x="1447.5" y="-105.3" font-family="Times,serif" font-size="14.00">Alpha</text>
+</g>
+<!-- Sample -->
+<g id="node30" class="node">
+<title>Sample</title>
+<polygon fill="none" stroke="black" points="1982,-179.5 1668,-179.5 1668,-146.5 1982,-146.5 1982,-179.5"/>
+<text text-anchor="start" x="1798" y="-165.3" font-family="Times,serif" font-size="14.00">Sample</text>
+<text text-anchor="start" x="1676" y="-153.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1697" y="-153.7" font-family="Times,serif" font-style="italic" font-size="11.00">mask_events_where_supermirror_does_not_cover</text>
+</g>
+<!-- Alpha&#45;&gt;Sample -->
+<g id="edge41" class="edge">
+<title>Alpha:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1477.5,-109C1530.64,-109 1545.39,-108.79 1596,-125 1626.96,-134.91 1631.2,-157.69 1657.98,-162.21"/>
+<polygon fill="black" stroke="black" points="1657.76,-165.7 1668,-163 1658.31,-158.73 1657.76,-165.7"/>
+</g>
+<!-- BeamDivergenceLimits -->
+<g id="node2" class="node">
+<title>BeamDivergenceLimits</title>
+<polygon fill="none" stroke="black" points="1206.5,-125.5 1023.5,-125.5 1023.5,-102.5 1206.5,-102.5 1206.5,-125.5"/>
+<text text-anchor="middle" x="1115" y="-110.3" font-family="Times,serif" font-size="14.00">BeamDivergenceLimits</text>
+</g>
+<!-- QBins -->
+<g id="node22" class="node">
+<title>QBins</title>
+<polygon fill="none" stroke="black" points="1481,-93.5 1414,-93.5 1414,-60.5 1481,-60.5 1481,-93.5"/>
+<text text-anchor="start" x="1426" y="-79.3" font-family="Times,serif" font-size="14.00">QBins</text>
+<text text-anchor="start" x="1422" y="-67.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1443" y="-67.7" font-family="Times,serif" font-style="italic" font-size="11.00">qgrid</text>
+</g>
+<!-- BeamDivergenceLimits&#45;&gt;QBins -->
+<g id="edge20" class="edge">
+<title>BeamDivergenceLimits:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M1208,-114C1228.88,-114 1360.34,-83.74 1402.39,-77.95"/>
+<polygon fill="black" stroke="black" points="1402.87,-81.42 1412.5,-77 1402.22,-74.45 1402.87,-81.42"/>
+</g>
+<!-- ReducibleData[SampleRun] -->
+<g id="node26" class="node">
+<title>ReducibleData[SampleRun]</title>
+<polygon fill="none" stroke="black" points="1583.5,-211.5 1311.5,-211.5 1311.5,-178.5 1583.5,-178.5 1583.5,-211.5"/>
+<text text-anchor="start" x="1349" y="-197.3" font-family="Times,serif" font-size="14.00">ReducibleData[SampleRun]</text>
+<text text-anchor="start" x="1319.5" y="-185.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1340.5" y="-185.7" font-family="Times,serif" font-style="italic" font-size="11.00">add_coords_masks_and_apply_corrections</text>
+</g>
+<!-- BeamDivergenceLimits&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge26" class="edge">
+<title>BeamDivergenceLimits:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1208,-114C1262.43,-114 1253.86,-185.19 1300.42,-194.09"/>
+<polygon fill="black" stroke="black" points="1300.23,-197.59 1310.5,-195 1300.86,-190.62 1300.23,-197.59"/>
+</g>
+<!-- BeamSize[SampleRun] -->
+<g id="node3" class="node">
+<title>BeamSize[SampleRun]</title>
+<polygon fill="none" stroke="black" points="896.5,-140.5 717.5,-140.5 717.5,-117.5 896.5,-117.5 896.5,-140.5"/>
+<text text-anchor="middle" x="807" y="-125.3" font-family="Times,serif" font-size="14.00">BeamSize[SampleRun]</text>
+</g>
+<!-- DetectorData[SampleRun] -->
+<g id="node13" class="node">
+<title>DetectorData[SampleRun]</title>
+<polygon fill="none" stroke="black" points="1217.5,-189.5 1012.5,-189.5 1012.5,-156.5 1217.5,-156.5 1217.5,-189.5"/>
+<text text-anchor="start" x="1020.5" y="-175.3" font-family="Times,serif" font-size="14.00">DetectorData[SampleRun]</text>
+<text text-anchor="start" x="1071" y="-163.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1092" y="-163.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_events</text>
+</g>
+<!-- BeamSize[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge12" class="edge">
+<title>BeamSize[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M898,-129C948.7,-129 956.76,-167.35 1001.8,-172.44"/>
+<polygon fill="black" stroke="black" points="1001.82,-175.95 1012,-173 1002.21,-168.96 1001.82,-175.95"/>
+</g>
+<!-- RawChopper[SampleRun] -->
+<g id="node4" class="node">
+<title>RawChopper[SampleRun]</title>
+<polygon fill="none" stroke="black" points="548,-193.5 348,-193.5 348,-160.5 548,-160.5 548,-193.5"/>
+<text text-anchor="start" x="356" y="-179.3" font-family="Times,serif" font-size="14.00">RawChopper[SampleRun]</text>
+<text text-anchor="start" x="397.5" y="-167.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="418.5" y="-167.7" font-family="Times,serif" font-style="italic" font-size="11.00">amor_chopper</text>
+</g>
+<!-- ChopperDistance[SampleRun] -->
+<g id="node5" class="node">
+<title>ChopperDistance[SampleRun]</title>
+<polygon fill="none" stroke="black" points="923,-184.5 691,-184.5 691,-151.5 923,-151.5 923,-184.5"/>
+<text text-anchor="start" x="699" y="-170.3" font-family="Times,serif" font-size="14.00">ChopperDistance[SampleRun]</text>
+<text text-anchor="start" x="715.5" y="-158.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="736.5" y="-158.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_chopper_distance</text>
+</g>
+<!-- RawChopper[SampleRun]&#45;&gt;ChopperDistance[SampleRun] -->
+<g id="edge1" class="edge">
+<title>RawChopper[SampleRun]:e&#45;&gt;ChopperDistance[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M549,-177C608.24,-177 625.31,-168.99 679.77,-168.08"/>
+<polygon fill="black" stroke="black" points="680.03,-171.58 690,-168 679.97,-164.58 680.03,-171.58"/>
+</g>
+<!-- ChopperSeparation[SampleRun] -->
+<g id="node8" class="node">
+<title>ChopperSeparation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="931,-221.5 683,-221.5 683,-188.5 931,-188.5 931,-221.5"/>
+<text text-anchor="start" x="691" y="-207.3" font-family="Times,serif" font-size="14.00">ChopperSeparation[SampleRun]</text>
+<text text-anchor="start" x="709" y="-195.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="730" y="-195.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_chopper_separation</text>
+</g>
+<!-- RawChopper[SampleRun]&#45;&gt;ChopperSeparation[SampleRun] -->
+<g id="edge2" class="edge">
+<title>RawChopper[SampleRun]:e&#45;&gt;ChopperSeparation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M549,-177C606.28,-177 620.55,-201.81 672.79,-204.72"/>
+<polygon fill="black" stroke="black" points="672.91,-208.23 683,-205 673.1,-201.23 672.91,-208.23"/>
+</g>
+<!-- ChopperDistance[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge9" class="edge">
+<title>ChopperDistance[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M924,-168C959.5,-168 970.76,-172.11 1001.71,-172.88"/>
+<polygon fill="black" stroke="black" points="1001.96,-176.38 1012,-173 1002.04,-169.38 1001.96,-176.38"/>
+</g>
+<!-- ChopperFrequency[SampleRun] -->
+<g id="node6" class="node">
+<title>ChopperFrequency[SampleRun]</title>
+<polygon fill="none" stroke="black" points="929.5,-113.5 684.5,-113.5 684.5,-90.5 929.5,-90.5 929.5,-113.5"/>
+<text text-anchor="middle" x="807" y="-98.3" font-family="Times,serif" font-size="14.00">ChopperFrequency[SampleRun]</text>
+</g>
+<!-- ChopperFrequency[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge8" class="edge">
+<title>ChopperFrequency[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M931,-102C975.13,-102 966.05,-162.34 1001.87,-171.77"/>
+<polygon fill="black" stroke="black" points="1001.65,-175.27 1012,-173 1002.5,-168.32 1001.65,-175.27"/>
+</g>
+<!-- ChopperPhase[SampleRun] -->
+<g id="node7" class="node">
+<title>ChopperPhase[SampleRun]</title>
+<polygon fill="none" stroke="black" points="913,-275.5 701,-275.5 701,-252.5 913,-252.5 913,-275.5"/>
+<text text-anchor="middle" x="807" y="-260.3" font-family="Times,serif" font-size="14.00">ChopperPhase[SampleRun]</text>
+</g>
+<!-- ChopperPhase[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge7" class="edge">
+<title>ChopperPhase[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M914,-264C969.72,-264 954.86,-184.02 1001.76,-174.02"/>
+<polygon fill="black" stroke="black" points="1002.4,-177.48 1012,-173 1001.7,-170.51 1002.4,-177.48"/>
+</g>
+<!-- ChopperSeparation[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge10" class="edge">
+<title>ChopperSeparation[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M931,-205C966.08,-205 972.31,-178.72 1001.98,-173.79"/>
+<polygon fill="black" stroke="black" points="1002.31,-177.28 1012,-173 1001.76,-170.3 1002.31,-177.28"/>
+</g>
+<!-- GravityToggle -->
+<g id="node9" class="node">
+<title>GravityToggle</title>
+<polygon fill="none" stroke="black" points="865.5,-309.5 748.5,-309.5 748.5,-286.5 865.5,-286.5 865.5,-309.5"/>
+<text text-anchor="middle" x="807" y="-294.3" font-family="Times,serif" font-size="14.00">GravityToggle</text>
+</g>
+<!-- CoordTransformationGraph -->
+<g id="node10" class="node">
+<title>CoordTransformationGraph</title>
+<polygon fill="none" stroke="black" points="1227,-309.5 1003,-309.5 1003,-276.5 1227,-276.5 1227,-309.5"/>
+<text text-anchor="start" x="1016" y="-295.3" font-family="Times,serif" font-size="14.00">CoordTransformationGraph</text>
+<text text-anchor="start" x="1011" y="-283.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1032" y="-283.7" font-family="Times,serif" font-style="italic" font-size="11.00">coordinate_transformation_graph</text>
+</g>
+<!-- GravityToggle&#45;&gt;CoordTransformationGraph -->
+<g id="edge3" class="edge">
+<title>GravityToggle:e&#45;&gt;CoordTransformationGraph:w</title>
+<path fill="none" stroke="black" d="M867,-298C923.94,-298 940.6,-293.57 992.82,-293.05"/>
+<polygon fill="black" stroke="black" points="993.02,-296.55 1003,-293 992.98,-289.55 993.02,-296.55"/>
+</g>
+<!-- CoordTransformationGraph&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge29" class="edge">
+<title>CoordTransformationGraph:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1227,-293C1280.53,-293 1256.9,-207.23 1300.49,-196.17"/>
+<polygon fill="black" stroke="black" points="1300.97,-199.64 1310.5,-195 1300.16,-192.68 1300.97,-199.64"/>
+</g>
+<!-- Reference -->
+<g id="node29" class="node">
+<title>Reference</title>
+<polygon fill="none" stroke="black" points="1950,-243.5 1700,-243.5 1700,-210.5 1950,-210.5 1950,-243.5"/>
+<text text-anchor="start" x="1788.5" y="-229.3" font-family="Times,serif" font-size="14.00">Reference</text>
+<text text-anchor="start" x="1708" y="-217.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1729" y="-217.7" font-family="Times,serif" font-style="italic" font-size="11.00">evaluate_reference_at_sample_coords</text>
+</g>
+<!-- CoordTransformationGraph&#45;&gt;Reference -->
+<g id="edge33" class="edge">
+<title>CoordTransformationGraph:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1227,-293C1391.38,-293 1435.7,-304.39 1596,-268 1640.58,-257.88 1648.69,-231.25 1688.97,-227.45"/>
+<polygon fill="black" stroke="black" points="1689.17,-230.95 1699,-227 1688.85,-223.95 1689.17,-230.95"/>
+</g>
+<!-- CriticalEdge -->
+<g id="node11" class="node">
+<title>CriticalEdge</title>
+<polygon fill="none" stroke="black" points="1500.5,-174.5 1394.5,-174.5 1394.5,-151.5 1500.5,-151.5 1500.5,-174.5"/>
+<text text-anchor="middle" x="1447.5" y="-159.3" font-family="Times,serif" font-size="14.00">CriticalEdge</text>
+</g>
+<!-- CriticalEdge&#45;&gt;Sample -->
+<g id="edge39" class="edge">
+<title>CriticalEdge:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1501.5,-163C1572.03,-163 1592.14,-163 1657.95,-163"/>
+<polygon fill="black" stroke="black" points="1658,-166.5 1668,-163 1658,-159.5 1658,-166.5"/>
+</g>
+<!-- NeXusComponent[NXdetector, SampleRun] -->
+<g id="node12" class="node">
+<title>NeXusComponent[NXdetector, SampleRun]</title>
+<polygon fill="none" stroke="black" points="611,-156.5 285,-156.5 285,-123.5 611,-123.5 611,-156.5"/>
+<text text-anchor="start" x="293" y="-142.3" font-family="Times,serif" font-size="14.00">NeXusComponent[NXdetector, SampleRun]</text>
+<text text-anchor="start" x="399" y="-130.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="420" y="-130.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_detector</text>
+</g>
+<!-- NeXusComponent[NXdetector, SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge4" class="edge">
+<title>NeXusComponent[NXdetector, SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M611,-140C646.58,-140 895.82,-145.69 931,-151 964.28,-156.02 973.08,-169.89 1001.89,-172.56"/>
+<polygon fill="black" stroke="black" points="1001.86,-176.06 1012,-173 1002.16,-169.06 1001.86,-176.06"/>
+</g>
+<!-- DetectorData[SampleRun]&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge23" class="edge">
+<title>DetectorData[SampleRun]:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1218,-173C1256.63,-173 1266.62,-191.38 1300.32,-194.54"/>
+<polygon fill="black" stroke="black" points="1300.35,-198.05 1310.5,-195 1300.67,-191.05 1300.35,-198.05"/>
+</g>
+<!-- DetectorRotation[SampleRun] -->
+<g id="node14" class="node">
+<title>DetectorRotation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="923,-49.5 691,-49.5 691,-16.5 923,-16.5 923,-49.5"/>
+<text text-anchor="start" x="699" y="-35.3" font-family="Times,serif" font-size="14.00">DetectorRotation[SampleRun]</text>
+<text text-anchor="start" x="715.5" y="-23.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="736.5" y="-23.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_detector_rotation</text>
+</g>
+<!-- DetectorRotation[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge5" class="edge">
+<title>DetectorRotation[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M924,-33C993.76,-33 944.16,-159.14 1001.79,-171.95"/>
+<polygon fill="black" stroke="black" points="1001.7,-175.46 1012,-173 1002.41,-168.5 1001.7,-175.46"/>
+</g>
+<!-- DetectorRotation[SampleRun]&#45;&gt;QBins -->
+<g id="edge17" class="edge">
+<title>DetectorRotation[SampleRun]:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M924,-33C1138.58,-33 1192.83,-75.64 1402.4,-76.97"/>
+<polygon fill="black" stroke="black" points="1402.49,-80.47 1412.5,-77 1402.51,-73.47 1402.49,-80.47"/>
+</g>
+<!-- SampleRotation[SampleRun] -->
+<g id="node15" class="node">
+<title>SampleRotation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="918.5,-86.5 695.5,-86.5 695.5,-53.5 918.5,-53.5 918.5,-86.5"/>
+<text text-anchor="start" x="703.5" y="-72.3" font-family="Times,serif" font-size="14.00">SampleRotation[SampleRun]</text>
+<text text-anchor="start" x="728" y="-60.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="749" y="-60.7" font-family="Times,serif" font-style="italic" font-size="11.00">correct_sample_rotation</text>
+</g>
+<!-- SampleRotation[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge6" class="edge">
+<title>SampleRotation[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M919,-70C976.94,-70 953.66,-160.9 1001.77,-171.91"/>
+<polygon fill="black" stroke="black" points="1001.69,-175.42 1012,-173 1002.43,-168.46 1001.69,-175.42"/>
+</g>
+<!-- SampleRotation[SampleRun]&#45;&gt;QBins -->
+<g id="edge18" class="edge">
+<title>SampleRotation[SampleRun]:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M919,-70C1134.93,-70 1191.39,-76.78 1402.34,-76.99"/>
+<polygon fill="black" stroke="black" points="1402.5,-80.49 1412.5,-77 1402.5,-73.49 1402.5,-80.49"/>
+</g>
+<!-- SampleSize[SampleRun] -->
+<g id="node16" class="node">
+<title>SampleSize[SampleRun]</title>
+<polygon fill="none" stroke="black" points="903,-248.5 711,-248.5 711,-225.5 903,-225.5 903,-248.5"/>
+<text text-anchor="middle" x="807" y="-233.3" font-family="Times,serif" font-size="14.00">SampleSize[SampleRun]</text>
+</g>
+<!-- SampleSize[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge11" class="edge">
+<title>SampleSize[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M904,-237C956.2,-237 956.42,-180.98 1001.92,-173.76"/>
+<polygon fill="black" stroke="black" points="1002.29,-177.25 1012,-173 1001.76,-170.27 1002.29,-177.25"/>
+</g>
+<!-- Filename[SampleRun] -->
+<g id="node17" class="node">
+<title>Filename[SampleRun]</title>
+<polygon fill="none" stroke="black" points="202,-164.5 27,-164.5 27,-141.5 202,-141.5 202,-164.5"/>
+<text text-anchor="middle" x="114.5" y="-149.3" font-family="Times,serif" font-size="14.00">Filename[SampleRun]</text>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;RawChopper[SampleRun] -->
+<g id="edge21" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;RawChopper[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C264.63,-153 280.64,-174.45 336.83,-176.79"/>
+<polygon fill="black" stroke="black" points="336.93,-180.3 347,-177 337.07,-173.3 336.93,-180.3"/>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;NeXusComponent[NXdetector, SampleRun] -->
+<g id="edge14" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;NeXusComponent[NXdetector, SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C236.45,-153 246.37,-142.51 274.65,-140.38"/>
+<polygon fill="black" stroke="black" points="275.13,-143.86 285,-140 274.88,-136.86 275.13,-143.86"/>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;DetectorRotation[SampleRun] -->
+<g id="edge13" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;DetectorRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C261.18,-153 233.56,-78.09 285,-52 442.65,27.95 507.33,-30.67 679.83,-32.93"/>
+<polygon fill="black" stroke="black" points="679.98,-36.43 690,-33 680.02,-29.43 679.98,-36.43"/>
+</g>
+<!-- ProtonCurrent[SampleRun] -->
+<g id="node21" class="node">
+<title>ProtonCurrent[SampleRun]</title>
+<polygon fill="none" stroke="black" points="554.5,-263.5 341.5,-263.5 341.5,-230.5 554.5,-230.5 554.5,-263.5"/>
+<text text-anchor="start" x="349.5" y="-249.3" font-family="Times,serif" font-size="14.00">ProtonCurrent[SampleRun]</text>
+<text text-anchor="start" x="363.5" y="-237.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="384.5" y="-237.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_proton_current</text>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;ProtonCurrent[SampleRun] -->
+<g id="edge16" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;ProtonCurrent[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C273.91,-153 267.8,-238.04 330.74,-246.35"/>
+<polygon fill="black" stroke="black" points="330.8,-249.86 341,-247 331.24,-242.87 330.8,-249.86"/>
+</g>
+<!-- RawSampleRotation[SampleRun] -->
+<g id="node24" class="node">
+<title>RawSampleRotation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="575,-86.5 321,-86.5 321,-53.5 575,-53.5 575,-86.5"/>
+<text text-anchor="start" x="329" y="-72.3" font-family="Times,serif" font-size="14.00">RawSampleRotation[SampleRun]</text>
+<text text-anchor="start" x="360" y="-60.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="381" y="-60.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_sample_rotation</text>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;RawSampleRotation[SampleRun] -->
+<g id="edge22" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;RawSampleRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C263.47,-153 257.39,-79.14 309.88,-70.77"/>
+<polygon fill="black" stroke="black" points="310.29,-74.25 320,-70 309.76,-67.27 310.29,-74.25"/>
+</g>
+<!-- DetectorSpatialResolution[SampleRun] -->
+<g id="node18" class="node">
+<title>DetectorSpatialResolution[SampleRun]</title>
+<polygon fill="none" stroke="black" points="1596,-265.5 1299,-265.5 1299,-242.5 1596,-242.5 1596,-265.5"/>
+<text text-anchor="middle" x="1447.5" y="-250.3" font-family="Times,serif" font-size="14.00">DetectorSpatialResolution[SampleRun]</text>
+</g>
+<!-- DetectorSpatialResolution[SampleRun]&#45;&gt;Reference -->
+<g id="edge32" class="edge">
+<title>DetectorSpatialResolution[SampleRun]:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1596,-254C1639.63,-254 1650.13,-231.05 1688.58,-227.47"/>
+<polygon fill="black" stroke="black" points="1689.17,-230.95 1699,-227 1688.85,-223.95 1689.17,-230.95"/>
+</g>
+<!-- MValue -->
+<g id="node19" class="node">
+<title>MValue</title>
+<polygon fill="none" stroke="black" points="1482.5,-147.5 1412.5,-147.5 1412.5,-124.5 1482.5,-124.5 1482.5,-147.5"/>
+<text text-anchor="middle" x="1447.5" y="-132.3" font-family="Times,serif" font-size="14.00">MValue</text>
+</g>
+<!-- MValue&#45;&gt;Sample -->
+<g id="edge40" class="edge">
+<title>MValue:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1483.5,-136C1534,-136 1546.04,-144.63 1596,-152 1624.4,-156.19 1633.59,-161.6 1657.88,-162.77"/>
+<polygon fill="black" stroke="black" points="1657.92,-166.27 1668,-163 1658.08,-159.27 1657.92,-166.27"/>
+</g>
+<!-- NeXusName[NXdetector] -->
+<g id="node20" class="node">
+<title>NeXusName[NXdetector]</title>
+<polygon fill="none" stroke="black" points="213,-137.5 16,-137.5 16,-114.5 213,-114.5 213,-137.5"/>
+<text text-anchor="middle" x="114.5" y="-122.3" font-family="Times,serif" font-size="14.00">NeXusName[NXdetector]</text>
+</g>
+<!-- NeXusName[NXdetector]&#45;&gt;NeXusComponent[NXdetector, SampleRun] -->
+<g id="edge15" class="edge">
+<title>NeXusName[NXdetector]:e&#45;&gt;NeXusComponent[NXdetector, SampleRun]:w</title>
+<path fill="none" stroke="black" d="M213,-126C241.91,-126 250.53,-137.01 274.84,-139.5"/>
+<polygon fill="black" stroke="black" points="274.84,-143.01 285,-140 275.18,-136.01 274.84,-143.01"/>
+</g>
+<!-- ProtonCurrent[SampleRun]&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge28" class="edge">
+<title>ProtonCurrent[SampleRun]:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M555,-247C613.33,-247 625.03,-269.52 683,-276 737.77,-282.13 876.77,-285.83 931,-276 964.63,-269.9 970.03,-257.99 1003,-249 1133.47,-213.41 1169.91,-195.9 1300.13,-195.03"/>
+<polygon fill="black" stroke="black" points="1300.51,-198.53 1310.5,-195 1300.49,-191.53 1300.51,-198.53"/>
+</g>
+<!-- ReflectivityOverQ -->
+<g id="node31" class="node">
+<title>ReflectivityOverQ</title>
+<polygon fill="none" stroke="black" points="2218,-179.5 2054,-179.5 2054,-146.5 2218,-146.5 2218,-179.5"/>
+<text text-anchor="start" x="2072.5" y="-165.3" font-family="Times,serif" font-size="14.00">ReflectivityOverQ</text>
+<text text-anchor="start" x="2062" y="-153.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="2083" y="-153.7" font-family="Times,serif" font-style="italic" font-size="11.00">reduce_sample_over_q</text>
+</g>
+<!-- QBins&#45;&gt;ReflectivityOverQ -->
+<g id="edge36" class="edge">
+<title>QBins:e&#45;&gt;ReflectivityOverQ:w</title>
+<path fill="none" stroke="black" d="M1482.5,-77C1706.55,-77 1761.99,-102.66 1982,-145 2010.72,-150.53 2019.18,-160.41 2043.73,-162.57"/>
+<polygon fill="black" stroke="black" points="2043.86,-166.08 2054,-163 2044.15,-159.09 2043.86,-166.08"/>
+</g>
+<!-- WavelengthBins -->
+<g id="node23" class="node">
+<title>WavelengthBins</title>
+<polygon fill="none" stroke="black" points="1181,-98.5 1049,-98.5 1049,-75.5 1181,-75.5 1181,-98.5"/>
+<text text-anchor="middle" x="1115" y="-83.3" font-family="Times,serif" font-size="14.00">WavelengthBins</text>
+</g>
+<!-- WavelengthBins&#45;&gt;QBins -->
+<g id="edge19" class="edge">
+<title>WavelengthBins:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M1182,-87C1281.04,-87 1308.13,-77.67 1402.25,-77.03"/>
+<polygon fill="black" stroke="black" points="1402.51,-80.53 1412.5,-77 1402.49,-73.53 1402.51,-80.53"/>
+</g>
+<!-- WavelengthBins&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge27" class="edge">
+<title>WavelengthBins:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1182,-87C1203.23,-87 1209.33,-91.23 1227,-103 1269.9,-131.58 1257.35,-186.98 1300.42,-194.21"/>
+<polygon fill="black" stroke="black" points="1300.26,-197.71 1310.5,-195 1300.8,-190.73 1300.26,-197.71"/>
+</g>
+<!-- RawSampleRotation[SampleRun]&#45;&gt;SampleRotation[SampleRun] -->
+<g id="edge42" class="edge">
+<title>RawSampleRotation[SampleRun]:e&#45;&gt;SampleRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M576,-70C625.38,-70 640.18,-70 684.97,-70"/>
+<polygon fill="black" stroke="black" points="685,-73.5 695,-70 685,-66.5 685,-73.5"/>
+</g>
+<!-- ReducedReference -->
+<g id="node25" class="node">
+<title>ReducedReference</title>
+<polygon fill="none" stroke="black" points="1522.5,-238.5 1372.5,-238.5 1372.5,-215.5 1522.5,-215.5 1522.5,-238.5"/>
+<text text-anchor="middle" x="1447.5" y="-223.3" font-family="Times,serif" font-size="14.00">ReducedReference</text>
+</g>
+<!-- ReducedReference&#45;&gt;Reference -->
+<g id="edge30" class="edge">
+<title>ReducedReference:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1523.5,-227C1598,-227 1619.13,-227 1688.83,-227"/>
+<polygon fill="black" stroke="black" points="1689,-230.5 1699,-227 1689,-223.5 1689,-230.5"/>
+</g>
+<!-- ReducedReference&#45;&gt;Sample -->
+<g id="edge38" class="edge">
+<title>ReducedReference:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1523.5,-227C1556.4,-227 1565.7,-224.84 1596,-212 1628.16,-198.37 1629.39,-169.44 1657.76,-163.92"/>
+<polygon fill="black" stroke="black" points="1658.35,-167.38 1668,-163 1657.73,-160.41 1658.35,-167.38"/>
+</g>
+<!-- ReducibleData[SampleRun]&#45;&gt;Reference -->
+<g id="edge31" class="edge">
+<title>ReducibleData[SampleRun]:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1584.5,-195C1633.73,-195 1644.75,-222.77 1688.75,-226.57"/>
+<polygon fill="black" stroke="black" points="1688.86,-230.08 1699,-227 1689.15,-223.09 1688.86,-230.08"/>
+</g>
+<!-- ReducibleData[SampleRun]&#45;&gt;Sample -->
+<g id="edge37" class="edge">
+<title>ReducibleData[SampleRun]:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1584.5,-195C1620.52,-195 1627.19,-168.72 1657.71,-163.79"/>
+<polygon fill="black" stroke="black" points="1658.3,-167.26 1668,-163 1657.76,-160.28 1658.3,-167.26"/>
+</g>
+<!-- YIndexLimits -->
+<g id="node27" class="node">
+<title>YIndexLimits</title>
+<polygon fill="none" stroke="black" points="1170,-152.5 1060,-152.5 1060,-129.5 1170,-129.5 1170,-152.5"/>
+<text text-anchor="middle" x="1115" y="-137.3" font-family="Times,serif" font-size="14.00">YIndexLimits</text>
+</g>
+<!-- YIndexLimits&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge24" class="edge">
+<title>YIndexLimits:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1171,-141C1196.88,-141 1202.71,-148.06 1227,-157 1261.83,-169.82 1268.65,-190.78 1300.34,-194.45"/>
+<polygon fill="black" stroke="black" points="1300.32,-197.95 1310.5,-195 1300.71,-190.96 1300.32,-197.95"/>
+</g>
+<!-- ZIndexLimits -->
+<g id="node28" class="node">
+<title>ZIndexLimits</title>
+<polygon fill="none" stroke="black" points="1170.5,-272.5 1059.5,-272.5 1059.5,-249.5 1170.5,-249.5 1170.5,-272.5"/>
+<text text-anchor="middle" x="1115" y="-257.3" font-family="Times,serif" font-size="14.00">ZIndexLimits</text>
+</g>
+<!-- ZIndexLimits&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge25" class="edge">
+<title>ZIndexLimits:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1171,-261C1196.77,-261 1203.32,-256.15 1227,-246 1263.53,-230.34 1266.71,-200.7 1300.2,-195.72"/>
+<polygon fill="black" stroke="black" points="1300.77,-199.19 1310.5,-195 1300.28,-192.2 1300.77,-199.19"/>
+</g>
+<!-- Reference&#45;&gt;ReflectivityOverQ -->
+<g id="edge35" class="edge">
+<title>Reference:e&#45;&gt;ReflectivityOverQ:w</title>
+<path fill="none" stroke="black" d="M1951,-227C2001.32,-227 2000.48,-171.22 2044.01,-163.81"/>
+<polygon fill="black" stroke="black" points="2044.32,-167.3 2054,-163 2043.75,-160.32 2044.32,-167.3"/>
+</g>
+<!-- Sample&#45;&gt;ReflectivityOverQ -->
+<g id="edge34" class="edge">
+<title>Sample:e&#45;&gt;ReflectivityOverQ:w</title>
+<path fill="none" stroke="black" d="M1982,-163C2010.38,-163 2019.88,-163 2043.98,-163"/>
+<polygon fill="black" stroke="black" points="2044,-166.5 2054,-163 2044,-159.5 2044,-166.5"/>
+</g>
+<!-- SampleRotationOffset[SampleRun] -->
+<g id="node32" class="node">
+<title>SampleRotationOffset[SampleRun]</title>
+<polygon fill="none" stroke="black" points="581,-113.5 315,-113.5 315,-90.5 581,-90.5 581,-113.5"/>
+<text text-anchor="middle" x="448" y="-98.3" font-family="Times,serif" font-size="14.00">SampleRotationOffset[SampleRun]</text>
+</g>
+<!-- SampleRotationOffset[SampleRun]&#45;&gt;SampleRotation[SampleRun] -->
+<g id="edge43" class="edge">
+<title>SampleRotationOffset[SampleRun]:e&#45;&gt;SampleRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M582,-102C630.63,-102 641.42,-74.23 684.88,-70.43"/>
+<polygon fill="black" stroke="black" points="685.16,-73.92 695,-70 684.86,-66.93 685.16,-73.92"/>
+</g>
+</g>
+</g><g transform="translate(0,1101.0)">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 353)">
+<title>%3</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-353 2238,-353 2238,4 -4,4"/>
+<g id="clust1" class="cluster">
+<title>cluster_611</title>
+<path fill="none" stroke="black" d="M20,-8C20,-8 2214,-8 2214,-8 2220,-8 2226,-14 2226,-20 2226,-20 2226,-329 2226,-329 2226,-335 2220,-341 2214,-341 2214,-341 20,-341 20,-341 14,-341 8,-335 8,-329 8,-329 8,-20 8,-20 8,-14 14,-8 20,-8"/>
+<text text-anchor="middle" x="1117" y="-325.8" font-family="Times,serif" font-size="14.00">611</text>
+</g>
+<!-- Alpha -->
+<g id="node1" class="node">
+<title>Alpha</title>
+<polygon fill="none" stroke="black" points="1476,-120.5 1419,-120.5 1419,-97.5 1476,-97.5 1476,-120.5"/>
+<text text-anchor="middle" x="1447.5" y="-105.3" font-family="Times,serif" font-size="14.00">Alpha</text>
+</g>
+<!-- Sample -->
+<g id="node30" class="node">
+<title>Sample</title>
+<polygon fill="none" stroke="black" points="1982,-179.5 1668,-179.5 1668,-146.5 1982,-146.5 1982,-179.5"/>
+<text text-anchor="start" x="1798" y="-165.3" font-family="Times,serif" font-size="14.00">Sample</text>
+<text text-anchor="start" x="1676" y="-153.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1697" y="-153.7" font-family="Times,serif" font-style="italic" font-size="11.00">mask_events_where_supermirror_does_not_cover</text>
+</g>
+<!-- Alpha&#45;&gt;Sample -->
+<g id="edge41" class="edge">
+<title>Alpha:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1477.5,-109C1530.64,-109 1545.39,-108.79 1596,-125 1626.96,-134.91 1631.2,-157.69 1657.98,-162.21"/>
+<polygon fill="black" stroke="black" points="1657.76,-165.7 1668,-163 1658.31,-158.73 1657.76,-165.7"/>
+</g>
+<!-- BeamDivergenceLimits -->
+<g id="node2" class="node">
+<title>BeamDivergenceLimits</title>
+<polygon fill="none" stroke="black" points="1206.5,-125.5 1023.5,-125.5 1023.5,-102.5 1206.5,-102.5 1206.5,-125.5"/>
+<text text-anchor="middle" x="1115" y="-110.3" font-family="Times,serif" font-size="14.00">BeamDivergenceLimits</text>
+</g>
+<!-- QBins -->
+<g id="node22" class="node">
+<title>QBins</title>
+<polygon fill="none" stroke="black" points="1481,-93.5 1414,-93.5 1414,-60.5 1481,-60.5 1481,-93.5"/>
+<text text-anchor="start" x="1426" y="-79.3" font-family="Times,serif" font-size="14.00">QBins</text>
+<text text-anchor="start" x="1422" y="-67.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1443" y="-67.7" font-family="Times,serif" font-style="italic" font-size="11.00">qgrid</text>
+</g>
+<!-- BeamDivergenceLimits&#45;&gt;QBins -->
+<g id="edge20" class="edge">
+<title>BeamDivergenceLimits:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M1208,-114C1228.88,-114 1360.34,-83.74 1402.39,-77.95"/>
+<polygon fill="black" stroke="black" points="1402.87,-81.42 1412.5,-77 1402.22,-74.45 1402.87,-81.42"/>
+</g>
+<!-- ReducibleData[SampleRun] -->
+<g id="node26" class="node">
+<title>ReducibleData[SampleRun]</title>
+<polygon fill="none" stroke="black" points="1583.5,-211.5 1311.5,-211.5 1311.5,-178.5 1583.5,-178.5 1583.5,-211.5"/>
+<text text-anchor="start" x="1349" y="-197.3" font-family="Times,serif" font-size="14.00">ReducibleData[SampleRun]</text>
+<text text-anchor="start" x="1319.5" y="-185.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1340.5" y="-185.7" font-family="Times,serif" font-style="italic" font-size="11.00">add_coords_masks_and_apply_corrections</text>
+</g>
+<!-- BeamDivergenceLimits&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge26" class="edge">
+<title>BeamDivergenceLimits:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1208,-114C1262.43,-114 1253.86,-185.19 1300.42,-194.09"/>
+<polygon fill="black" stroke="black" points="1300.23,-197.59 1310.5,-195 1300.86,-190.62 1300.23,-197.59"/>
+</g>
+<!-- BeamSize[SampleRun] -->
+<g id="node3" class="node">
+<title>BeamSize[SampleRun]</title>
+<polygon fill="none" stroke="black" points="896.5,-140.5 717.5,-140.5 717.5,-117.5 896.5,-117.5 896.5,-140.5"/>
+<text text-anchor="middle" x="807" y="-125.3" font-family="Times,serif" font-size="14.00">BeamSize[SampleRun]</text>
+</g>
+<!-- DetectorData[SampleRun] -->
+<g id="node13" class="node">
+<title>DetectorData[SampleRun]</title>
+<polygon fill="none" stroke="black" points="1217.5,-189.5 1012.5,-189.5 1012.5,-156.5 1217.5,-156.5 1217.5,-189.5"/>
+<text text-anchor="start" x="1020.5" y="-175.3" font-family="Times,serif" font-size="14.00">DetectorData[SampleRun]</text>
+<text text-anchor="start" x="1071" y="-163.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1092" y="-163.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_events</text>
+</g>
+<!-- BeamSize[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge12" class="edge">
+<title>BeamSize[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M898,-129C948.7,-129 956.76,-167.35 1001.8,-172.44"/>
+<polygon fill="black" stroke="black" points="1001.82,-175.95 1012,-173 1002.21,-168.96 1001.82,-175.95"/>
+</g>
+<!-- RawChopper[SampleRun] -->
+<g id="node4" class="node">
+<title>RawChopper[SampleRun]</title>
+<polygon fill="none" stroke="black" points="548,-193.5 348,-193.5 348,-160.5 548,-160.5 548,-193.5"/>
+<text text-anchor="start" x="356" y="-179.3" font-family="Times,serif" font-size="14.00">RawChopper[SampleRun]</text>
+<text text-anchor="start" x="397.5" y="-167.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="418.5" y="-167.7" font-family="Times,serif" font-style="italic" font-size="11.00">amor_chopper</text>
+</g>
+<!-- ChopperDistance[SampleRun] -->
+<g id="node5" class="node">
+<title>ChopperDistance[SampleRun]</title>
+<polygon fill="none" stroke="black" points="923,-184.5 691,-184.5 691,-151.5 923,-151.5 923,-184.5"/>
+<text text-anchor="start" x="699" y="-170.3" font-family="Times,serif" font-size="14.00">ChopperDistance[SampleRun]</text>
+<text text-anchor="start" x="715.5" y="-158.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="736.5" y="-158.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_chopper_distance</text>
+</g>
+<!-- RawChopper[SampleRun]&#45;&gt;ChopperDistance[SampleRun] -->
+<g id="edge1" class="edge">
+<title>RawChopper[SampleRun]:e&#45;&gt;ChopperDistance[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M549,-177C608.24,-177 625.31,-168.99 679.77,-168.08"/>
+<polygon fill="black" stroke="black" points="680.03,-171.58 690,-168 679.97,-164.58 680.03,-171.58"/>
+</g>
+<!-- ChopperSeparation[SampleRun] -->
+<g id="node8" class="node">
+<title>ChopperSeparation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="931,-221.5 683,-221.5 683,-188.5 931,-188.5 931,-221.5"/>
+<text text-anchor="start" x="691" y="-207.3" font-family="Times,serif" font-size="14.00">ChopperSeparation[SampleRun]</text>
+<text text-anchor="start" x="709" y="-195.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="730" y="-195.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_chopper_separation</text>
+</g>
+<!-- RawChopper[SampleRun]&#45;&gt;ChopperSeparation[SampleRun] -->
+<g id="edge2" class="edge">
+<title>RawChopper[SampleRun]:e&#45;&gt;ChopperSeparation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M549,-177C606.28,-177 620.55,-201.81 672.79,-204.72"/>
+<polygon fill="black" stroke="black" points="672.91,-208.23 683,-205 673.1,-201.23 672.91,-208.23"/>
+</g>
+<!-- ChopperDistance[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge9" class="edge">
+<title>ChopperDistance[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M924,-168C959.5,-168 970.76,-172.11 1001.71,-172.88"/>
+<polygon fill="black" stroke="black" points="1001.96,-176.38 1012,-173 1002.04,-169.38 1001.96,-176.38"/>
+</g>
+<!-- ChopperFrequency[SampleRun] -->
+<g id="node6" class="node">
+<title>ChopperFrequency[SampleRun]</title>
+<polygon fill="none" stroke="black" points="929.5,-113.5 684.5,-113.5 684.5,-90.5 929.5,-90.5 929.5,-113.5"/>
+<text text-anchor="middle" x="807" y="-98.3" font-family="Times,serif" font-size="14.00">ChopperFrequency[SampleRun]</text>
+</g>
+<!-- ChopperFrequency[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge8" class="edge">
+<title>ChopperFrequency[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M931,-102C975.13,-102 966.05,-162.34 1001.87,-171.77"/>
+<polygon fill="black" stroke="black" points="1001.65,-175.27 1012,-173 1002.5,-168.32 1001.65,-175.27"/>
+</g>
+<!-- ChopperPhase[SampleRun] -->
+<g id="node7" class="node">
+<title>ChopperPhase[SampleRun]</title>
+<polygon fill="none" stroke="black" points="913,-275.5 701,-275.5 701,-252.5 913,-252.5 913,-275.5"/>
+<text text-anchor="middle" x="807" y="-260.3" font-family="Times,serif" font-size="14.00">ChopperPhase[SampleRun]</text>
+</g>
+<!-- ChopperPhase[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge7" class="edge">
+<title>ChopperPhase[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M914,-264C969.72,-264 954.86,-184.02 1001.76,-174.02"/>
+<polygon fill="black" stroke="black" points="1002.4,-177.48 1012,-173 1001.7,-170.51 1002.4,-177.48"/>
+</g>
+<!-- ChopperSeparation[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge10" class="edge">
+<title>ChopperSeparation[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M931,-205C966.08,-205 972.31,-178.72 1001.98,-173.79"/>
+<polygon fill="black" stroke="black" points="1002.31,-177.28 1012,-173 1001.76,-170.3 1002.31,-177.28"/>
+</g>
+<!-- GravityToggle -->
+<g id="node9" class="node">
+<title>GravityToggle</title>
+<polygon fill="none" stroke="black" points="865.5,-309.5 748.5,-309.5 748.5,-286.5 865.5,-286.5 865.5,-309.5"/>
+<text text-anchor="middle" x="807" y="-294.3" font-family="Times,serif" font-size="14.00">GravityToggle</text>
+</g>
+<!-- CoordTransformationGraph -->
+<g id="node10" class="node">
+<title>CoordTransformationGraph</title>
+<polygon fill="none" stroke="black" points="1227,-309.5 1003,-309.5 1003,-276.5 1227,-276.5 1227,-309.5"/>
+<text text-anchor="start" x="1016" y="-295.3" font-family="Times,serif" font-size="14.00">CoordTransformationGraph</text>
+<text text-anchor="start" x="1011" y="-283.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1032" y="-283.7" font-family="Times,serif" font-style="italic" font-size="11.00">coordinate_transformation_graph</text>
+</g>
+<!-- GravityToggle&#45;&gt;CoordTransformationGraph -->
+<g id="edge3" class="edge">
+<title>GravityToggle:e&#45;&gt;CoordTransformationGraph:w</title>
+<path fill="none" stroke="black" d="M867,-298C923.94,-298 940.6,-293.57 992.82,-293.05"/>
+<polygon fill="black" stroke="black" points="993.02,-296.55 1003,-293 992.98,-289.55 993.02,-296.55"/>
+</g>
+<!-- CoordTransformationGraph&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge29" class="edge">
+<title>CoordTransformationGraph:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1227,-293C1280.53,-293 1256.9,-207.23 1300.49,-196.17"/>
+<polygon fill="black" stroke="black" points="1300.97,-199.64 1310.5,-195 1300.16,-192.68 1300.97,-199.64"/>
+</g>
+<!-- Reference -->
+<g id="node29" class="node">
+<title>Reference</title>
+<polygon fill="none" stroke="black" points="1950,-243.5 1700,-243.5 1700,-210.5 1950,-210.5 1950,-243.5"/>
+<text text-anchor="start" x="1788.5" y="-229.3" font-family="Times,serif" font-size="14.00">Reference</text>
+<text text-anchor="start" x="1708" y="-217.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="1729" y="-217.7" font-family="Times,serif" font-style="italic" font-size="11.00">evaluate_reference_at_sample_coords</text>
+</g>
+<!-- CoordTransformationGraph&#45;&gt;Reference -->
+<g id="edge33" class="edge">
+<title>CoordTransformationGraph:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1227,-293C1391.38,-293 1435.7,-304.39 1596,-268 1640.58,-257.88 1648.69,-231.25 1688.97,-227.45"/>
+<polygon fill="black" stroke="black" points="1689.17,-230.95 1699,-227 1688.85,-223.95 1689.17,-230.95"/>
+</g>
+<!-- CriticalEdge -->
+<g id="node11" class="node">
+<title>CriticalEdge</title>
+<polygon fill="none" stroke="black" points="1500.5,-174.5 1394.5,-174.5 1394.5,-151.5 1500.5,-151.5 1500.5,-174.5"/>
+<text text-anchor="middle" x="1447.5" y="-159.3" font-family="Times,serif" font-size="14.00">CriticalEdge</text>
+</g>
+<!-- CriticalEdge&#45;&gt;Sample -->
+<g id="edge39" class="edge">
+<title>CriticalEdge:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1501.5,-163C1572.03,-163 1592.14,-163 1657.95,-163"/>
+<polygon fill="black" stroke="black" points="1658,-166.5 1668,-163 1658,-159.5 1658,-166.5"/>
+</g>
+<!-- NeXusComponent[NXdetector, SampleRun] -->
+<g id="node12" class="node">
+<title>NeXusComponent[NXdetector, SampleRun]</title>
+<polygon fill="none" stroke="black" points="611,-156.5 285,-156.5 285,-123.5 611,-123.5 611,-156.5"/>
+<text text-anchor="start" x="293" y="-142.3" font-family="Times,serif" font-size="14.00">NeXusComponent[NXdetector, SampleRun]</text>
+<text text-anchor="start" x="399" y="-130.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="420" y="-130.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_detector</text>
+</g>
+<!-- NeXusComponent[NXdetector, SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge4" class="edge">
+<title>NeXusComponent[NXdetector, SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M611,-140C646.58,-140 895.82,-145.69 931,-151 964.28,-156.02 973.08,-169.89 1001.89,-172.56"/>
+<polygon fill="black" stroke="black" points="1001.86,-176.06 1012,-173 1002.16,-169.06 1001.86,-176.06"/>
+</g>
+<!-- DetectorData[SampleRun]&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge23" class="edge">
+<title>DetectorData[SampleRun]:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1218,-173C1256.63,-173 1266.62,-191.38 1300.32,-194.54"/>
+<polygon fill="black" stroke="black" points="1300.35,-198.05 1310.5,-195 1300.67,-191.05 1300.35,-198.05"/>
+</g>
+<!-- DetectorRotation[SampleRun] -->
+<g id="node14" class="node">
+<title>DetectorRotation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="923,-49.5 691,-49.5 691,-16.5 923,-16.5 923,-49.5"/>
+<text text-anchor="start" x="699" y="-35.3" font-family="Times,serif" font-size="14.00">DetectorRotation[SampleRun]</text>
+<text text-anchor="start" x="715.5" y="-23.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="736.5" y="-23.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_detector_rotation</text>
+</g>
+<!-- DetectorRotation[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge5" class="edge">
+<title>DetectorRotation[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M924,-33C993.76,-33 944.16,-159.14 1001.79,-171.95"/>
+<polygon fill="black" stroke="black" points="1001.7,-175.46 1012,-173 1002.41,-168.5 1001.7,-175.46"/>
+</g>
+<!-- DetectorRotation[SampleRun]&#45;&gt;QBins -->
+<g id="edge17" class="edge">
+<title>DetectorRotation[SampleRun]:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M924,-33C1138.58,-33 1192.83,-75.64 1402.4,-76.97"/>
+<polygon fill="black" stroke="black" points="1402.49,-80.47 1412.5,-77 1402.51,-73.47 1402.49,-80.47"/>
+</g>
+<!-- SampleRotation[SampleRun] -->
+<g id="node15" class="node">
+<title>SampleRotation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="918.5,-86.5 695.5,-86.5 695.5,-53.5 918.5,-53.5 918.5,-86.5"/>
+<text text-anchor="start" x="703.5" y="-72.3" font-family="Times,serif" font-size="14.00">SampleRotation[SampleRun]</text>
+<text text-anchor="start" x="728" y="-60.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="749" y="-60.7" font-family="Times,serif" font-style="italic" font-size="11.00">correct_sample_rotation</text>
+</g>
+<!-- SampleRotation[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge6" class="edge">
+<title>SampleRotation[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M919,-70C976.94,-70 953.66,-160.9 1001.77,-171.91"/>
+<polygon fill="black" stroke="black" points="1001.69,-175.42 1012,-173 1002.43,-168.46 1001.69,-175.42"/>
+</g>
+<!-- SampleRotation[SampleRun]&#45;&gt;QBins -->
+<g id="edge18" class="edge">
+<title>SampleRotation[SampleRun]:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M919,-70C1134.93,-70 1191.39,-76.78 1402.34,-76.99"/>
+<polygon fill="black" stroke="black" points="1402.5,-80.49 1412.5,-77 1402.5,-73.49 1402.5,-80.49"/>
+</g>
+<!-- SampleSize[SampleRun] -->
+<g id="node16" class="node">
+<title>SampleSize[SampleRun]</title>
+<polygon fill="none" stroke="black" points="903,-248.5 711,-248.5 711,-225.5 903,-225.5 903,-248.5"/>
+<text text-anchor="middle" x="807" y="-233.3" font-family="Times,serif" font-size="14.00">SampleSize[SampleRun]</text>
+</g>
+<!-- SampleSize[SampleRun]&#45;&gt;DetectorData[SampleRun] -->
+<g id="edge11" class="edge">
+<title>SampleSize[SampleRun]:e&#45;&gt;DetectorData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M904,-237C956.2,-237 956.42,-180.98 1001.92,-173.76"/>
+<polygon fill="black" stroke="black" points="1002.29,-177.25 1012,-173 1001.76,-170.27 1002.29,-177.25"/>
+</g>
+<!-- Filename[SampleRun] -->
+<g id="node17" class="node">
+<title>Filename[SampleRun]</title>
+<polygon fill="none" stroke="black" points="202,-164.5 27,-164.5 27,-141.5 202,-141.5 202,-164.5"/>
+<text text-anchor="middle" x="114.5" y="-149.3" font-family="Times,serif" font-size="14.00">Filename[SampleRun]</text>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;RawChopper[SampleRun] -->
+<g id="edge21" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;RawChopper[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C264.63,-153 280.64,-174.45 336.83,-176.79"/>
+<polygon fill="black" stroke="black" points="336.93,-180.3 347,-177 337.07,-173.3 336.93,-180.3"/>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;NeXusComponent[NXdetector, SampleRun] -->
+<g id="edge14" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;NeXusComponent[NXdetector, SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C236.45,-153 246.37,-142.51 274.65,-140.38"/>
+<polygon fill="black" stroke="black" points="275.13,-143.86 285,-140 274.88,-136.86 275.13,-143.86"/>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;DetectorRotation[SampleRun] -->
+<g id="edge13" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;DetectorRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C261.18,-153 233.56,-78.09 285,-52 442.65,27.95 507.33,-30.67 679.83,-32.93"/>
+<polygon fill="black" stroke="black" points="679.98,-36.43 690,-33 680.02,-29.43 679.98,-36.43"/>
+</g>
+<!-- ProtonCurrent[SampleRun] -->
+<g id="node21" class="node">
+<title>ProtonCurrent[SampleRun]</title>
+<polygon fill="none" stroke="black" points="554.5,-263.5 341.5,-263.5 341.5,-230.5 554.5,-230.5 554.5,-263.5"/>
+<text text-anchor="start" x="349.5" y="-249.3" font-family="Times,serif" font-size="14.00">ProtonCurrent[SampleRun]</text>
+<text text-anchor="start" x="363.5" y="-237.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="384.5" y="-237.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_proton_current</text>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;ProtonCurrent[SampleRun] -->
+<g id="edge16" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;ProtonCurrent[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C273.91,-153 267.8,-238.04 330.74,-246.35"/>
+<polygon fill="black" stroke="black" points="330.8,-249.86 341,-247 331.24,-242.87 330.8,-249.86"/>
+</g>
+<!-- RawSampleRotation[SampleRun] -->
+<g id="node24" class="node">
+<title>RawSampleRotation[SampleRun]</title>
+<polygon fill="none" stroke="black" points="575,-86.5 321,-86.5 321,-53.5 575,-53.5 575,-86.5"/>
+<text text-anchor="start" x="329" y="-72.3" font-family="Times,serif" font-size="14.00">RawSampleRotation[SampleRun]</text>
+<text text-anchor="start" x="360" y="-60.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="381" y="-60.7" font-family="Times,serif" font-style="italic" font-size="11.00">load_amor_sample_rotation</text>
+</g>
+<!-- Filename[SampleRun]&#45;&gt;RawSampleRotation[SampleRun] -->
+<g id="edge22" class="edge">
+<title>Filename[SampleRun]:e&#45;&gt;RawSampleRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M203.5,-153C263.47,-153 257.39,-79.14 309.88,-70.77"/>
+<polygon fill="black" stroke="black" points="310.29,-74.25 320,-70 309.76,-67.27 310.29,-74.25"/>
+</g>
+<!-- DetectorSpatialResolution[SampleRun] -->
+<g id="node18" class="node">
+<title>DetectorSpatialResolution[SampleRun]</title>
+<polygon fill="none" stroke="black" points="1596,-265.5 1299,-265.5 1299,-242.5 1596,-242.5 1596,-265.5"/>
+<text text-anchor="middle" x="1447.5" y="-250.3" font-family="Times,serif" font-size="14.00">DetectorSpatialResolution[SampleRun]</text>
+</g>
+<!-- DetectorSpatialResolution[SampleRun]&#45;&gt;Reference -->
+<g id="edge32" class="edge">
+<title>DetectorSpatialResolution[SampleRun]:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1596,-254C1639.63,-254 1650.13,-231.05 1688.58,-227.47"/>
+<polygon fill="black" stroke="black" points="1689.17,-230.95 1699,-227 1688.85,-223.95 1689.17,-230.95"/>
+</g>
+<!-- MValue -->
+<g id="node19" class="node">
+<title>MValue</title>
+<polygon fill="none" stroke="black" points="1482.5,-147.5 1412.5,-147.5 1412.5,-124.5 1482.5,-124.5 1482.5,-147.5"/>
+<text text-anchor="middle" x="1447.5" y="-132.3" font-family="Times,serif" font-size="14.00">MValue</text>
+</g>
+<!-- MValue&#45;&gt;Sample -->
+<g id="edge40" class="edge">
+<title>MValue:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1483.5,-136C1534,-136 1546.04,-144.63 1596,-152 1624.4,-156.19 1633.59,-161.6 1657.88,-162.77"/>
+<polygon fill="black" stroke="black" points="1657.92,-166.27 1668,-163 1658.08,-159.27 1657.92,-166.27"/>
+</g>
+<!-- NeXusName[NXdetector] -->
+<g id="node20" class="node">
+<title>NeXusName[NXdetector]</title>
+<polygon fill="none" stroke="black" points="213,-137.5 16,-137.5 16,-114.5 213,-114.5 213,-137.5"/>
+<text text-anchor="middle" x="114.5" y="-122.3" font-family="Times,serif" font-size="14.00">NeXusName[NXdetector]</text>
+</g>
+<!-- NeXusName[NXdetector]&#45;&gt;NeXusComponent[NXdetector, SampleRun] -->
+<g id="edge15" class="edge">
+<title>NeXusName[NXdetector]:e&#45;&gt;NeXusComponent[NXdetector, SampleRun]:w</title>
+<path fill="none" stroke="black" d="M213,-126C241.91,-126 250.53,-137.01 274.84,-139.5"/>
+<polygon fill="black" stroke="black" points="274.84,-143.01 285,-140 275.18,-136.01 274.84,-143.01"/>
+</g>
+<!-- ProtonCurrent[SampleRun]&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge28" class="edge">
+<title>ProtonCurrent[SampleRun]:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M555,-247C613.33,-247 625.03,-269.52 683,-276 737.77,-282.13 876.77,-285.83 931,-276 964.63,-269.9 970.03,-257.99 1003,-249 1133.47,-213.41 1169.91,-195.9 1300.13,-195.03"/>
+<polygon fill="black" stroke="black" points="1300.51,-198.53 1310.5,-195 1300.49,-191.53 1300.51,-198.53"/>
+</g>
+<!-- ReflectivityOverQ -->
+<g id="node31" class="node">
+<title>ReflectivityOverQ</title>
+<polygon fill="none" stroke="black" points="2218,-179.5 2054,-179.5 2054,-146.5 2218,-146.5 2218,-179.5"/>
+<text text-anchor="start" x="2072.5" y="-165.3" font-family="Times,serif" font-size="14.00">ReflectivityOverQ</text>
+<text text-anchor="start" x="2062" y="-153.7" font-family="Times,serif" font-size="11.00">via:</text>
+<text text-anchor="start" x="2083" y="-153.7" font-family="Times,serif" font-style="italic" font-size="11.00">reduce_sample_over_q</text>
+</g>
+<!-- QBins&#45;&gt;ReflectivityOverQ -->
+<g id="edge36" class="edge">
+<title>QBins:e&#45;&gt;ReflectivityOverQ:w</title>
+<path fill="none" stroke="black" d="M1482.5,-77C1706.55,-77 1761.99,-102.66 1982,-145 2010.72,-150.53 2019.18,-160.41 2043.73,-162.57"/>
+<polygon fill="black" stroke="black" points="2043.86,-166.08 2054,-163 2044.15,-159.09 2043.86,-166.08"/>
+</g>
+<!-- WavelengthBins -->
+<g id="node23" class="node">
+<title>WavelengthBins</title>
+<polygon fill="none" stroke="black" points="1181,-98.5 1049,-98.5 1049,-75.5 1181,-75.5 1181,-98.5"/>
+<text text-anchor="middle" x="1115" y="-83.3" font-family="Times,serif" font-size="14.00">WavelengthBins</text>
+</g>
+<!-- WavelengthBins&#45;&gt;QBins -->
+<g id="edge19" class="edge">
+<title>WavelengthBins:e&#45;&gt;QBins:w</title>
+<path fill="none" stroke="black" d="M1182,-87C1281.04,-87 1308.13,-77.67 1402.25,-77.03"/>
+<polygon fill="black" stroke="black" points="1402.51,-80.53 1412.5,-77 1402.49,-73.53 1402.51,-80.53"/>
+</g>
+<!-- WavelengthBins&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge27" class="edge">
+<title>WavelengthBins:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1182,-87C1203.23,-87 1209.33,-91.23 1227,-103 1269.9,-131.58 1257.35,-186.98 1300.42,-194.21"/>
+<polygon fill="black" stroke="black" points="1300.26,-197.71 1310.5,-195 1300.8,-190.73 1300.26,-197.71"/>
+</g>
+<!-- RawSampleRotation[SampleRun]&#45;&gt;SampleRotation[SampleRun] -->
+<g id="edge42" class="edge">
+<title>RawSampleRotation[SampleRun]:e&#45;&gt;SampleRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M576,-70C625.38,-70 640.18,-70 684.97,-70"/>
+<polygon fill="black" stroke="black" points="685,-73.5 695,-70 685,-66.5 685,-73.5"/>
+</g>
+<!-- ReducedReference -->
+<g id="node25" class="node">
+<title>ReducedReference</title>
+<polygon fill="none" stroke="black" points="1522.5,-238.5 1372.5,-238.5 1372.5,-215.5 1522.5,-215.5 1522.5,-238.5"/>
+<text text-anchor="middle" x="1447.5" y="-223.3" font-family="Times,serif" font-size="14.00">ReducedReference</text>
+</g>
+<!-- ReducedReference&#45;&gt;Reference -->
+<g id="edge30" class="edge">
+<title>ReducedReference:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1523.5,-227C1598,-227 1619.13,-227 1688.83,-227"/>
+<polygon fill="black" stroke="black" points="1689,-230.5 1699,-227 1689,-223.5 1689,-230.5"/>
+</g>
+<!-- ReducedReference&#45;&gt;Sample -->
+<g id="edge38" class="edge">
+<title>ReducedReference:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1523.5,-227C1556.4,-227 1565.7,-224.84 1596,-212 1628.16,-198.37 1629.39,-169.44 1657.76,-163.92"/>
+<polygon fill="black" stroke="black" points="1658.35,-167.38 1668,-163 1657.73,-160.41 1658.35,-167.38"/>
+</g>
+<!-- ReducibleData[SampleRun]&#45;&gt;Reference -->
+<g id="edge31" class="edge">
+<title>ReducibleData[SampleRun]:e&#45;&gt;Reference:w</title>
+<path fill="none" stroke="black" d="M1584.5,-195C1633.73,-195 1644.75,-222.77 1688.75,-226.57"/>
+<polygon fill="black" stroke="black" points="1688.86,-230.08 1699,-227 1689.15,-223.09 1688.86,-230.08"/>
+</g>
+<!-- ReducibleData[SampleRun]&#45;&gt;Sample -->
+<g id="edge37" class="edge">
+<title>ReducibleData[SampleRun]:e&#45;&gt;Sample:w</title>
+<path fill="none" stroke="black" d="M1584.5,-195C1620.52,-195 1627.19,-168.72 1657.71,-163.79"/>
+<polygon fill="black" stroke="black" points="1658.3,-167.26 1668,-163 1657.76,-160.28 1658.3,-167.26"/>
+</g>
+<!-- YIndexLimits -->
+<g id="node27" class="node">
+<title>YIndexLimits</title>
+<polygon fill="none" stroke="black" points="1170,-152.5 1060,-152.5 1060,-129.5 1170,-129.5 1170,-152.5"/>
+<text text-anchor="middle" x="1115" y="-137.3" font-family="Times,serif" font-size="14.00">YIndexLimits</text>
+</g>
+<!-- YIndexLimits&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge24" class="edge">
+<title>YIndexLimits:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1171,-141C1196.88,-141 1202.71,-148.06 1227,-157 1261.83,-169.82 1268.65,-190.78 1300.34,-194.45"/>
+<polygon fill="black" stroke="black" points="1300.32,-197.95 1310.5,-195 1300.71,-190.96 1300.32,-197.95"/>
+</g>
+<!-- ZIndexLimits -->
+<g id="node28" class="node">
+<title>ZIndexLimits</title>
+<polygon fill="none" stroke="black" points="1170.5,-272.5 1059.5,-272.5 1059.5,-249.5 1170.5,-249.5 1170.5,-272.5"/>
+<text text-anchor="middle" x="1115" y="-257.3" font-family="Times,serif" font-size="14.00">ZIndexLimits</text>
+</g>
+<!-- ZIndexLimits&#45;&gt;ReducibleData[SampleRun] -->
+<g id="edge25" class="edge">
+<title>ZIndexLimits:e&#45;&gt;ReducibleData[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M1171,-261C1196.77,-261 1203.32,-256.15 1227,-246 1263.53,-230.34 1266.71,-200.7 1300.2,-195.72"/>
+<polygon fill="black" stroke="black" points="1300.77,-199.19 1310.5,-195 1300.28,-192.2 1300.77,-199.19"/>
+</g>
+<!-- Reference&#45;&gt;ReflectivityOverQ -->
+<g id="edge35" class="edge">
+<title>Reference:e&#45;&gt;ReflectivityOverQ:w</title>
+<path fill="none" stroke="black" d="M1951,-227C2001.32,-227 2000.48,-171.22 2044.01,-163.81"/>
+<polygon fill="black" stroke="black" points="2044.32,-167.3 2054,-163 2043.75,-160.32 2044.32,-167.3"/>
+</g>
+<!-- Sample&#45;&gt;ReflectivityOverQ -->
+<g id="edge34" class="edge">
+<title>Sample:e&#45;&gt;ReflectivityOverQ:w</title>
+<path fill="none" stroke="black" d="M1982,-163C2010.38,-163 2019.88,-163 2043.98,-163"/>
+<polygon fill="black" stroke="black" points="2044,-166.5 2054,-163 2044,-159.5 2044,-166.5"/>
+</g>
+<!-- SampleRotationOffset[SampleRun] -->
+<g id="node32" class="node">
+<title>SampleRotationOffset[SampleRun]</title>
+<polygon fill="none" stroke="black" points="581,-113.5 315,-113.5 315,-90.5 581,-90.5 581,-113.5"/>
+<text text-anchor="middle" x="448" y="-98.3" font-family="Times,serif" font-size="14.00">SampleRotationOffset[SampleRun]</text>
+</g>
+<!-- SampleRotationOffset[SampleRun]&#45;&gt;SampleRotation[SampleRun] -->
+<g id="edge43" class="edge">
+<title>SampleRotationOffset[SampleRun]:e&#45;&gt;SampleRotation[SampleRun]:w</title>
+<path fill="none" stroke="black" d="M582,-102C630.63,-102 641.42,-74.23 684.88,-70.43"/>
+<polygon fill="black" stroke="black" points="685.16,-73.92 695,-70 684.86,-66.93 685.16,-73.92"/>
+</g>
+</g>
+</g>
+        </svg>
+        
