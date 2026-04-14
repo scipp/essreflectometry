@@ -11,7 +11,7 @@ asttokens==3.0.1
     # via stack-data
 bqplot==0.12.45
     # via ipydatagrid
-click==8.3.1
+click==8.3.2
     # via dask
 cloudpickle==3.1.2
     # via dask
@@ -43,7 +43,7 @@ executing==2.2.1
     # via stack-data
 fonttools==4.62.1
     # via matplotlib
-fsspec==2026.2.0
+fsspec==2026.3.0
     # via dask
 gast==0.4.0
     # via py2vega
@@ -61,7 +61,7 @@ importlib-metadata==9.0.0
     # via dask
 ipydatagrid==1.4.0
     # via -r base.in
-ipython==9.10.0
+ipython==9.10.1
     # via ipywidgets
 ipython-pygments-lexers==1.1.1
     # via ipython
@@ -91,7 +91,7 @@ mpltoolbox==26.2.0
     # via scippneutron
 networkx==3.6.1
     # via cyclebane
-numpy==2.4.3
+numpy==2.4.4
     # via
     #   bqplot
     #   contourpy
@@ -101,7 +101,7 @@ numpy==2.4.3
     #   scipp
     #   scippneutron
     #   scipy
-orsopy==1.2.2
+orsopy==1.2.3
     # via -r base.in
 packaging==26.0
     # via
@@ -119,7 +119,7 @@ partd==1.4.2
     # via dask
 pexpect==4.9.0
     # via ipython
-pillow==12.1.1
+pillow==12.2.0
     # via matplotlib
 plopp==26.3.1
     # via
@@ -133,11 +133,11 @@ pure-eval==0.2.3
     # via stack-data
 py2vega==0.6.1
     # via ipydatagrid
-pydantic==2.12.5
+pydantic==2.13.0
     # via scippneutron
-pydantic-core==2.41.5
+pydantic-core==2.46.0
     # via pydantic
-pygments==2.19.2
+pygments==2.20.0
     # via
     #   ipython
     #   ipython-pygments-lexers
@@ -206,11 +206,11 @@ typing-extensions==4.15.0
     #   typing-inspection
 typing-inspection==0.4.2
     # via pydantic
-tzdata==2025.3
+tzdata==2026.1
     # via pandas
 wcwidth==0.6.0
     # via prompt-toolkit
 widgetsnbextension==4.0.15
     # via ipywidgets
-zipp==3.23.0
+zipp==3.23.1
     # via importlib-metadata

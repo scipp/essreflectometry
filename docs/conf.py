@@ -32,6 +32,7 @@ extensions = [
     'sphinx_autodoc_typehints',
     'sphinx_copybutton',
     'sphinx_design',
+    'sphinx_reredirects',
     'sphinxcontrib.bibtex',
     'sphinxcontrib.autodoc_pydantic',
     'nbsphinx',
@@ -282,3 +283,10 @@ nbsphinx_execute_arguments = [
 # -- Options for bibtex ----------------------------------------------------
 bibtex_bibfiles = ["bibliography.bib"]
 bibtex_reference_style = "label"
+
+
+# -- Redirect to new docs --------------------------------------------------
+
+redirects = {
+    "*": "https://scipp.github.io/ess/essreflectometry/$source.html",
+}
