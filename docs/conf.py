@@ -288,5 +288,5 @@ bibtex_reference_style = "label"
 # -- Redirect to new docs --------------------------------------------------
 
 redirects = {
-    "*": "https://scipp.github.io/ess/essreflectometry/$source.html",
+    "*": "https://scipp.github.io/ess/reflectometry/$source.html",
 }
