@@ -9,7 +9,7 @@ graphviz
 plopp>=24.7.0
 orsopy>=1.2
 sciline>=24.6.0
-scipp>=24.09.1
+scipp>=26.3.1
 scippneutron>=24.10.0
 scippnexus>=24.9.1
 essreduce>=26.4.0
